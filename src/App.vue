@@ -72,6 +72,11 @@ export default {
         rota: "clientes"
       },
       {
+        titulo: "Login",
+        icone: "mdi-login",
+        rota: "login"
+      },
+      {
         titulo: "Sair",
         icone: "mdi-exit-run",
         rota: "logout"
