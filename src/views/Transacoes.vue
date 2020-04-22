@@ -94,11 +94,10 @@
     data: () => ({
       dialog: false,
       headers: [
-        {
-          text: 'Empresa', value: 'empresa',},
+        { text: 'Empresa', value: 'empresa',},
         { text: 'Cliente', value: 'cliente' },
         { text: 'Valor', value: 'valor'},
-        { data: 'Data', value: 'data' },
+        { text: 'Data', value: 'data' },
         { text: 'Status', value: 'status' },
         { text: 'Ações', value: 'acoes', sortable: false },
       ],
