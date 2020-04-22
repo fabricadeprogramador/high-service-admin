@@ -6,26 +6,27 @@
     
     <template v-slot:top>
       <div >
-        <v-row align-content="left" >
-          <v-col cols="3">
+        <v-row >
+          <v-col cols="2">
             <v-subheader>Total Transaçoes: </v-subheader>
           </v-col>
-          <v-col cols="3">
-            <v-text-field value="13.00"></v-text-field>
+          <v-col cols="2">
+            <v-text-field v-model="totalDeTransacoes" readonly></v-text-field>
           </v-col>
-          <v-col cols="3">
+          <v-spacer></v-spacer>
+          <v-col cols="2">
             <v-subheader>Total Gerado: </v-subheader>
           </v-col>
-          <v-col cols="3">
-            <v-text-field value="15.00" prefix="R$"></v-text-field>
+          <v-col cols="2">
+            <v-text-field v-model="totalGerado" prefix="R$"></v-text-field>
           </v-col>
         </v-row>
-        <v-row align-content="left">
-          <v-col cols="3">
-            <v-subheader>Valor Total: </v-subheader>
+        <v-row >
+          <v-col cols="2">
+            <v-subheader>Valor Total das Transações: </v-subheader>
           </v-col>
-          <v-col cols="3">
-            <v-text-field value="15.00" prefix="R$"></v-text-field>
+          <v-col cols="2">
+            <v-text-field v-model=valorTotalTransacoes prefix="R$"></v-text-field>
           </v-col>
         </v-row>
       </div>
@@ -103,9 +104,9 @@
       ],
       transacoes: [],
       editedIndex: -1,
-      valorTotal:0,
+      valorTotalTransacoes: 0,
       totalGerado:0,
-      totalTransacoes:0,
+      totalDeTransacoes:0,
       editedItem: {
         empresa: '',
         cliente: '',
@@ -136,6 +137,7 @@
 
     created () {
       this.initialize()
+      this.balancoTotal()
     },
 
     methods: {
@@ -144,18 +146,31 @@
           {
             empresa: 'Empresa 1',
             cliente: 'Ana Carla Silva',
-            valor: '2500.00',
+            valor: 2500.00,
             data: '18/04/2020',
             status: 'Em Andamento',
           },
           {
             empresa: 'Empresa 2',
             cliente: 'José Francisco Cooper',
-            valor: '5700.00',
+            valor: 5700.00,
             data: '19/04/2020',
             status: 'Concluído',
           },
         ]
+      },
+
+      balancoTotal() {
+        this.valorTotalTransacoes = 0
+
+        for (let i = 0; i < this.transacoes.length; i++) {
+          this.valorTotalTransacoes += parseInt(this.transacoes[i].valor);
+        }
+
+        this.totalDeTransacoes = this.transacoes.length
+
+        this.totalGerado = this.valorTotalTransacoes * 0.01
+
       },
 
       editItem (item) {
@@ -167,6 +182,7 @@
       deleteItem (item) {
         const index = this.transacoes.indexOf(item)
         confirm('Tem certeza que deseja deletar essa transação?') && this.transacoes.splice(index, 1)
+        this.balancoTotal()
       },
 
       close () {
@@ -183,6 +199,7 @@
         } else {
           this.transacoes.push(this.editedItem)
         }
+        this.balancoTotal()
         this.close()
       },
     },
