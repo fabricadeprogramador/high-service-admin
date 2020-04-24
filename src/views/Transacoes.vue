@@ -1,3 +1,4 @@
+
 <template>
   <v-data-table
     :headers="headers"
@@ -43,25 +44,45 @@
         </v-card-title>
 
         <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.empresa" label="Empresa"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.cliente" label="Cliente"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.valor" label="Valor" prefix="R$"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.data" label="Data"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.status" label="Status"></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
+          <v-form v-model="valid">
+            <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.empresa" 
+                    :rules="empresaRules" 
+                    :counter="20"
+                    label="Empresa"
+                    required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.cliente" 
+                    :rules="clienteRules"
+                    :counter="25"
+                    label="Cliente"
+                    required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.valor"
+                    :rules="valorRules"
+                    :counter="10"
+                    label="Valor" prefix="R$"
+                    required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.data" 
+                    :rules="dataRules"
+                    label="Data"
+                    required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.status"
+                    :rules="statusRules"
+                    label="Status"
+                    required></v-text-field>
+                  </v-col>
+                </v-row>
+            </v-container>
+          </v-form>
         </v-card-text>
 
             <v-card-actions>
@@ -97,7 +118,7 @@
         { text: 'Empresa', value: 'empresa',},
         { text: 'Cliente', value: 'cliente' },
         { text: 'Valor', value: 'valor'},
-        { text: 'Data', value: 'data' },
+        { text: 'Data', value: 'data'},
         { text: 'Status', value: 'status' },
         { text: 'Ações', value: 'acoes', sortable: false },
       ],
@@ -106,19 +127,21 @@
       valorTotalTransacoes: 0,
       totalGerado:0,
       totalDeTransacoes:0,
+
       editedItem: {
         empresa: '',
         cliente: '',
         valor: 0,
-        data: '01/01/2000',
-        status: 'Aberto',
+        data: '',
+        status: '',
+        
       },
       defaultItem: {
         empresa: '',
         cliente: '',
         valor: 0,
-        data: '01/01/2000',
-        status: 'Aberto',
+        data: '',
+        status: '',
       },
     }),
 
@@ -193,10 +216,30 @@
       },
 
       save () {
+        var msg = ""
+
         if (this.editedIndex > -1) {
           Object.assign(this.transacoes[this.editedIndex], this.editedItem)
         } else {
-          this.transacoes.push(this.editedItem)
+          if(this.editedItem.empresa != "" && this.editedItem.cliente != "" && this.editedItem.valor != 0 && this.editedItem.data != "" && this.editedItem.status != ""){
+            this.transacoes.push(this.editedItem)
+          }
+          if(this.editedItem.empresa == ""){
+            msg+= "Preencher Campo Obrigatório Empresa\n"
+          }
+          if(this.editedItem.cliente == ""){
+            msg+= "Preencher Campo Obrigatório Cliente\n"
+          }
+          if(this.editedItem.valor == 0){
+            msg+= "Preencher Campo Obrigatório Valor\n"
+          }
+          if(this.editedItem.data == ""){
+            msg+= "Preencher Campo Obrigatório Data\n"
+          }
+          if(this.editedItem.status == ""){
+            msg+= "Preencher Campo Obrigatório Status\n"
+          }
+          alert(msg)
         }
         this.balancoTotal()
         this.close()
