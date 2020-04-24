@@ -33,7 +33,7 @@
       </div>
       <v-toolbar flat color="dark-grey">
       <v-spacer></v-spacer>
-       <v-dialog v-model="dialog" max-width="500px">
+       <v-dialog v-model="dialog" max-width="500px" overlay-color="grey">
         <template v-slot:activator="{ on }">
           <v-btn color="primary" dark class="mb-2" v-on="on">Cadastrar Transação</v-btn>          
         </template>
@@ -48,21 +48,21 @@
             <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.empresa" 
+                    <v-text-field v-model="editedItem.empresa" :readonly="readonly"
                     :rules="empresaRules" 
                     :counter="20"
                     label="Empresa"
                     required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.cliente" 
+                    <v-text-field v-model="editedItem.cliente" :readonly="readonly"
                     :rules="clienteRules"
                     :counter="25"
                     label="Cliente"
                     required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.valor"
+                    <v-text-field v-model="editedItem.valor" :readonly="readonly"
                     :rules="valorRules"
                     :counter="10"
                     label="Valor" prefix="R$"
@@ -72,18 +72,16 @@
                     <v-dialog
                       ref="dialog"
                       v-model="modal"
-                      :return-value.sync="editedItem.data"
-                      persistent
+                      :return-value.sync="editedItem.data" 
                       width="250px">
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        v-model="computedDateFormatted"
+                        v-model="computedDateFormatted" 
                         label="Data"
-                        readonly
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="date" scrollable>
+                    <v-date-picker :readonly="readonly" v-model="date" scrollable>
                       <v-spacer></v-spacer>
                       <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
                       <v-btn text color="primary" @click="$refs.dialog.save(dateFormatted)">OK</v-btn>
@@ -134,6 +132,7 @@
       dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
       modal: false,
       dialog: false,
+      readonly: false,
       headers: [
         { text: 'Empresa', value: 'empresa',},
         { text: 'Cliente', value: 'cliente' },
@@ -226,6 +225,7 @@
         this.editedIndex = this.transacoes.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
+        this.readonly = true
       },
 
       deleteItem (item) {
@@ -236,6 +236,7 @@
 
       close () {
         this.dialog = false
+        this.readonly = false
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
