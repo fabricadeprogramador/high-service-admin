@@ -19,7 +19,7 @@
             <v-subheader>Total Gerado: </v-subheader>
           </v-col>
           <v-col cols="2">
-            <v-text-field v-model="totalGerado" prefix="R$"></v-text-field>
+            <v-text-field v-model="totalGerado" prefix="R$" readonly></v-text-field>
           </v-col>
         </v-row>
         <v-row >
@@ -27,7 +27,7 @@
             <v-subheader>Valor Total das Transações: </v-subheader>
           </v-col>
           <v-col cols="2">
-            <v-text-field v-model=valorTotalTransacoes prefix="R$"></v-text-field>
+            <v-text-field v-model=valorTotalTransacoes prefix="R$" readonly></v-text-field>
           </v-col>
         </v-row>
       </div>
@@ -69,16 +69,33 @@
                     required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.data" 
-                    :rules="dataRules"
-                    label="Data"
-                    required></v-text-field>
+                    <v-dialog
+                      ref="dialog"
+                      v-model="modal"
+                      :return-value.sync="editedItem.data"
+                      persistent
+                      width="250px">
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="computedDateFormatted"
+                        label="Data"
+                        readonly
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker v-model="date" scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
+                      <v-btn text color="primary" @click="$refs.dialog.save(dateFormatted)">OK</v-btn>
+                    </v-date-picker>
+                  </v-dialog>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.status"
+                    <v-select v-model="editedItem.status"
+                    :items="status"
                     :rules="statusRules"
                     label="Status"
-                    required></v-text-field>
+                    required></v-select>
                   </v-col>
                 </v-row>
             </v-container>
@@ -112,7 +129,10 @@
 
 <script>
   export default {
-    data: () => ({
+    data: vm => ({
+      date: new Date().toISOString().substr(0, 10),
+      dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
+      modal: false,
       dialog: false,
       headers: [
         { text: 'Empresa', value: 'empresa',},
@@ -122,6 +142,7 @@
         { text: 'Status', value: 'status' },
         { text: 'Ações', value: 'acoes', sortable: false },
       ],
+      status: ['Aberto','Em Andamento', 'Pendente', 'Concluído'],
       transacoes: [],
       editedIndex: -1,
       valorTotalTransacoes: 0,
@@ -149,11 +170,17 @@
       formTitle () {
         return this.editedIndex == -1 ? 'Cadastrar Transação' : 'Alterar Status'
       },
+       computedDateFormatted () {
+        return this.formatDate(this.date)
+      },
     },
 
     watch: {
       dialog (val) {
         val || this.close()
+      },
+      date (val) {
+        this.dateFormatted = this.formatDate(this.date)
       },
     },
 
@@ -191,7 +218,7 @@
 
         this.totalDeTransacoes = this.transacoes.length
 
-        this.totalGerado = this.valorTotalTransacoes * 0.01
+        this.totalGerado = parseFloat((this.valorTotalTransacoes * 0.01).toFixed(2))
 
       },
 
@@ -218,12 +245,13 @@
       save () {
         var msg = ""
 
-        if (this.editedIndex > -1) {
-          Object.assign(this.transacoes[this.editedIndex], this.editedItem)
-        } else {
-          if(this.editedItem.empresa != "" && this.editedItem.cliente != "" && this.editedItem.valor != 0 && this.editedItem.data != "" && this.editedItem.status != ""){
-            this.transacoes.push(this.editedItem)
-          }
+        if(this.editedItem.empresa != "" && this.editedItem.cliente != "" && this.editedItem.valor != 0 && this.editedItem.data != "" && this.editedItem.status != ""){
+          if (this.editedIndex > -1) {
+            Object.assign(this.transacoes[this.editedIndex], this.editedItem)
+          } else {
+              this.transacoes.push(this.editedItem)
+            }
+        }else{
           if(this.editedItem.empresa == ""){
             msg+= "Preencher Campo Obrigatório Empresa\n"
           }
@@ -243,6 +271,19 @@
         }
         this.balancoTotal()
         this.close()
+      },
+
+      formatDate (date) {
+        if (!date) return null
+
+        const [year, month, day] = date.split('-')
+        return `${day}/${month}/${year}`
+      },
+      parseDate (date) {
+        if (!date) return null
+
+        const [month, day, year] = date.split('/')
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       },
     },
   }
