@@ -50,7 +50,7 @@
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.empresa" :readonly="readonly"
                     :rules="empresaRules" 
-                    :counter="20"
+                    :counter="25"
                     label="Empresa"
                     required></v-text-field>
                   </v-col>
@@ -64,7 +64,6 @@
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.valor" :readonly="readonly"
                     :rules="valorRules"
-                    :counter="10"
                     label="Valor" prefix="R$"
                     required></v-text-field>
                   </v-col>
@@ -90,9 +89,9 @@
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select v-model="editedItem.status"
-                    :items="status"
-                    :rules="statusRules"
-                    label="Status"
+                    :items= "status"
+                    :rules= "[v => !!v || 'Selecione um status' ]"
+                    label= "Status"
                     required></v-select>
                   </v-col>
                 </v-row>
@@ -154,8 +153,8 @@
         valor: 0,
         data: '',
         status: '',
-        
       },
+
       defaultItem: {
         empresa: '',
         cliente: '',
@@ -163,6 +162,23 @@
         data: '',
         status: '',
       },
+
+        empresaRules: [
+          v=> !!v || 'Empresa Obrigatório',
+          v=> v.length <= 25 || 'Requer menos de 25 caracteres'
+        ],
+
+        clienteRules: [
+          v=> !!v || 'Cliente Obrigatório',
+          v=> v.length <= 25 || 'Requer menos de 25 caracteres'
+        ],
+
+        valorRules: [
+          v=> !!v || 'Valor Obrigatório'
+        ],
+
+        //Faltou validação da data
+
     }),
 
     computed: {
@@ -244,31 +260,13 @@
       },
 
       save () {
-        var msg = ""
-
         if(this.editedItem.empresa != "" && this.editedItem.cliente != "" && this.editedItem.valor != 0 && this.editedItem.data != "" && this.editedItem.status != ""){
           if (this.editedIndex > -1) {
             Object.assign(this.transacoes[this.editedIndex], this.editedItem)
-          } else {
-              this.transacoes.push(this.editedItem)
-            }
-        }else{
-          if(this.editedItem.empresa == ""){
-            msg+= "Preencher Campo Obrigatório Empresa\n"
           }
-          if(this.editedItem.cliente == ""){
-            msg+= "Preencher Campo Obrigatório Cliente\n"
+          else {
+            this.transacoes.push(this.editedItem)
           }
-          if(this.editedItem.valor == 0){
-            msg+= "Preencher Campo Obrigatório Valor\n"
-          }
-          if(this.editedItem.data == ""){
-            msg+= "Preencher Campo Obrigatório Data\n"
-          }
-          if(this.editedItem.status == ""){
-            msg+= "Preencher Campo Obrigatório Status\n"
-          }
-          alert(msg)
         }
         this.balancoTotal()
         this.close()
