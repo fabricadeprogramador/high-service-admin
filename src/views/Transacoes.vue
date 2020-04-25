@@ -33,7 +33,7 @@
       </div>
       <v-toolbar flat color="dark-grey">
       <v-spacer></v-spacer>
-       <v-dialog v-model="dialog" max-width="500px">
+       <v-dialog v-model="dialog" max-width="500px" overlay-color="grey">
         <template v-slot:activator="{ on }">
           <v-btn color="primary" dark class="mb-2" v-on="on">Cadastrar Transação</v-btn>          
         </template>
@@ -48,23 +48,22 @@
             <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.empresa" 
+                    <v-text-field v-model="editedItem.empresa" :readonly="readonly"
                     :rules="empresaRules" 
-                    :counter="20"
+                    :counter="25"
                     label="Empresa"
                     required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.cliente" 
+                    <v-text-field v-model="editedItem.cliente" :readonly="readonly"
                     :rules="clienteRules"
                     :counter="25"
                     label="Cliente"
                     required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.valor"
+                    <v-text-field v-model="editedItem.valor" :readonly="readonly"
                     :rules="valorRules"
-                    :counter="10"
                     label="Valor" prefix="R$"
                     required></v-text-field>
                   </v-col>
@@ -72,18 +71,16 @@
                     <v-dialog
                       ref="dialog"
                       v-model="modal"
-                      :return-value.sync="editedItem.data"
-                      persistent
+                      :return-value.sync="editedItem.data" 
                       width="250px">
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        v-model="computedDateFormatted"
+                        v-model="computedDateFormatted" 
                         label="Data"
-                        readonly
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="date" scrollable>
+                    <v-date-picker :readonly="readonly" v-model="date" scrollable>
                       <v-spacer></v-spacer>
                       <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
                       <v-btn text color="primary" @click="$refs.dialog.save(dateFormatted)">OK</v-btn>
@@ -92,9 +89,9 @@
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select v-model="editedItem.status"
-                    :items="status"
-                    :rules="statusRules"
-                    label="Status"
+                    :items= "status"
+                    :rules= "[v => !!v || 'Selecione um status' ]"
+                    label= "Status"
                     required></v-select>
                   </v-col>
                 </v-row>
@@ -134,6 +131,7 @@
       dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
       modal: false,
       dialog: false,
+      readonly: false,
       headers: [
         { text: 'Empresa', value: 'empresa',},
         { text: 'Cliente', value: 'cliente' },
@@ -155,8 +153,8 @@
         valor: 0,
         data: '',
         status: '',
-        
       },
+
       defaultItem: {
         empresa: '',
         cliente: '',
@@ -164,6 +162,23 @@
         data: '',
         status: '',
       },
+
+        empresaRules: [
+          v=> !!v || 'Empresa Obrigatório',
+          v=> v.length <= 25 || 'Requer menos de 25 caracteres'
+        ],
+
+        clienteRules: [
+          v=> !!v || 'Cliente Obrigatório',
+          v=> v.length <= 25 || 'Requer menos de 25 caracteres'
+        ],
+
+        valorRules: [
+          v=> !!v || 'Valor Obrigatório'
+        ],
+
+        //Faltou validação da data
+
     }),
 
     computed: {
@@ -226,6 +241,7 @@
         this.editedIndex = this.transacoes.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
+        this.readonly = true
       },
 
       deleteItem (item) {
@@ -236,6 +252,7 @@
 
       close () {
         this.dialog = false
+        this.readonly = false
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
@@ -243,31 +260,13 @@
       },
 
       save () {
-        var msg = ""
-
         if(this.editedItem.empresa != "" && this.editedItem.cliente != "" && this.editedItem.valor != 0 && this.editedItem.data != "" && this.editedItem.status != ""){
           if (this.editedIndex > -1) {
             Object.assign(this.transacoes[this.editedIndex], this.editedItem)
-          } else {
-              this.transacoes.push(this.editedItem)
-            }
-        }else{
-          if(this.editedItem.empresa == ""){
-            msg+= "Preencher Campo Obrigatório Empresa\n"
           }
-          if(this.editedItem.cliente == ""){
-            msg+= "Preencher Campo Obrigatório Cliente\n"
+          else {
+            this.transacoes.push(this.editedItem)
           }
-          if(this.editedItem.valor == 0){
-            msg+= "Preencher Campo Obrigatório Valor\n"
-          }
-          if(this.editedItem.data == ""){
-            msg+= "Preencher Campo Obrigatório Data\n"
-          }
-          if(this.editedItem.status == ""){
-            msg+= "Preencher Campo Obrigatório Status\n"
-          }
-          alert(msg)
         }
         this.balancoTotal()
         this.close()

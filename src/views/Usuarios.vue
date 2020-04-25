@@ -30,7 +30,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary" @click="cadastrarUsuario()">Salvar</v-btn>
+                <v-btn color="primary" @click="cadastrarUsuario()">Cadastrar</v-btn>
                 <v-spacer />
               </v-card-actions>
             </v-card>
