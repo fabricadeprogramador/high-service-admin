@@ -35,7 +35,7 @@
       <v-spacer></v-spacer>
        <v-dialog v-model="dialog" max-width="500px" overlay-color="grey">
         <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark class="mb-2" v-on="on">Cadastrar Transação</v-btn>          
+          <v-btn color="primary" dark class="mb-2" v-on="on" @click="resetValidation">Cadastrar Transação</v-btn>          
         </template>
      
       <v-card>
@@ -44,7 +44,7 @@
         </v-card-title>
 
         <v-card-text>
-          <v-form v-model="valid">
+          <v-form ref="form" v-model="valid">
             <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
@@ -270,6 +270,10 @@
         }
         this.balancoTotal()
         this.close()
+      },
+
+      resetValidation(){
+        this.$refs.form.resetValidation()
       },
 
       formatDate (date) {
