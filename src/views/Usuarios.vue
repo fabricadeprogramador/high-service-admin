@@ -65,6 +65,7 @@ export default {
   methods: {
     cadastrarUsuario() {
       let usuario = Object.assign({}, this.usuario)
+      usuario.tipo = "ADMIN"
       this.usuarios.push(usuario);
       alert(
         JSON.stringify(this.usuarios)
