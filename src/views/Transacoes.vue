@@ -3,7 +3,7 @@
   <v-data-table
     :headers="headers"
     :items="transacoes"
-    sort-by="empresa">
+    sort-by="data">
     
     <template v-slot:body="{ items }">
       <tbody>
@@ -14,8 +14,8 @@
           <td>{{item.data}}</td>
           <td>{{item.status}}</td>
           <td>
-            <v-icon small class="mr-2" @click="editItem(item)">mdi-magnify</v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete</v-icon>
+            <v-icon small class="mr-2" @click="editItem(item)" v-bind:title="messageVisuzalizar">mdi-magnify</v-icon>
+            <v-icon small @click="deleteItem(item)" v-bind:title="messageDisable">mdi-close</v-icon>
           </td>
         </tr>
       </tbody>
@@ -52,7 +52,7 @@
       <v-spacer></v-spacer>
        <v-dialog v-model="dialog" max-width="500px" overlay-color="grey">
         <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark  v-on="on" @click="resetValidation">
+          <v-btn color="primary" dark v-on="on" @click="resetValidation">
             <v-icon dark  v-on="on" v-bind:title="messageNewAdd">mdi-account-plus</v-icon>
           </v-btn> 
         </template>
@@ -258,10 +258,11 @@
       },
 
       editItem (item) {
-        this.editedIndex = this.transacoes.indexOf(item)
-        this.editedItem = Object.assign({}, item)
         this.dialog = true
         this.readonly = true
+        this.editedIndex = this.transacoes.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+
       },
 
       deleteItem (item) {
@@ -276,6 +277,7 @@
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
+          this.resetValidation()
         }, 300)
       },
 
