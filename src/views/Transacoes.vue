@@ -14,8 +14,8 @@
           <td>{{item.data}}</td>
           <td>{{item.status}}</td>
           <td>
-            <v-icon small class="mr-2" @click="editItem(item)">mdi-magnify</v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete</v-icon>
+            <v-icon small class="mr-2" @click="editItem(item)" v-bind:title="messageVisuzalizar">mdi-magnify</v-icon>
+            <v-icon small @click="deleteItem(item)" v-bind:title="messageDisable">mdi-close</v-icon>
           </td>
         </tr>
       </tbody>
