@@ -36,7 +36,7 @@
        <v-dialog v-model="dialog" max-width="500px" overlay-color="grey">
         <template v-slot:activator="{ on }">
           <v-btn color="primary" dark  v-on="on" @click="resetValidation">
-            <v-icon dark  v-on="on" >mdi-account-plus</v-icon>
+            <v-icon dark  v-on="on" v-bind:title="messageNewAdd">mdi-account-plus</v-icon>
           </v-btn> 
         </template>
      
@@ -112,8 +112,8 @@
       </v-toolbar>
     </template>
     <template v-slot:item.acoes="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">mdi-magnify</v-icon>
-      <v-icon small @click="deleteItem(item)">mdi-close</v-icon>
+      <v-icon small class="mr-2" @click="editItem(item)" v-bind:title="messageVisuzalizar">mdi-magnify</v-icon>
+      <v-icon small @click="deleteItem(item)" v-bind:title="messageDisable">mdi-close</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -143,6 +143,9 @@
       valorTotalTransacoes: 0,
       totalGerado:0,
       totalDeTransacoes:0,
+      messageDisable :'Desativar Transação',
+      messageVisuzalizar:'Visualizar Transação',
+      messageNewAdd:'Novo Cadastro',
 
       editedItem: {
         empresa: '',
