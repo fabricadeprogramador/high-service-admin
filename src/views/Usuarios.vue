@@ -7,55 +7,57 @@
   >
     <template v-slot:top>
       <!-- CARD JOAO -->
-      <v-card v-if="mostraNovoUsuario">
-        <v-card-title>
-          <span class="headline">Novo Usuário</span>
-        </v-card-title>
+      <v-expand-transition>
+        <v-card v-if="mostraNovoUsuario">
+          <v-card-title>
+            <span class="headline">Novo Usuário</span>
+          </v-card-title>
 
-        <v-form v-model="valid" ref="form">
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12" sm="6" md="6">
-                  <v-text-field
-                    v-model="usuario.username"
-                    label="Nome de usuário"
-                    :rules="nameRules"
-                    counter
-                    :maxlength="10"
-                    type="text"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="6">
-                  <v-text-field
-                    v-model="usuario.password"
-                    label="Senha"
-                    :rules="passwordRules"
-                    counter
-                    :maxlength="6"
-                    type="password"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
+          <v-form v-model="valid" ref="form">
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field
+                      v-model="editedItem.username"
+                      label="Nome de usuário"
+                      :rules="nameRules"
+                      counter
+                      :maxlength="10"
+                      type="text"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field
+                      v-model="editedItem.password"
+                      label="Senha"
+                      :rules="passwordRules"
+                      counter
+                      :maxlength="6"
+                      type="password"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              dark
-              class="mb-2"
-              @click="save"
-              :disabled="!valid"
-              >Salvar</v-btn
-            >
-            <v-btn color="primary" dark class="mb-2" @click="close"
-              >Cancelar</v-btn
-            >
-          </v-card-actions>
-        </v-form>
-      </v-card>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                dark
+                class="mb-2"
+                @click="save"
+                :disabled="!valid"
+                >Salvar</v-btn
+              >
+              <v-btn color="primary" dark class="mb-2" @click="reset"
+                >Cancelar</v-btn
+              >
+            </v-card-actions>
+          </v-form>
+        </v-card>
+      </v-expand-transition>
       <!-- CARD JOAO -->
 
       <v-toolbar flat color="dark-grey">
@@ -73,7 +75,7 @@
               <v-icon dark>mdi-plus</v-icon>
             </v-btn>
           </template>
-          <v-card> -->
+        <v-card>-->
         <!-- <v-form v-model="valid" ref="form">
 
             <v-card-title>
@@ -98,10 +100,26 @@
               <v-btn color="primary" dark class="mb-2" @click="save" :disabled="!valid">Salvar</v-btn>
               <v-btn color="primary" dark class="mb-2" @click="close">Cancelar</v-btn>
             </v-card-actions>
-            </v-form> -->
+        </v-form>-->
         <!-- </v-card>
-        </v-dialog> -->
+        </v-dialog>-->
       </v-toolbar>
+    </template>
+
+    <template v-slot:item.tipo="{ item }">
+      <tr v-bind:class="{ usuarioInativo: !item.ativo }">
+        {{
+          item.tipo
+        }}
+      </tr>
+    </template>
+
+    <template v-slot:item.username="{ item }">
+      <tr v-bind:class="{ usuarioInativo: !item.ativo }">
+        {{
+          item.username
+        }}
+      </tr>
     </template>
 
     <template v-slot:item.actions="{ item }">
@@ -110,17 +128,19 @@
         small
         color="green"
         @click="ativarDesativarUsuario(item)"
+        >mdi-check-bold</v-icon
       >
-        mdi-check-bold
-      </v-icon>
       <v-icon
         v-if="!item.ativo"
         small
         color="red"
         @click="ativarDesativarUsuario(item)"
+        >mdi-cancel</v-icon
       >
-        mdi-close-thick
-      </v-icon>
+      <v-icon small v-if="item.ativo" @click="editItem(item)"
+        >mdi-pencil</v-icon
+      >
+      <v-icon small v-if="!item.ativo">mdi-pencil-remove</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -154,17 +174,15 @@ export default {
     editedIndex: -1,
     editedItem: {
       username: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+      password: "",
+      tipo: "",
+      ativo: Boolean,
     },
     defaultItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+      username: "",
+      password: "",
+      tipo: "",
+      ativo: Boolean,
     },
   }),
 
@@ -203,12 +221,16 @@ export default {
     },
 
     corAtivo(ativo) {
-      if (ativo == true) return "white";
-      else return "gray";
+      if (ativo == true) return "usuarioAtivo";
+      else return "usuarioInativo";
     },
 
     mostra() {
       alert("hey");
+    },
+
+    abreNovoUsuario() {
+      this.mostraNovoUsuario = true;
     },
 
     mostrarNovoUsuario() {
@@ -232,13 +254,20 @@ export default {
 
     reset() {
       this.$refs.form.reset();
+      this.editedIndex = -1;
     },
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.abreNovoUsuario();
+      this.editedIndex = this.usuarios.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.dialog = true;
     },
+
+    // editItem (item) {
+    //   this.editedIndex = this.desserts.indexOf(item)
+    //   this.editedItem = Object.assign({}, item)
+    //   this.dialog = true
+    // },
 
     deleteItem(item) {
       const index = this.desserts.indexOf(item);
@@ -247,26 +276,28 @@ export default {
     },
 
     close() {
-      this.dialog = false;
-      this.reset();
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
+      this.mostraNovoUsuario = false;
     },
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        Object.assign(this.usuarios[this.editedIndex], this.editedItem);
       } else {
-        let usuario = Object.assign({}, this.usuario);
-        usuario.tipo = "ADMIN";
-        usuario.ativo = true;
-        this.usuarios.push(Object.assign({}, usuario));
+        this.editedItem.tipo = "ADMIN";
+        this.editedItem.ativo = true;
+        this.usuarios.push(Object.assign({}, this.editedItem));
       }
       this.reset();
-      this.close();
     },
   },
 };
 </script>
+
+<style>
+.usuarioAtivo {
+  color: white;
+}
+.usuarioInativo {
+  color: #454547;
+}
+</style>
