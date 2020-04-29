@@ -36,11 +36,15 @@
               </v-container>
             </v-card-text>
 
-            <v-card-actions>
+         <v-layout justify-center>
+            <v-card-actions> 
               <v-spacer></v-spacer>
               <v-btn color="primary" dark class="mb-2" @click="save" :disabled="!valid">Salvar</v-btn>
               <v-btn color="primary" dark class="mb-2" @click="reset">Cancelar</v-btn>
             </v-card-actions>
+          </v-layout>
+          
+          
           </v-form>
         </v-card>
       </v-expand-transition>
