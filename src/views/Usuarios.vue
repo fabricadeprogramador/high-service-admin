@@ -1,77 +1,125 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="desserts"
-    sort-by="empresa"
+    :items="usuarios"
+    sort-by="username"
     class="elevation-1"
-     >
-
-
+  >
     <template v-slot:top>
-
-
-      <v-card>
+      <!-- CARD JOAO -->
+      <v-card v-if="mostraNovoUsuario">
         <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
+          <span class="headline">Novo Usuário</span>
         </v-card-title>
 
-        <v-card-text>
-          <v-form v-model="valid">
+        <v-form v-model="valid" ref="form">
+          <v-card-text>
             <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.nome" :readonly="readonly"
-                    :rules="nomeRules" 
-                    :counter="25"
-                    label="Nome"
-                    required></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-
-
-                    <v-text-field v-model="editedItem.senha" :readonly="readonly"
-                    :rules="senhaRules"
-                    :counter="25"
+              <v-row>
+                <v-col cols="12" sm="6" md="6">
+                  <v-text-field
+                    v-model="usuario.username"
+                    label="Nome de usuário"
+                    :rules="nameRules"
+                    counter
+                    :maxlength="10"
+                    type="text"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6" md="6">
+                  <v-text-field
+                    v-model="usuario.password"
                     label="Senha"
+                    :rules="passwordRules"
+                    counter
+                    :maxlength="6"
                     type="password"
-                    required></v-text-field>
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              dark
+              class="mb-2"
+              @click="save"
+              :disabled="!valid"
+              >Salvar</v-btn
+            >
+            <v-btn color="primary" dark class="mb-2" @click="close"
+              >Cancelar</v-btn
+            >
+          </v-card-actions>
+        </v-form>
+      </v-card>
+      <!-- CARD JOAO -->
+
+      <v-toolbar flat color="dark-grey">
+        <v-toolbar-title>Lista de Usuários</v-toolbar-title>
+        <v-spacer></v-spacer>
+
+        <v-btn color="primary" fab dark small @click="mostrarNovoUsuario">
+          <v-icon v-if="!mostraNovoUsuario" dark>mdi-plus</v-icon>
+          <v-icon v-if="mostraNovoUsuario" dark>mdi-minus</v-icon>
+        </v-btn>
+
+        <!-- <v-dialog v-model="dialog" max-width="500px">
+          <template v-slot:activator="{ on }">
+            <v-btn color="primary" fab dark small v-on="on">
+              <v-icon dark>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <v-card> -->
+        <!-- <v-form v-model="valid" ref="form">
+
+            <v-card-title>
+              <span class="headline">{{ formTitle }}</span>
+            </v-card-title>
+
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field v-model="usuario.username" label="Nome de usuário" :rules="nameRules" counter :maxlength="10"></v-text-field>
                   </v-col>
-                 
-           
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select v-model="editedItem.papel"
-                    :items= "Papel"
-                    :rules= "[v => !!v || 'Selecione um status' ]"
-                    label= "Papel"
-                    required></v-select>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field v-model="usuario.password" label="Senha" :rules="passwordRules" counter :maxlength="6"></v-text-field>
                   </v-col>
                 </v-row>
-            </v-container>
-          </v-form>
-        </v-card-text>
+              </v-container>
+            </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              
-              <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
-
-            <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-            
+              <v-btn color="primary" dark class="mb-2" @click="save" :disabled="!valid">Salvar</v-btn>
+              <v-btn color="primary" dark class="mb-2" @click="close">Cancelar</v-btn>
             </v-card-actions>
-          </v-card>
-        
-
-
-
-     
+            </v-form> -->
+        <!-- </v-card>
+        </v-dialog> -->
+      </v-toolbar>
     </template>
-    <template v-slot:item.acoes="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">mdi-magnify</v-icon>
+
+    <template v-slot:item.actions="{ item }">
       <v-icon
+        v-if="item.ativo"
         small
-        @click="deleteItem(item)"
+        color="green"
+        @click="ativarDesativarUsuario(item)"
       >
-        mdi-delete
+        mdi-check-bold
+      </v-icon>
+      <v-icon
+        v-if="!item.ativo"
+        small
+        color="red"
+        @click="ativarDesativarUsuario(item)"
+      >
+        mdi-close-thick
       </v-icon>
     </template>
     <template v-slot:no-data>
@@ -81,134 +129,144 @@
 </template>
 
 <script>
-  export default {
-    data: () => ({
-     
-      modal: false,
-      dialog: false,
-      readonly: false,
-      headers: [
-         {
-            text: 'Usuarios',
-            align: 'start',
-            sortable: false,
-            value: 'nome',
-          },
-{ text: 'Papel', value: 'papel' },
-{ text: 'Ações', value: 'acoes', sortable: false },
-],
-      
-      papel: ['Funcional','Adm'],
-      desserts: [],
-      editedIndex: -1,
-      
-      editedItem: {
-        name: '',
-        senha: '',
-        papel: '',
-      },
-      defaultItem: {
-        name: '',
-        senha:'',
-        papel: '',
-        
-      },
-        nomeRules: [
-          v=> !!v || 'Nome é Obrigatório',
-          v=> v.length <= 25 || 'Requer menos de 25 caracteres'
-        ],
-        senhaRules: [
-          v=> !!v || 'Senha é Obrigatório',
-          v=> v.length <= 25 || 'Requer menos de 25 caracteres'
-        ],
-        papelRules: [
-          v=> !!v || 'Valor Obrigatório'
-        ],
-        
-    }),
-  computed: {
-formTitle () {
-return this.editedIndex === -1 ? 'Novo Usuario' : 'Edite Usario'
-},
-},
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-     
+export default {
+  data: () => ({
+    usuario: {},
+    usuarios: [],
+    mostraNovoUsuario: false,
+    valid: true,
+    nameRules: [
+      (v) => !!v || "Digite um nome de usuário!",
+      (v) =>
+        (!!v && v.length >= 3 && v.length <= 10) ||
+        "Nome de usuário deve possuir no mínimo 3 e no máximo 10 caracteres!",
+    ],
+    passwordRules: [
+      (v) => !!v || "Digite uma senha!",
+      (v) => (!!v && v.length == 6) || "A senha deve possuir 6 caracteres!",
+    ],
+    dialog: false,
+    headers: [
+      { text: "Nome de usuário", value: "username" },
+      { text: "Tipo", value: "tipo" },
+      { text: "Ativo?", value: "actions", sortable: false },
+    ],
+    editedIndex: -1,
+    editedItem: {
+      username: "",
+      calories: 0,
+      fat: 0,
+      carbs: 0,
+      protein: 0,
     },
- created () {
-this.initialize()
-},
-    methods: {
-initialize () {
-this.desserts = [
-{
-nome: 'JAO',
-papel: 'Adm',
-},
-{
-nome: 'JAO',
-papel: 'Funcional',
-},
-{
-nome: 'JAO',
-papel: 'Adm',
-},
-{
-nome: 'JAO',
-papel: 'Adm',
-},
-{
-nome: 'Jones',
-papel: 'Adm',
-},
-{
-nome: 'Jhonne',
-papel: 'Adm',
-},
-{
-nome: 'Jhon',
-papel: 'Adm',
-},
-{
-nome: 'Ruan',
-papel: 'Adm',
-},
-{
-nome: 'Luan',
-papel: 'Adm',
-},
-{
-nome: 'Juan',
-papel: 'Adm',
-},
-]
-},
-editItem (item) {
-this.editedIndex = this.desserts.indexOf(item)
-this.editedItem = Object.assign({}, item)
-this.dialog = true
-},
-deleteItem (item) {
-const index = this.desserts.indexOf(item)
-confirm('Deseja realmente deletar esse item') && this.desserts.splice(index, 1)
-},
-close () {
-this.dialog = false
-setTimeout(() => {
-this.editedItem = Object.assign({}, this.defaultItem)
-this.editedIndex = -1
-}, 300)
-},
-save () {
-if (this.editedIndex > -1) {
-Object.assign(this.desserts[this.editedIndex], this.editedItem)
-} else {
-this.desserts.push(this.editedItem)
-}
-this.close()
-},
-},
-}
+    defaultItem: {
+      name: "",
+      calories: 0,
+      fat: 0,
+      carbs: 0,
+      protein: 0,
+    },
+  }),
+
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+  },
+
+  created() {
+    this.initialize();
+  },
+
+  methods: {
+    initialize() {
+      this.usuarios = [
+        {
+          username: "111",
+          password: "111111",
+          tipo: "ADMIN",
+          ativo: true,
+        },
+        {
+          username: "222",
+          password: "222222",
+          tipo: "ADMIN",
+          ativo: true,
+        },
+      ];
+    },
+
+    corAtivo(ativo) {
+      if (ativo == true) return "white";
+      else return "gray";
+    },
+
+    mostra() {
+      alert("hey");
+    },
+
+    mostrarNovoUsuario() {
+      this.mostraNovoUsuario = !this.mostraNovoUsuario;
+      this.reset();
+    },
+
+    ativarDesativarUsuario(usuario) {
+      usuario.ativo = !usuario.ativo;
+    },
+
+    cadastrarUsuario() {
+      let usuario = Object.assign({}, this.usuario);
+      usuario.tipo = "ADMIN";
+      usuario.ativo = true;
+      this.usuarios.push(usuario);
+      alert(JSON.stringify(this.usuarios));
+      // *** Nessa linha faz o request para a API salvar o novo usuário
+      this.reset();
+    },
+
+    reset() {
+      this.$refs.form.reset();
+    },
+
+    editItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteItem(item) {
+      const index = this.desserts.indexOf(item);
+      confirm("Você tem certeza que deseja apagar esse item?") &&
+        this.usuarios.splice(index, 1);
+    },
+
+    close() {
+      this.dialog = false;
+      this.reset();
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+      } else {
+        let usuario = Object.assign({}, this.usuario);
+        usuario.tipo = "ADMIN";
+        usuario.ativo = true;
+        this.usuarios.push(Object.assign({}, usuario));
+      }
+      this.reset();
+      this.close();
+    },
+  },
+};
 </script>
