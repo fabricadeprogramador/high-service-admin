@@ -3,23 +3,27 @@
   <v-data-table
     :headers="headers"
     :items="transacoes"
+    :search="search"
     sort-by="data">
     
     <template v-slot:body="{ items }">
       <tbody>
         <tr v-for="item in items" :key="item.empresa">         
-          <td>{{ item.empresa }}</td>
-          <td>{{item.cliente}}</td>
-          <td><money v-model=item.valor v-bind="money" readonly=true></money></td>
-          <td>{{item.data}}</td>
-          <td>{{item.status}}</td>
+          <td v-bind:class="{ transacaoInativa: !item.ativo }">{{ item.empresa }}</td>
+          <td v-bind:class="{ transacaoInativa: !item.ativo }">{{item.cliente}}</td>
+          <td v-bind:class="{ transacaoInativa: !item.ativo }"><money v-model=item.valor v-bind="money" readonly=true></money></td>
+          <td v-bind:class="{ transacaoInativa: !item.ativo }">{{item.data}}</td>
+          <td v-bind:class="{ transacaoInativa: !item.ativo }">{{item.status}}</td>
           <td>
             <v-icon small class="mr-2" @click="editItem(item)" v-bind:title="messageVisuzalizar">mdi-magnify</v-icon>
-            <v-icon small @click="deleteItem(item)" v-bind:title="messageDisable">mdi-close</v-icon>
+            <v-icon v-if="item.ativo" small @click="ativarDesativarTransacao(item)" v-bind:title="messageDisable">mdi-close</v-icon>
+            <v-icon v-if="!item.ativo" small color="red" @click="ativarDesativarTransacao(item)" v-bind:title="messageEnable">mdi-cancel</v-icon>
           </td>
         </tr>
       </tbody>
     </template>
+
+
 
     <template v-slot:top>
       <div >
@@ -49,11 +53,20 @@
         </v-row>
       </div>
       <v-toolbar flat color="dark-grey">
+      <v-col cols="12" sm="6" md="4">
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Buscar"
+        single-line
+        hide-details
+      ></v-text-field>
+      </v-col>
       <v-spacer></v-spacer>
        <v-dialog v-model="dialog" max-width="500px" overlay-color="grey">
         <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark v-on="on" @click="resetValidation">
-            <v-icon dark  v-on="on" v-bind:title="messageNewAdd">mdi-account-plus</v-icon>
+          <v-btn color="primary" dark v-on="on">
+            <v-icon dark  v-on="on" v-bind:title="messageNewAdd">mdi-plus</v-icon>
           </v-btn> 
         </template>
      
@@ -89,19 +102,19 @@
                       ref="dialog"
                       v-model="modal"
                       :return-value.sync="editedItem.data" 
-                      width="250px">
+                      width="290px">
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        v-model="computedDateFormatted" 
+                        v-model="editedItem.data" 
                         label="Data"
                         v-on="on"
                         :rules= "[v => !!v || 'Selecione uma Data' ]"
                       ></v-text-field>
                     </template>
-                    <v-date-picker :readonly="readonly" v-model="date" scrollable>
+                    <v-date-picker :readonly="readonly" v-model="date" >
                       <v-spacer></v-spacer>
                       <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-                      <v-btn text color="primary" @click="$refs.dialog.save(dateFormatted)">OK</v-btn>
+                      <v-btn text color="primary" @click="$refs.dialog.save(dateFormatted)" :disabled="readonly">OK</v-btn>
                     </v-date-picker>
                   </v-dialog>
                   </v-col>
@@ -110,6 +123,7 @@
                     :items= "status"
                     :rules= "[v => !!v || 'Selecione um status' ]"
                     label= "Status"
+                    :readonly = "readstatus"
                     required></v-select>
                   </v-col>
                 </v-row>
@@ -141,8 +155,11 @@
       date: new Date().toISOString().substr(0, 10),
       dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
       modal: false,
+      valid: true,
       dialog: false,
       readonly: false,
+      readstatus: false,
+      search: '',
       money: {
           decimal: ',',
           thousands: '.',
@@ -166,6 +183,7 @@
       totalGerado:0,
       totalDeTransacoes:0,
       messageDisable :'Desativar Transação',
+      messageEnable: 'Ativar Transação',
       messageVisuzalizar:'Visualizar Transação',
       messageNewAdd:'Novo Cadastro',
 
@@ -175,6 +193,7 @@
         valor: 0,
         data: '',
         status: '',
+        ativo: Boolean,
       },
 
       defaultItem: {
@@ -183,6 +202,7 @@
         valor: 0,
         data: '',
         status: '',
+        ativo: Boolean,
       },
 
         empresaRules: [
@@ -206,7 +226,7 @@
         return this.editedIndex == -1 ? 'Cadastrar Transação' : 'Alterar Status'
       },
        computedDateFormatted () {
-        return this.formatDate(this.date)
+         return this.formatDate(this.date)
       },
     },
 
@@ -233,6 +253,7 @@
             valor: 2500.00,
             data: '18/04/2020',
             status: 'Em Andamento',
+            ativo: true
           },
           {
             empresa: 'Empresa 2',
@@ -240,6 +261,7 @@
             valor: 5700.00,
             data: '19/04/2020',
             status: 'Concluído',
+            ativo: true
           },
         ]
       },
@@ -260,15 +282,22 @@
       editItem (item) {
         this.dialog = true
         this.readonly = true
+        if(!item.ativo)
+          this.readstatus = true
         this.editedIndex = this.transacoes.indexOf(item)
         this.editedItem = Object.assign({}, item)
-
       },
 
-      deleteItem (item) {
-        const index = this.transacoes.indexOf(item)
-        confirm('Tem certeza que deseja deletar essa transação?') && this.transacoes.splice(index, 1)
-        this.balancoTotal()
+      ativarDesativarTransacao(item) {
+        let resp = ""
+        if(item.ativo)
+          resp = confirm("Tem certeza que deseja desativar essa transação?") 
+        else
+          resp = confirm("Tem certeza que deseja reativar essa transação?") 
+        
+        if(resp){
+          item.ativo = !item.ativo
+        }
       },
 
       close () {
@@ -282,11 +311,12 @@
       },
 
       save () {
-        if(this.editedItem.empresa != "" && this.editedItem.cliente != "" && this.editedItem.valor != 0 && this.editedItem.data != "" && this.editedItem.status != ""){
+        if(this.editedItem.empresa != "" && this.editedItem.cliente != "" && this.editedItem.valor != 0 && this.editedItem.data != null && this.editedItem.status != ""){
           if (this.editedIndex > -1) {
             Object.assign(this.transacoes[this.editedIndex], this.editedItem)
           }
           else {
+            this.editedItem.ativo = true
             this.transacoes.push(this.editedItem)
           }
         this.balancoTotal()
@@ -296,6 +326,8 @@
 
       resetValidation(){
         this.$refs.form.resetValidation()
+        this.date = new Date().toISOString().substr(0, 10)
+        this.readstatus = false
       },
 
       formatDate (date) {
@@ -304,12 +336,13 @@
         const [year, month, day] = date.split('-')
         return `${day}/${month}/${year}`
       },
-      parseDate (date) {
-        if (!date) return null
 
-        const [month, day, year] = date.split('/')
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-      },
     },
   }
 </script>
+
+<style>
+.transacaoInativa {
+  color: #454547;
+}
+</style>
