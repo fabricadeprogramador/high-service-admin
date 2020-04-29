@@ -3,8 +3,24 @@
   <v-data-table
     :headers="headers"
     :items="transacoes"
-    sort-by="empresa">
+    sort-by="data">
     
+    <template v-slot:body="{ items }">
+      <tbody>
+        <tr v-for="item in items" :key="item.empresa">         
+          <td>{{ item.empresa }}</td>
+          <td>{{item.cliente}}</td>
+          <td><money v-model=item.valor v-bind="money" readonly=true></money></td>
+          <td>{{item.data}}</td>
+          <td>{{item.status}}</td>
+          <td>
+            <v-icon small class="mr-2" @click="editItem(item)" v-bind:title="messageVisuzalizar">mdi-magnify</v-icon>
+            <v-icon small @click="deleteItem(item)" v-bind:title="messageDisable">mdi-close</v-icon>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+
     <template v-slot:top>
       <div >
         <v-row >
@@ -15,19 +31,20 @@
             <v-text-field v-model="totalDeTransacoes" readonly></v-text-field>
           </v-col>
           <v-spacer></v-spacer>
-          <v-col cols="2">
+          <v-col cols="2" align-self="center">
             <v-subheader>Total Gerado: </v-subheader>
           </v-col>
-          <v-col cols="2">
-            <v-text-field v-model="totalGerado" prefix="R$" readonly></v-text-field>
+          <v-col cols="2" align-self="center">
+            <money v-model="totalGerado" v-bind="money" readonly=true></money>
           </v-col>
+          <v-col cols="3"></v-col>
         </v-row>
         <v-row >
           <v-col cols="2">
             <v-subheader>Valor Total das Transações: </v-subheader>
           </v-col>
           <v-col cols="2">
-            <v-text-field v-model=valorTotalTransacoes prefix="R$" readonly></v-text-field>
+            <money v-model="valorTotalTransacoes" v-bind="money" readonly=true></money>
           </v-col>
         </v-row>
       </div>
@@ -35,7 +52,9 @@
       <v-spacer></v-spacer>
        <v-dialog v-model="dialog" max-width="500px" overlay-color="grey">
         <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark class="mb-2" v-on="on" @click="resetValidation">Cadastrar Transação</v-btn>          
+          <v-btn color="primary" dark v-on="on" @click="resetValidation">
+            <v-icon dark  v-on="on" v-bind:title="messageNewAdd">mdi-account-plus</v-icon>
+          </v-btn> 
         </template>
      
       <v-card>
@@ -62,10 +81,8 @@
                     required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.valor" :readonly="readonly"
-                    :rules="valorRules"
-                    label="Valor" prefix="R$"
-                    required></v-text-field>
+                    <label>Valor</label>
+                     <money v-model="editedItem.valor" v-bind="money" :readonly="readonly" :rules="valorRules" required></money>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-dialog
@@ -78,6 +95,7 @@
                         v-model="computedDateFormatted" 
                         label="Data"
                         v-on="on"
+                        :rules= "[v => !!v || 'Selecione uma Data' ]"
                       ></v-text-field>
                     </template>
                     <v-date-picker :readonly="readonly" v-model="date" scrollable>
@@ -109,15 +127,6 @@
 
       </v-toolbar>
     </template>
-    <template v-slot:item.acoes="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">mdi-magnify</v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
-    </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
     </template>
@@ -125,17 +134,27 @@
 </template>
 
 <script>
+  import {Money} from 'v-money'
   export default {
+    components: {Money},
     data: vm => ({
       date: new Date().toISOString().substr(0, 10),
       dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
       modal: false,
       dialog: false,
       readonly: false,
+      money: {
+          decimal: ',',
+          thousands: '.',
+          prefix: 'R$ ',
+          suffix: '',
+          precision: 2,
+          masked: false,
+        },
       headers: [
         { text: 'Empresa', value: 'empresa',},
         { text: 'Cliente', value: 'cliente' },
-        { text: 'Valor', value: 'valor'},
+        { text: 'Valor (R$)', value: 'valor'},
         { text: 'Data', value: 'data'},
         { text: 'Status', value: 'status' },
         { text: 'Ações', value: 'acoes', sortable: false },
@@ -146,6 +165,9 @@
       valorTotalTransacoes: 0,
       totalGerado:0,
       totalDeTransacoes:0,
+      messageDisable :'Desativar Transação',
+      messageVisuzalizar:'Visualizar Transação',
+      messageNewAdd:'Novo Cadastro',
 
       editedItem: {
         empresa: '',
@@ -176,8 +198,6 @@
         valorRules: [
           v=> !!v || 'Valor Obrigatório'
         ],
-
-        //Faltou validação da data
 
     }),
 
@@ -238,10 +258,11 @@
       },
 
       editItem (item) {
-        this.editedIndex = this.transacoes.indexOf(item)
-        this.editedItem = Object.assign({}, item)
         this.dialog = true
         this.readonly = true
+        this.editedIndex = this.transacoes.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+
       },
 
       deleteItem (item) {
@@ -256,6 +277,7 @@
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
+          this.resetValidation()
         }, 300)
       },
 
@@ -267,9 +289,9 @@
           else {
             this.transacoes.push(this.editedItem)
           }
-        }
         this.balancoTotal()
         this.close()
+        }
       },
 
       resetValidation(){
