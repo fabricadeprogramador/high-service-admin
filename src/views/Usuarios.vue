@@ -1,10 +1,5 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="usuarios"
-    sort-by="username"
-    class="elevation-1"
-  >
+  <v-data-table :headers="headers" :items="usuarios" sort-by="username" class="elevation-1">
     <template v-slot:top>
       <!-- CARD JOAO -->
       <v-expand-transition>
@@ -43,17 +38,8 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn
-                color="primary"
-                dark
-                class="mb-2"
-                @click="save"
-                :disabled="!valid"
-                >Salvar</v-btn
-              >
-              <v-btn color="primary" dark class="mb-2" @click="reset"
-                >Cancelar</v-btn
-              >
+              <v-btn color="primary" dark class="mb-2" @click="save" :disabled="!valid">Salvar</v-btn>
+              <v-btn color="primary" dark class="mb-2" @click="reset">Cancelar</v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
@@ -109,7 +95,7 @@
     <template v-slot:item.tipo="{ item }">
       <tr v-bind:class="{ usuarioInativo: !item.ativo }">
         {{
-          item.tipo
+        item.tipo
         }}
       </tr>
     </template>
@@ -117,7 +103,7 @@
     <template v-slot:item.username="{ item }">
       <tr v-bind:class="{ usuarioInativo: !item.ativo }">
         {{
-          item.username
+        item.username
         }}
       </tr>
     </template>
@@ -128,18 +114,9 @@
         small
         color="green"
         @click="ativarDesativarUsuario(item)"
-        >mdi-check-bold</v-icon
-      >
-      <v-icon
-        v-if="!item.ativo"
-        small
-        color="red"
-        @click="ativarDesativarUsuario(item)"
-        >mdi-cancel</v-icon
-      >
-      <v-icon small v-if="item.ativo" @click="editItem(item)"
-        >mdi-pencil</v-icon
-      >
+      >mdi-check-bold</v-icon>
+      <v-icon v-if="!item.ativo" small color="red" @click="ativarDesativarUsuario(item)">mdi-cancel</v-icon>
+      <v-icon small v-if="item.ativo" @click="editItem(item)">mdi-pencil</v-icon>
       <v-icon small v-if="!item.ativo">mdi-pencil-remove</v-icon>
     </template>
     <template v-slot:no-data>
@@ -156,46 +133,46 @@ export default {
     mostraNovoUsuario: false,
     valid: true,
     nameRules: [
-      (v) => !!v || "Digite um nome de usuário!",
-      (v) =>
+      v => !!v || "Digite um nome de usuário!",
+      v =>
         (!!v && v.length >= 3 && v.length <= 10) ||
-        "Nome de usuário deve possuir no mínimo 3 e no máximo 10 caracteres!",
+        "Nome de usuário deve possuir no mínimo 3 e no máximo 10 caracteres!"
     ],
     passwordRules: [
-      (v) => !!v || "Digite uma senha!",
-      (v) => (!!v && v.length == 6) || "A senha deve possuir 6 caracteres!",
+      v => !!v || "Digite uma senha!",
+      v => (!!v && v.length == 6) || "A senha deve possuir 6 caracteres!"
     ],
     dialog: false,
     headers: [
       { text: "Nome de usuário", value: "username" },
       { text: "Tipo", value: "tipo" },
-      { text: "Ativo?", value: "actions", sortable: false },
+      { text: "Ativo?", value: "actions", sortable: false }
     ],
     editedIndex: -1,
     editedItem: {
       username: "",
       password: "",
       tipo: "",
-      ativo: Boolean,
+      ativo: Boolean
     },
     defaultItem: {
       username: "",
       password: "",
       tipo: "",
-      ativo: Boolean,
-    },
+      ativo: Boolean
+    }
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
+    }
   },
 
   watch: {
     dialog(val) {
       val || this.close();
-    },
+    }
   },
 
   created() {
@@ -209,14 +186,14 @@ export default {
           username: "111",
           password: "111111",
           tipo: "ADMIN",
-          ativo: true,
+          ativo: true
         },
         {
           username: "222",
           password: "222222",
           tipo: "ADMIN",
-          ativo: true,
-        },
+          ativo: true
+        }
       ];
     },
 
@@ -239,7 +216,8 @@ export default {
     },
 
     ativarDesativarUsuario(usuario) {
-      usuario.ativo = !usuario.ativo;
+      confirm("Tem certeza que deseja Ativar/Dessativar esse usuário?") &&
+        (usuario.ativo = !usuario.ativo);
     },
 
     cadastrarUsuario() {
@@ -288,8 +266,8 @@ export default {
         this.usuarios.push(Object.assign({}, this.editedItem));
       }
       this.reset();
-    },
-  },
+    }
+  }
 };
 </script>
 
