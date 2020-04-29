@@ -3,8 +3,9 @@
     <template v-slot:top>
       <v-expand-transition>
         <v-card v-if="mostraNovoUsuario">
+         
           <v-card-title>
-            <span class="headline">Novo Usuário</span>
+            <span class="headline">{{formTitle}}</span>
           </v-card-title>
 
           <v-form v-model="valid" ref="form">
@@ -49,7 +50,9 @@
         <v-spacer></v-spacer>
 
         <v-btn color="primary" fab dark small @click="mostrarNovoUsuario">
-          <v-icon v-if="!mostraNovoUsuario" dark>mdi-plus</v-icon>
+          <v-icon v-if="!mostraNovoUsuario" dark
+          v-bind:title="msnBotaoUser"
+          >mdi-plus</v-icon>
           <v-icon v-if="mostraNovoUsuario" dark>mdi-minus</v-icon>
         </v-btn>
       </v-toolbar>
@@ -77,10 +80,23 @@
         small
         color="green"
         @click="ativarDesativarUsuario(item)"
+      v-bind:title="msnDesativar"
       >mdi-check-bold</v-icon>
-      <v-icon v-if="!item.ativo" small color="red" @click="ativarDesativarUsuario(item)">mdi-cancel</v-icon>
-      <v-icon small v-if="item.ativo" @click="editItem(item)">mdi-pencil</v-icon>
-      <v-icon small v-if="!item.ativo">mdi-pencil-remove</v-icon>
+
+
+      <v-icon v-if="!item.ativo" small color="red" @click="ativarDesativarUsuario(item)"
+      v-bind:title="msnAtivar"
+      >mdi-cancel</v-icon>
+
+      <v-icon small v-if="item.ativo" @click="editItem(item)"
+      v-bind:title="msnEditar"
+      
+      >mdi-pencil</v-icon>
+
+
+      <v-icon small v-if="!item.ativo">mdi-pencil-remove     
+      </v-icon>
+
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -109,9 +125,18 @@ export default {
     headers: [
       { text: "Nome de usuário", value: "username" },
       { text: "Tipo", value: "tipo" },
-      { text: "Ativo?", value: "actions", sortable: false }
+      { text: "Ações", value: "actions", sortable: false }
     ],
     editedIndex: -1,
+
+
+msnBotaoUser:'Novo Usuario',
+msnDesativar:'Desativar Usuario',
+msnAtivar:'Ativar Usuario',
+msnEditar:'Editar Usuario',
+
+
+
     editedItem: {
       username: "",
       password: "",
@@ -128,7 +153,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "Novo Usuário" : "Editar Usuário";
     }
   },
 
