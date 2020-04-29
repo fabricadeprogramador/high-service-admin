@@ -2,7 +2,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="transacoes"
+    :items="transacoesMostradas"
     :search="search"
     sort-by="data">
     
@@ -53,6 +53,8 @@
         </v-row>
       </div>
       <v-toolbar flat color="dark-grey">
+      <v-switch v-model="switch1" label="Mostrar Inativos"></v-switch>
+      <v-spacer></v-spacer>
       <v-col cols="12" sm="6" md="4">
       <v-text-field
         v-model="search"
@@ -160,6 +162,7 @@
       readonly: false,
       readstatus: false,
       search: '',
+      switch1: false,
       money: {
           decimal: ',',
           thousands: '.',
@@ -225,9 +228,15 @@
       formTitle () {
         return this.editedIndex == -1 ? 'Cadastrar Transação' : 'Alterar Status'
       },
-       computedDateFormatted () {
-         return this.formatDate(this.date)
-      },
+       transacoesMostradas : function() {
+         if(!this.switch1){
+           return this.transacoes.filter(function(u) {
+             return u.ativo
+         })
+         }
+         else
+          return this.transacoes
+     }
     },
 
     watch: {
@@ -253,7 +262,7 @@
             valor: 2500.00,
             data: '18/04/2020',
             status: 'Em Andamento',
-            ativo: true
+            ativo: false
           },
           {
             empresa: 'Empresa 2',
