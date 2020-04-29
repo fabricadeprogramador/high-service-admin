@@ -1,7 +1,6 @@
 <template>
   <v-data-table :headers="headers" :items="usuarios" sort-by="username" class="elevation-1">
     <template v-slot:top>
-      <!-- CARD JOAO -->
       <v-expand-transition>
         <v-card v-if="mostraNovoUsuario">
           <v-card-title>
@@ -44,7 +43,6 @@
           </v-form>
         </v-card>
       </v-expand-transition>
-      <!-- CARD JOAO -->
 
       <v-toolbar flat color="dark-grey">
         <v-toolbar-title>Lista de Usuários</v-toolbar-title>
@@ -54,41 +52,6 @@
           <v-icon v-if="!mostraNovoUsuario" dark>mdi-plus</v-icon>
           <v-icon v-if="mostraNovoUsuario" dark>mdi-minus</v-icon>
         </v-btn>
-
-        <!-- <v-dialog v-model="dialog" max-width="500px">
-          <template v-slot:activator="{ on }">
-            <v-btn color="primary" fab dark small v-on="on">
-              <v-icon dark>mdi-plus</v-icon>
-            </v-btn>
-          </template>
-        <v-card>-->
-        <!-- <v-form v-model="valid" ref="form">
-
-            <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
-
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="6">
-                    <v-text-field v-model="usuario.username" label="Nome de usuário" :rules="nameRules" counter :maxlength="10"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="6">
-                    <v-text-field v-model="usuario.password" label="Senha" :rules="passwordRules" counter :maxlength="6"></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" dark class="mb-2" @click="save" :disabled="!valid">Salvar</v-btn>
-              <v-btn color="primary" dark class="mb-2" @click="close">Cancelar</v-btn>
-            </v-card-actions>
-        </v-form>-->
-        <!-- </v-card>
-        </v-dialog>-->
       </v-toolbar>
     </template>
 
@@ -216,7 +179,7 @@ export default {
     },
 
     ativarDesativarUsuario(usuario) {
-      confirm("Tem certeza que deseja Ativar/Dessativar esse usuário?") &&
+      confirm("Tem certeza que deseja Ativar/Desativar esse usuário?") &&
         (usuario.ativo = !usuario.ativo);
     },
 
@@ -240,12 +203,6 @@ export default {
       this.editedIndex = this.usuarios.indexOf(item);
       this.editedItem = Object.assign({}, item);
     },
-
-    // editItem (item) {
-    //   this.editedIndex = this.desserts.indexOf(item)
-    //   this.editedItem = Object.assign({}, item)
-    //   this.dialog = true
-    // },
 
     deleteItem(item) {
       const index = this.desserts.indexOf(item);
