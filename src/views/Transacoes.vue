@@ -276,7 +276,7 @@
             empresa: 'Empresa 3',
             cliente: 'José Francisco Cooper',
             valor: 1800.00,
-            data: '19/04/2020',
+            data: '20/04/2020',
             status: 'Concluído',
             ativo: false
           },
@@ -284,7 +284,7 @@
             empresa: 'Empresa 4',
             cliente: 'Ana Carla Silva',
             valor: 900.00,
-            data: '19/04/2020',
+            data: '21/04/2020',
             status: 'Concluído',
             ativo: true
           },
@@ -292,7 +292,7 @@
             empresa: 'Empresa 5',
             cliente: 'José Francisco Cooper',
             valor: 230.00,
-            data: '19/04/2020',
+            data: '20/04/2020',
             status: 'Concluído',
             ativo: true
           },
