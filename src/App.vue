@@ -2,13 +2,7 @@
   <v-app id="inspire">
     <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense>
-        <v-list-item
-          v-for="item in menu"
-          :key="item.titulo"
-          link
-          router
-          :to="item.rota"
-        >
+        <v-list-item v-for="item in menu" :key="item.titulo" link router :to="item.rota">
           <v-list-item-action>
             <v-icon>{{ item.icone }}</v-icon>
           </v-list-item-action>
