@@ -8,10 +8,10 @@
           </v-card-title>
 
           <v-form v-model="valid" ref="form">
-            <v-card-text>
+            <v-card-text class="pa-0">
               <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="6">
+                <v-row justify="center">
+                  <v-col cols="12" sm="6" md="6" lg="4" xl="3">
                     <v-text-field
                       v-model="editedItem.username"
                       label="Nome de usuário"
@@ -21,7 +21,9 @@
                       type="text"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="6">
+                </v-row>
+                <v-row justify="center">
+                  <v-col cols="12" sm="6" md="6" lg="4" xl="3">
                     <v-text-field
                       v-model="editedItem.password"
                       label="Senha"
@@ -36,7 +38,7 @@
             </v-card-text>
 
             <v-layout justify-center>
-              <v-card-actions>
+              <v-card-actions class="mb-3">
                 <v-spacer></v-spacer>
                 <v-btn color="primary" dark class="mb-2" @click="save" :disabled="!valid">Salvar</v-btn>
                 <v-btn color="primary" dark class="mb-2" @click="reset">Cancelar</v-btn>
@@ -158,16 +160,16 @@ export default {
     initialize() {
       this.usuarios = [
         {
-          username: "111",
-          password: "111111",
+          username: "ADMIN",
+          password: "0123",
           tipo: "ADMIN",
           ativo: true
         },
         {
-          username: "222",
-          password: "222222",
+          username: "ADMIN2",
+          password: "112233",
           tipo: "ADMIN",
-          ativo: true
+          ativo: false
         }
       ];
     },
