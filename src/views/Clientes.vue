@@ -26,13 +26,14 @@
                   <v-col cols="12" sm="6" md="5" lg="3">
                     <!-- Falta máscara, não consegui implementar -->
                     <v-text-field
+                      v-mask = "'###.###.###-##'"
                       v-model="editedItem.cpf"
                       class="inputNumeroLimpo"
                       label="CPF"
                       :rules="cpfRules"
                       counter
-                      :maxlength="11"
-                      type="number"
+                      :maxlength="14"
+                      type="text" 
                       oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                     ></v-text-field>
                     <!-- <the-mask
@@ -250,7 +251,7 @@
                   v-model="clienteConsultado.cpf"
                   class="inputNumeroLimpo"
                   label="CPF"
-                  :maxlength="11"
+                  :maxlength="14"
                   type="number"
                   oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                   solo
@@ -428,8 +429,13 @@
 
 <script>
 import { TheMask } from "vue-the-mask";
+import {mask} from "vue-the-mask"  //Fiz esse import do Mask
+
 export default {
-  components: { TheMask },
+  components: { TheMask }, 
+
+  directives: {mask}, //Aqui não usa o mask como um componente
+
   data: () => ({
     sexo: ["M", "F"],
     cliente: {},
@@ -437,7 +443,7 @@ export default {
     mostraNovocliente: false,
     valid: true,
     nameRules: [v => (!!v && v.length >= 4) || "Digite o nome do cliente"],
-    cpfRules: [v => (!!v && v.length == 11) || "Digite o CPF com 11 dígitos"],
+    cpfRules: [v => (!!v && v.length == 14) || "Digite o CPF com 11 dígitos"],
     telRules: [
       v =>
         (!!v && v.length >= 8) || "Digite o telefone com pelo menos 8 números"

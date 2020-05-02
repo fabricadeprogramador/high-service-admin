@@ -22,9 +22,7 @@
         </tr>
       </tbody>
     </template>
-
-
-
+    
     <template v-slot:top>
       <div >
         <v-row >
@@ -111,6 +109,7 @@
                         label="Data"
                         v-on="on"
                         :rules= "[v => !!v || 'Selecione uma Data' ]"
+                        readonly
                       ></v-text-field>
                     </template>
                     <v-date-picker :readonly="readonly" v-model="date" >
@@ -151,8 +150,10 @@
 
 <script>
   import {Money} from 'v-money'
+
   export default {
     components: {Money},
+
     data: vm => ({
       date: new Date().toISOString().substr(0, 10),
       dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
