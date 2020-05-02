@@ -24,45 +24,26 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="5" lg="3">
-                    <!-- Falta máscara, não consegui implementar -->
                     <v-text-field
-                      v-mask = "'###.###.###-##'"
+                      v-mask="'###.###.###-##'"
                       v-model="editedItem.cpf"
                       class="inputNumeroLimpo"
                       label="CPF"
                       :rules="cpfRules"
-                      counter
                       :maxlength="14"
-                      type="text" 
+                      type="text"
                       oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                     ></v-text-field>
-                    <!-- <the-mask
-                      mask="###.###.###-##"
-                      type="text"
-                      v-model="editedItem.cpf"
-                      placeholder="CPF"
-                      counter
-                      :maxlength="14"
-                    ></the-mask>-->
                   </v-col>
                   <v-col cols="12" sm="6" md="5" lg="3">
-                    <!-- Falta máscara, não consegui implementar -->
                     <v-text-field
                       v-model="editedItem.tel"
                       label="Telefone"
+                      v-mask="['(##) ####-####', '(##) #####-####']"
                       :rules="telRules"
-                      counter
-                      :maxlength="11"
+                      :maxlength="15"
                       type="text"
                     ></v-text-field>
-                    <!-- <the-mask
-                      :mask="['(##) ####-####', '(##) #####-####']"
-                      type="text"
-                      v-model="editedItem.tel"
-                      placeholder="Telefone"
-                      counter
-                      :maxlength="14"
-                    ></the-mask>-->
                   </v-col>
                   <v-col cols="12" sm="6" md="5" lg="3">
                     <v-text-field
@@ -101,8 +82,8 @@
                     <v-text-field
                       v-model="editedItem.nr"
                       label="Número"
-                      type="number"
-                      counter
+                      v-mask="'######'"
+                      type="text"
                       :maxlength="6"
                       class="inputNumeroLimpo"
                     ></v-text-field>
@@ -127,23 +108,14 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="5" lg="3">
-                    <!-- Falta máscara, não consegui implementar -->
                     <v-text-field
                       v-model="editedItem.cep"
+                      v-mask="'#####-###'"
                       label="CEP"
                       :rules="cepRules"
                       type="text"
-                      counter
-                      :maxlength="8"
+                      :maxlength="9"
                     ></v-text-field>
-                    <!-- <the-mask
-                      mask="#####-###"
-                      type="text"
-                      v-model="editedItem.endereco.cep"
-                      placeholder="CEP"
-                      counter
-                      :maxlength="14"
-                    ></the-mask>-->
                   </v-col>
                   <v-col cols="12" sm="6" md="5" lg="3">
                     <v-text-field
@@ -155,16 +127,6 @@
                       :maxlength="30"
                     ></v-text-field>
                   </v-col>
-                  <!-- <v-col cols="12" sm="6" md="5" lg="3">
-                    <v-text-field
-                      v-model="editedItem.endereco.uf"
-                      label="UF"
-                      :rules="nameRules"
-                      type="text"
-                      counter
-                      :maxlength="30"
-                    ></v-text-field>
-                  </v-col>-->
                   <v-col cols="12" sm="2" md="2" lg="1" xl="1">
                     <v-select v-model="editedItem.uf" :items="uf" label="UF" :rules="ufRules"></v-select>
                   </v-col>
@@ -241,49 +203,28 @@
                   v-model="clienteConsultado.nome"
                   label="Nome Completo"
                   type="text"
-                  solo
                   readonly
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="5" lg="3">
-                <!-- Falta máscara, não consegui implementar -->
                 <v-text-field
                   v-model="clienteConsultado.cpf"
                   class="inputNumeroLimpo"
                   label="CPF"
                   :maxlength="14"
-                  type="number"
-                  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                  solo
+                  type="text"
                   readonly
                 ></v-text-field>
-                <!-- <the-mask
-                      mask="###.###.###-##"
-                      type="text"
-                      v-model="clienteConsultado.cpf"
-                      placeholder="CPF"
-                      counter
-                      :maxlength="14"
-                ></the-mask>-->
               </v-col>
               <v-col cols="12" sm="6" md="5" lg="3">
-                <!-- Falta máscara, não consegui implementar -->
                 <v-text-field
                   v-model="clienteConsultado.tel"
                   label="Telefone"
+                  v-mask="['(##) ####-####', '(##) #####-####']"
                   :maxlength="11"
                   type="text"
-                  solo
                   readonly
                 ></v-text-field>
-                <!-- <the-mask
-                      :mask="['(##) ####-####', '(##) #####-####']"
-                      type="text"
-                      v-model="clienteConsultado.tel"
-                      placeholder="Telefone"
-                      counter
-                      :maxlength="14"
-                ></the-mask>-->
               </v-col>
               <v-col cols="12" sm="6" md="5" lg="3">
                 <v-text-field
@@ -291,7 +232,6 @@
                   label="E-mail"
                   type="text"
                   :maxlength="30"
-                  solo
                   readonly
                 ></v-text-field>
               </v-col>
@@ -301,7 +241,6 @@
                   :items="sexo"
                   label="Sexo"
                   :rules="sexoRules"
-                  solo
                   readonly
                 ></v-select>
               </v-col>
@@ -316,7 +255,6 @@
                   label="Logradouro"
                   type="text"
                   :maxlength="30"
-                  solo
                   readonly
                 ></v-text-field>
               </v-col>
@@ -327,7 +265,6 @@
                   type="number"
                   :maxlength="6"
                   class="inputNumeroLimpo"
-                  solo
                   readonly
                 ></v-text-field>
               </v-col>
@@ -337,7 +274,6 @@
                   label="Complemento"
                   type="text"
                   :maxlength="30"
-                  solo
                   readonly
                 ></v-text-field>
               </v-col>
@@ -347,28 +283,18 @@
                   label="Bairro"
                   type="text"
                   :maxlength="30"
-                  solo
                   readonly
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="5" lg="3">
-                <!-- Falta máscara, não consegui implementar -->
                 <v-text-field
                   v-model="clienteConsultado.cep"
                   label="CEP"
+                  v-mask="'#####-###'"
                   type="text"
                   :maxlength="8"
-                  solo
                   readonly
                 ></v-text-field>
-                <!-- <the-mask
-                      mask="#####-###"
-                      type="text"
-                      v-model="clienteConsultado.endereco.cep"
-                      placeholder="CEP"
-                      counter
-                      :maxlength="14"
-                ></the-mask>-->
               </v-col>
               <v-col cols="12" sm="6" md="5" lg="3">
                 <v-text-field
@@ -376,22 +302,11 @@
                   label="Cidade"
                   type="text"
                   :maxlength="30"
-                  solo
                   readonly
                 ></v-text-field>
               </v-col>
-              <!-- <v-col cols="12" sm="6" md="5" lg="3">
-                    <v-text-field
-                      v-model="clienteConsultado.endereco.uf"
-                      label="UF"
-                      :rules="nameRules"
-                      type="text"
-                      counter
-                      :maxlength="30"
-                    ></v-text-field>
-              </v-col>-->
               <v-col cols="12" sm="2" md="2" lg="1" xl="1">
-                <v-select v-model="clienteConsultado.uf" :items="uf" label="UF" solo readonly></v-select>
+                <v-select v-model="clienteConsultado.uf" :items="uf" label="UF" readonly></v-select>
               </v-col>
             </v-row>
           </v-container>
@@ -429,12 +344,12 @@
 
 <script>
 import { TheMask } from "vue-the-mask";
-import {mask} from "vue-the-mask"  //Fiz esse import do Mask
+import { mask } from "vue-the-mask"; //Fiz esse import do Mask
 
 export default {
-  components: { TheMask }, 
+  components: { TheMask },
 
-  directives: {mask}, //Aqui não usa o mask como um componente
+  directives: { mask }, //Aqui não usa o mask como um componente
 
   data: () => ({
     sexo: ["M", "F"],
@@ -446,13 +361,13 @@ export default {
     cpfRules: [v => (!!v && v.length == 14) || "Digite o CPF com 11 dígitos"],
     telRules: [
       v =>
-        (!!v && v.length >= 8) || "Digite o telefone com pelo menos 8 números"
+        (!!v && v.length >= 14) || "Digite o telefone com pelo menos 8 números"
     ],
     emailRules: [v => /.+@.+\..+/.test(v) || "Digite um e-mail válido"],
     sexoRules: [v => !!v || "Selecione o sexo"],
     logradouroRules: [v => (!!v && v.length >= 6) || "Digite o logradouro"],
     bairroRules: [v => (!!v && v.length >= 6) || "Digite o bairro"],
-    cepRules: [v => (!!v && v.length == 8) || "Digite o CEP com 8 dígitos"],
+    cepRules: [v => (!!v && v.length == 9) || "Digite o CEP com 8 dígitos"],
     cidadeRules: [v => (!!v && v.length >= 4) || "Digite o nome da cidade"],
     ufRules: [v => !!v || "Selecione o estado"],
     headers: [
@@ -569,30 +484,30 @@ export default {
       this.clientes = [
         {
           nome: "Teste1",
-          cpf: "11111111111",
+          cpf: "111.111.111-11",
           sexo: "M",
-          tel: "11111111111",
+          tel: "(11)11111-1111",
           email: "teste1@teste.com",
           logradouro: "Rua teste1",
           nr: "111",
           complemento: "teste1",
           bairro: "teste1",
-          cep: "11111111",
+          cep: "11111-111",
           cidade: "teste1",
           uf: "MS",
           ativo: true
         },
         {
           nome: "Teste2",
-          cpf: "22222222222",
+          cpf: "222.222.222-22",
           sexo: "F",
-          tel: "22222222",
+          tel: "(22)22222-2222",
           email: "teste2@teste.com",
           logradouro: "Rua teste2",
           nr: "222",
           complemento: "teste2",
           bairro: "teste2",
-          cep: "22222222",
+          cep: "22222-222",
           cidade: "teste2",
           uf: "MT",
           ativo: false

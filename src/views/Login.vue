@@ -9,12 +9,7 @@
             </v-toolbar>
             <v-card-text class="px-10">
               <v-row justify="center">
-                <img
-                  class="mb-8"
-                  width="160"
-                  alt="Logo High Service"
-                  src="../assets/LOGO HIGH SERVICE 1.jpg"
-                />
+                <img class="mb-8" width="160" alt="Logo High Service" src="../assets/logo_hs_1.png" />
               </v-row>
               <v-form v-model="valid" ref="form">
                 <v-text-field
