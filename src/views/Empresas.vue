@@ -360,7 +360,7 @@
         },
 
         save () {
-            alert(JSON.stringify(this.editedItem));
+/*             alert(JSON.stringify(this.editedItem)); */            
             if (this.editedIndex > -1) {
                 Object.assign(this.empresas[this.editedIndex], this.editedItem)
             }
