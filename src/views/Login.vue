@@ -2,16 +2,16 @@
   <v-content class="pa-5">
     <v-container>
       <v-row justify="center">
-        <v-col cols="12" sm="8" md="8" lg="6" xl="4">
+        <v-col cols="12" sm="7" md="7" lg="6" xl="4">
           <v-card class="elevation-12">
             <v-toolbar dark flat>
               <v-toolbar-title>Login High Service</v-toolbar-title>
             </v-toolbar>
             <v-card-text class="px-10">
               <v-row justify="center">
-                <img class="mb-8" width="160" alt="Logo High Service" src="../assets/logo_hs_1.png" />
+                <img class="mb-0" width="200" alt="Logo High Service" src="../assets/logo_hs_1.png" />
               </v-row>
-              <v-form v-model="valid" ref="form">
+              <v-form @submit="e.keyCode === 13" v-model="valid" ref="form">
                 <v-text-field
                   label="Username"
                   name="login"
@@ -32,13 +32,18 @@
                   v-model="usuario.password"
                   :rules="pass"
                 />
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    type="submit"
+                    class="botaoLogin"
+                    color="primary"
+                    @click="autenticar()"
+                  >Login</v-btn>
+                  <v-spacer></v-spacer>
+                </v-card-actions>
               </v-form>
             </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn class="botaoLogin" color="primary" @click="autenticar()">Login</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
@@ -131,7 +136,11 @@ export default {
 
 <style>
 .botaoLogin {
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 15px;
   width: 100px;
+}
+html {
+  overflow-y: auto;
 }
 </style>

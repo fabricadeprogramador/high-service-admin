@@ -6,7 +6,7 @@
           <v-card-title>
             <span class="headline">{{ formTitle }}</span>
           </v-card-title>
-          <v-form v-model="valid" ref="form">
+          <v-form @submit="e.keyCode === 13" v-model="valid" ref="form">
             <v-card-text>
               <v-container>
                 <v-row>
@@ -137,7 +137,14 @@
             <v-layout justify-center>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" dark class="mb-2" @click="save" :disabled="!valid">Salvar</v-btn>
+                <v-btn
+                  type="submit"
+                  color="primary"
+                  dark
+                  class="mb-2"
+                  @click="save"
+                  :disabled="!valid"
+                >Salvar</v-btn>
                 <v-btn color="primary" dark class="mb-2" @click="reset">Cancelar</v-btn>
               </v-card-actions>
             </v-layout>
@@ -414,7 +421,6 @@ export default {
       cep: "",
       cidade: "",
       uf: "",
-
       ativo: Boolean
     },
     defaultItem: {
