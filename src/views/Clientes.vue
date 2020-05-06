@@ -2,7 +2,7 @@
   <v-data-table :headers="headers" :items="clientes" sort-by="nome" class="elevation-1">
     <template v-slot:top>
       <v-expand-transition>
-        <v-card v-if="mostraNovocliente">
+        <v-card v-if="mostraNovoCliente">
           <v-card-title>
             <span class="headline">{{ formTitle }}</span>
           </v-card-title>
@@ -151,18 +151,15 @@
           </v-form>
         </v-card>
       </v-expand-transition>
-
       <v-toolbar flat color="dark-grey">
         <v-toolbar-title>Lista de clientes</v-toolbar-title>
         <v-spacer></v-spacer>
-
         <v-btn color="primary" fab dark small @click="mostrarNovocliente">
-          <v-icon v-if="!mostraNovocliente" dark v-bind:title="msnBotaoUser">mdi-plus</v-icon>
-          <v-icon v-if="mostraNovocliente" dark>mdi-minus</v-icon>
+          <v-icon v-if="!mostraNovoCliente" dark v-bind:title="msnBotaoUser">mdi-plus</v-icon>
+          <v-icon v-if="mostraNovoCliente" dark>mdi-minus</v-icon>
         </v-btn>
       </v-toolbar>
     </template>
-
     <template v-slot:item.nome="{ item }">
       <tr v-bind:class="{ clienteInativo: !item.ativo }">
         {{
@@ -170,7 +167,6 @@
         }}
       </tr>
     </template>
-
     <template v-slot:item.cpf="{ item }">
       <tr v-bind:class="{ clienteInativo: !item.ativo }">
         {{
@@ -178,7 +174,6 @@
         }}
       </tr>
     </template>
-
     <template v-slot:item.tel="{ item }">
       <tr v-bind:class="{ clienteInativo: !item.ativo }">
         {{
@@ -186,7 +181,6 @@
         }}
       </tr>
     </template>
-
     <template v-slot:item.email="{ item }">
       <tr v-bind:class="{ clienteInativo: !item.ativo }">
         {{
@@ -194,10 +188,8 @@
         }}
       </tr>
     </template>
-
     <template v-slot:item.actions="{ item }">
       <v-icon small @click="detalhaCliente(item)" v-bind:title="msnDetalhar">mdi-magnify</v-icon>
-
       <v-dialog v-model="dialog" transition="dialog-transition">
         <v-card>
           <v-container>
@@ -319,50 +311,37 @@
           </v-container>
         </v-card>
       </v-dialog>
-
       <v-icon
         v-if="item.ativo"
         small
         color="green"
-        @click="ativarDesativarcliente(item)"
+        @click="ativarDesativarCliente(item)"
         v-bind:title="msnDesativar"
       >mdi-check-bold</v-icon>
-
       <v-icon
         v-if="!item.ativo"
         small
         color="red"
-        @click="ativarDesativarcliente(item)"
+        @click="ativarDesativarCliente(item)"
         v-bind:title="msnAtivar"
       >mdi-cancel</v-icon>
-
       <v-icon small v-if="item.ativo" @click="editItem(item)" v-bind:title="msnEditar">mdi-pencil</v-icon>
-
       <v-icon small v-if="!item.ativo">mdi-pencil-remove</v-icon>
     </template>
-
-    <template></template>
-
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
     </template>
   </v-data-table>
 </template>
-
 <script>
-import { TheMask } from "vue-the-mask";
 import { mask } from "vue-the-mask"; //Fiz esse import do Mask
-
 export default {
-  components: { TheMask },
-
   directives: { mask }, //Aqui não usa o mask como um componente
-
   data: () => ({
     sexo: ["M", "F"],
     cliente: {},
     clientes: [],
-    mostraNovocliente: false,
+    mostraNovoCliente: false,
     valid: true,
     nameRules: [v => (!!v && v.length >= 4) || "Digite o nome do cliente"],
     cpfRules: [v => (!!v && v.length == 14) || "Digite o CPF com 11 dígitos"],
@@ -391,7 +370,6 @@ export default {
     msnDesativar: "Desativar cliente",
     msnAtivar: "Ativar cliente",
     msnEditar: "Editar cliente",
-
     clienteConsultado: {
       nome: "",
       cpf: "",
@@ -407,7 +385,6 @@ export default {
       uf: "",
       ativo: Boolean
     },
-
     editedItem: {
       nome: "",
       cpf: "",
@@ -468,23 +445,14 @@ export default {
       "TO"
     ]
   }),
-
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Novo cliente" : "Editar cliente";
     }
   },
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    }
-  },
-
   created() {
     this.initialize();
   },
-
   methods: {
     initialize() {
       this.clientes = [
@@ -520,69 +488,34 @@ export default {
         }
       ];
     },
-
-    corAtivo(ativo) {
-      if (ativo == true) return "clienteAtivo";
-      else return "clienteInativo";
-    },
-
-    mostra() {
-      alert("hey");
-    },
-
     abreNovocliente() {
-      this.mostraNovocliente = true;
+      this.mostraNovoCliente = true;
     },
-
     mostrarNovocliente() {
-      this.mostraNovocliente = !this.mostraNovocliente;
-      this.reset();
+      this.mostraNovoCliente = !this.mostraNovoCliente;
+      setTimeout(() => {
+        this.reset();
+      }, 100);
     },
-
-    ativarDesativarcliente(cliente) {
+    ativarDesativarCliente(cliente) {
       confirm("Tem certeza que deseja Ativar/Desativar esse cliente?") &&
         (cliente.ativo = !cliente.ativo);
     },
-
-    cadastrarcliente() {
-      let cliente = Object.assign({}, this.cliente);
-      cliente.ativo = true;
-      this.clientes.push(cliente);
-      alert(JSON.stringify(this.clientes));
-      // *** Nessa linha faz o request para a API salvar o novo cliente
-      this.reset();
-    },
-
     reset() {
-      this.$refs.form.reset();
-      this.editedIndex = -1;
+      if (this.mostraNovoCliente) {
+        this.$refs.form.reset();
+        this.editedIndex = -1;
+      }
     },
-
-    abreDialog() {
-      this.dialog = true;
-    },
-
     detalhaCliente(item) {
       this.clienteConsultado = Object.assign({}, item);
       this.dialog = true;
     },
-
     editItem(item) {
       this.abreNovocliente();
       this.editedIndex = this.clientes.indexOf(item);
       this.editedItem = Object.assign({}, item);
     },
-
-    deleteItem(item) {
-      const index = this.desserts.indexOf(item);
-      confirm("Você tem certeza que deseja apagar esse item?") &&
-        this.clientes.splice(index, 1);
-    },
-
-    close() {
-      this.mostraNovocliente = false;
-    },
-
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.clientes[this.editedIndex], this.editedItem);
@@ -595,7 +528,6 @@ export default {
   }
 };
 </script>
-
 <style>
 .clienteAtivo {
   color: white;

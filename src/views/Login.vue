@@ -13,15 +13,15 @@
               </v-row>
               <v-form @submit="e.keyCode === 13" v-model="valid" ref="form">
                 <v-text-field
+                  ref="refInputUsername"
                   label="Username"
                   name="login"
                   prepend-icon="mdi-account"
                   type="text"
                   :maxlength="10"
                   v-model="usuario.username"
-                  :rules="usernameRule"
+                  :rules="usernameRules"
                 />
-
                 <v-text-field
                   id="password"
                   label="Senha"
@@ -30,11 +30,12 @@
                   type="password"
                   :maxlength="6"
                   v-model="usuario.password"
-                  :rules="pass"
+                  :rules="passwordRules"
                 />
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
+                    :disabled="!valid"
                     type="submit"
                     class="botaoLogin"
                     color="primary"
@@ -52,23 +53,24 @@
       color="primary"
       v-model="snackbarAutenticado"
       :timeout="snackbarTimeout"
-      multi-line="true"
-      top="true"
+      :multi-line="multiLineVariavel"
+      :top="topVariavel"
     >Usuário autenticado</v-snackbar>
     <v-snackbar
       color="red"
       v-model="snackbarInvalido"
       :timeout="snackbarTimeout"
-      multi-line="true"
-      top="true"
+      :multi-line="multiLineVariavel"
+      :top="topVariavel"
     >Usuário ou senha inválido(s)</v-snackbar>
   </v-content>
 </template>
-
 <script>
 export default {
   data() {
     return {
+      multiLineVariavel: true,
+      topVariavel: true,
       usuario: {},
       usuarios: [],
       usuarioAutenticado: {},
@@ -77,12 +79,15 @@ export default {
       snackbarInvalido: false,
       snackbarTimeout: 2000,
       valid: false,
-      usernameRules: [v => !v || "Digite um nome de usuário"],
-      passwordRules: [v => !v || "Digite um nome de usuário"]
+      usernameRules: [v => !!v || "Digite o nome do usuário"],
+      passwordRules: [v => !!v || "Digite a senha"]
     };
   },
   created() {
     this.initialize();
+  },
+  mounted() {
+    this.$refs.refInputUsername.focus();
   },
   methods: {
     initialize() {
@@ -101,7 +106,6 @@ export default {
         }
       ];
     },
-
     autenticar() {
       this.usuarioAutenticado = {};
       let stop = false;
@@ -129,11 +133,11 @@ export default {
         this.snackbarInvalido = true;
       }
       this.$refs.form.reset();
+      this.$refs.refInputUsername.focus();
     }
   }
 };
 </script>
-
 <style>
 .botaoLogin {
   margin-top: 10px;

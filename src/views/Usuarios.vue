@@ -6,7 +6,6 @@
           <v-card-title>
             <span class="headline">{{formTitle}}</span>
           </v-card-title>
-
           <v-form @submit="e.keyCode === 13" v-model="valid" ref="form">
             <v-card-text class="pa-0">
               <v-container>
@@ -36,7 +35,6 @@
                 </v-row>
               </v-container>
             </v-card-text>
-
             <v-layout justify-center>
               <v-card-actions class="mb-3">
                 <v-spacer></v-spacer>
@@ -54,18 +52,15 @@
           </v-form>
         </v-card>
       </v-expand-transition>
-
       <v-toolbar flat color="dark-grey">
         <v-toolbar-title>Lista de Usuários</v-toolbar-title>
         <v-spacer></v-spacer>
-
         <v-btn color="primary" fab dark small @click="mostrarNovoUsuario">
           <v-icon v-if="!mostraNovoUsuario" dark v-bind:title="msnBotaoUser">mdi-plus</v-icon>
           <v-icon v-if="mostraNovoUsuario" dark>mdi-minus</v-icon>
         </v-btn>
       </v-toolbar>
     </template>
-
     <template v-slot:item.tipo="{ item }">
       <tr v-bind:class="{ usuarioInativo: !item.ativo }">
         {{
@@ -73,7 +68,6 @@
         }}
       </tr>
     </template>
-
     <template v-slot:item.username="{ item }">
       <tr v-bind:class="{ usuarioInativo: !item.ativo }">
         {{
@@ -81,7 +75,6 @@
         }}
       </tr>
     </template>
-
     <template v-slot:item.actions="{ item }">
       <v-icon
         v-if="item.ativo"
@@ -90,7 +83,6 @@
         @click="ativarDesativarUsuario(item)"
         v-bind:title="msnDesativar"
       >mdi-check-bold</v-icon>
-
       <v-icon
         v-if="!item.ativo"
         small
@@ -98,9 +90,7 @@
         @click="ativarDesativarUsuario(item)"
         v-bind:title="msnAtivar"
       >mdi-cancel</v-icon>
-
       <v-icon small v-if="item.ativo" @click="editItem(item)" v-bind:title="msnEditar">mdi-pencil</v-icon>
-
       <v-icon small v-if="!item.ativo">mdi-pencil-remove</v-icon>
     </template>
     <template v-slot:no-data>
@@ -108,7 +98,6 @@
     </template>
   </v-data-table>
 </template>
-
 <script>
 export default {
   data: () => ({
@@ -126,7 +115,6 @@ export default {
       v => !!v || "Digite uma senha!",
       v => (!!v && v.length == 6) || "A senha deve possuir 6 caracteres!"
     ],
-    dialog: false,
     headers: [
       { text: "Nome de usuário", value: "username" },
       { text: "Tipo", value: "tipo" },
@@ -155,11 +143,6 @@ export default {
       return this.editedIndex === -1 ? "Novo Usuário" : "Editar Usuário";
     }
   },
-  watch: {
-    dialog(val) {
-      val || this.close();
-    }
-  },
   created() {
     this.initialize();
   },
@@ -180,13 +163,6 @@ export default {
         }
       ];
     },
-    corAtivo(ativo) {
-      if (ativo == true) return "usuarioAtivo";
-      else return "usuarioInativo";
-    },
-    mostra() {
-      alert("hey");
-    },
     abreNovoUsuario() {
       this.mostraNovoUsuario = true;
     },
@@ -200,15 +176,6 @@ export default {
       confirm("Tem certeza que deseja Ativar/Desativar esse usuário?") &&
         (usuario.ativo = !usuario.ativo);
     },
-    cadastrarUsuario() {
-      let usuario = Object.assign({}, this.usuario);
-      usuario.tipo = "ADMIN";
-      usuario.ativo = true;
-      this.usuarios.push(usuario);
-      alert(JSON.stringify(this.usuarios));
-      // *** Nessa linha faz o request para a API salvar o novo usuário
-      this.reset();
-    },
     reset() {
       if (this.mostraNovoUsuario) {
         this.$refs.form.reset();
@@ -219,14 +186,6 @@ export default {
       this.abreNovoUsuario();
       this.editedIndex = this.usuarios.indexOf(item);
       this.editedItem = Object.assign({}, item);
-    },
-    deleteItem(item) {
-      const index = this.desserts.indexOf(item);
-      confirm("Você tem certeza que deseja apagar esse item?") &&
-        this.usuarios.splice(index, 1);
-    },
-    close() {
-      this.mostraNovoUsuario = false;
     },
     save() {
       if (this.editedIndex > -1) {
@@ -241,7 +200,6 @@ export default {
   }
 };
 </script>
-
 <style>
 .usuarioAtivo {
   color: white;
