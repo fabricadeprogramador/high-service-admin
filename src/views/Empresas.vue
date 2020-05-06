@@ -129,7 +129,7 @@
         @click="abrirDialogProdutosServicos()"
         v-bind:title="msnCadastraListaProdutosServicos"
       >mdi-wrench-outline</v-icon>
-      <v-icon small @click="abrirMensagens(item)" v-bind:title="msgMensagens">mdi-email-outline</v-icon>
+      <v-icon small @click="abrirDialogMenssagem()" v-bind:title="msgMensagens">mdi-email-outline</v-icon>
       <v-icon
         small
         class="mr-2"
@@ -151,6 +151,8 @@
         v-bind:title="messageDisable"
       >mdi-check-bold</v-icon>
       <v-icon small v-if="item.ativo" @click="editItem(item)" v-bind:title="msnEditar">mdi-pencil</v-icon>
+
+
 
       <v-dialog v-model="dialog" overlay-color="grey">
         <v-card>
@@ -204,7 +206,74 @@
           </v-container>
         </v-card>
       </v-dialog>
-      <!-- EMPRESAS PRODUTOS/SERVICOS -->
+
+
+      <!-- EMPRESAS - Mensagens  -->
+
+  
+   <v-dialog
+        :retain-focus="false"
+        
+        v-model="dialogMenssagem"
+        scrollable
+        transition="dialog-transition"
+        overlay-color="grey"
+      >
+        <v-card>
+          <v-container>
+            <v-row>
+              <h3 class="ml-3">Mensagens :</h3>
+            </v-row>
+                                    
+           
+
+
+      <div class="card-footer">
+          <form id="chat">
+
+              <div class="gorm-group">
+                  <label for="user">Usuario: </label>
+                  <input type="text" v-model="user" 
+                  placeholder="Digite seu usuario"
+                  >
+              </div>
+
+                <div class="messages"></div>
+
+
+  <!-- logica pra aplicar
+               <div class="messages" v-for="(msg, index) in messages" :key="index">
+                  <p><span class="font-weight-bold">{{ msg.user }}: </span>{{ msg.message }}</p>
+              </div>
+        -->
+
+
+              <div class="gorm-group pb-3">
+                  <label for="message">Mensagem: </label>
+                  <input type="text" v-model="message" 
+                  placeholder="Digite sua mensagem">
+              </div>
+              
+
+
+               <v-btn color="primary" dark class="mb-2" @click="EnviarMsg">Enviar</v-btn>
+
+             
+          </form>
+      </div>
+                                
+            
+           
+          </v-container>
+        </v-card>
+      </v-dialog>
+
+
+   <!-- EMPRESAS - Fim Mensagens  -->
+
+
+
+     <!-- EMPRESAS PRODUTOS/SERVICOS -->
       <!-- BUG 1 (ABRIR E FECHAR O DETALHAR TRAVA O NAVEGADOR) -->
       <!-- BUG 2 (VUETIFY COM ERRO AO DEFINIR ENDEREÇO DINAMICO PARA V-IMG, ENCONTREI NA INTERNET SOLUÇÃO DE USAR 'REQUEST', IMPLEMENTEI NOS PRODUTOS/SERVIÇOS PRÉ-GERADOS, MAS AINDA NÃO É UMA SOLUÇÃO PRÁTICA) -->
       <!-- BUG 3 (POR CAUSA DO BUG 2 NOVOS PRODUTOS/SERVIÇOS CADASTRADOS NÃO MOSTRAM IMG) -->
@@ -455,6 +524,7 @@ export default {
     readonly: false,
     novoCadastro: false,
     dialog: false,
+    dialogMenssagem: false,
     headers: [
       { text: "Empresa", value: "empresa" },
       { text: "CNPJ", value: "cnpj" },
@@ -633,6 +703,8 @@ export default {
         ? "Novo Produto/Serviço"
         : "Editar Produto/Serviço";
     }
+
+
   },
 
   created() {
@@ -819,9 +891,22 @@ export default {
       );
       this.produtoServicoDetalhado = Object.assign({}, item);
       this.dialogDetalhaProdutoServico = true;
-    }
+    },
     // Methods de Produtos e Serviços
-  }
+
+
+
+   // Methods para Mensagens
+  abrirDialogMenssagem() {
+      this.dialogMenssagem = true;
+    },
+    
+    fecharDialogMenssagem() {
+      this.dialogMenssagem = false;
+    },
+  // Methods para Mensagens
+
+}
 };
 </script>
 
@@ -847,4 +932,24 @@ html {
   -webkit-appearance: none;
 }
 /* Styles de Produtos e Serviços */
+
+
+
+/* Styles Mensagens */
+#chat {
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.messages {
+  width: 600px;
+  height: 400px;
+  margin: 20px 0;
+  border: 1px solid #ddd;
+  padding: 20px;
+}
+/* Styles Mensagens */
+
 </style>
