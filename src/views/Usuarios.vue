@@ -192,7 +192,9 @@ export default {
     },
     mostrarNovoUsuario() {
       this.mostraNovoUsuario = !this.mostraNovoUsuario;
-      this.reset();
+      setTimeout(() => {
+        this.reset();
+      }, 100);
     },
     ativarDesativarUsuario(usuario) {
       confirm("Tem certeza que deseja Ativar/Desativar esse usuário?") &&
@@ -208,8 +210,10 @@ export default {
       this.reset();
     },
     reset() {
-      this.$refs.form.reset();
-      this.editedIndex = -1;
+      if (this.mostraNovoUsuario) {
+        this.$refs.form.reset();
+        this.editedIndex = -1;
+      }
     },
     editItem(item) {
       this.abreNovoUsuario();
