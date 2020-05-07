@@ -663,6 +663,7 @@
 
 <script>
 import { mask } from "vue-the-mask";
+import ConverterUtil from '@/util/ConverterUtil'
 
 export default {
   directives: { mask },
@@ -861,6 +862,7 @@ export default {
 
   methods: {
     initialize() {
+      // ConverterUtil.converterCNPJParaNumero()
       (this.empresas = [
         {
           empresa: "Empresa 1",
