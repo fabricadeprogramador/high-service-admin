@@ -90,6 +90,8 @@
               </v-container>
             </v-card-text>
             <v-layout justify-center>
+             
+             
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" dark class="mb-2" @click="save" :disabled="!valid">Salvar</v-btn>
@@ -225,42 +227,16 @@
               <h3 class="ml-3">Mensagens :</h3>
             </v-row>
                                     
-           
-
-
-      <div class="card-footer">
-          <form id="chat">
-
-              <div class="gorm-group">
-                  <label for="user">Usuario: </label>
-                  <input type="text" v-model="user" 
-                  placeholder="Digite seu usuario"
-                  >
-              </div>
-
-                <div class="messages"></div>
-
-
-  <!-- logica pra aplicar
-               <div class="messages" v-for="(msg, index) in messages" :key="index">
+          
+  <!--  TO DO   colocar inputs  
+               
+                   <div class="messages" v-for="(msg, index) in messages" :key="index">
                   <p><span class="font-weight-bold">{{ msg.user }}: </span>{{ msg.message }}</p>
-              </div>
-        -->
-
-
-              <div class="gorm-group pb-3">
-                  <label for="message">Mensagem: </label>
-                  <input type="text" v-model="message" 
-                  placeholder="Digite sua mensagem">
-              </div>
-              
-
-
-               <v-btn color="primary" dark class="mb-2" @click="EnviarMsg">Enviar</v-btn>
-
-             
-          </form>
-      </div>
+                  </div>
+      
+ -->
+          
+     
                                 
             
            
