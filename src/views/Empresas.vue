@@ -190,8 +190,11 @@
         small
         @click="abrirDialogProdutosServicos(item)"
         v-bind:title="msnCadastraListaProdutosServicos"
-      >mdi-wrench-outline</v-icon>
-      <v-icon small @click="abrirDialogMenssagem()" v-bind:title="msgMensagens">mdi-email-outline</v-icon>
+        >mdi-wrench-outline</v-icon
+      >
+      <v-icon small @click="abrirDialogMenssagem()" v-bind:title="msgMensagens"
+        >mdi-email-outline</v-icon
+      >
       <v-icon
         small
         class="mr-2"
@@ -222,8 +225,6 @@
         v-bind:title="msnEditar"
         >mdi-pencil</v-icon
       >
-
-
 
       <v-dialog v-model="dialog" overlay-color="grey">
         <v-card>
@@ -327,13 +328,10 @@
         </v-card>
       </v-dialog>
 
-
       <!-- EMPRESAS - Mensagens  -->
 
-  
-   <v-dialog
+      <v-dialog
         :retain-focus="false"
-        
         v-model="dialogMenssagem"
         scrollable
         transition="dialog-transition"
@@ -344,52 +342,47 @@
             <v-row>
               <h3 class="ml-3">Mensagens :</h3>
             </v-row>
-                                    
-           
 
-
-      <div class="card-footer">
-          <form id="chat">
-
-              <div class="gorm-group">
+            <div class="card-footer">
+              <form id="chat">
+                <div class="gorm-group">
                   <label for="user">Usuario: </label>
-                  <input type="text" v-model="user" 
-                  placeholder="Digite seu usuario"
-                  >
-              </div>
+                  <input
+                    type="text"
+                    id="user"
+                    v-model="user"
+                    placeholder="Digite seu usuario"
+                  />
+                </div>
 
                 <div class="messages"></div>
 
-
-  <!-- logica pra aplicar
+                <!-- logica pra aplicar
                <div class="messages" v-for="(msg, index) in messages" :key="index">
                   <p><span class="font-weight-bold">{{ msg.user }}: </span>{{ msg.message }}</p>
               </div>
         -->
 
-
-              <div class="gorm-group pb-3">
+                <div class="gorm-group pb-3">
                   <label for="message">Mensagem: </label>
-                  <input type="text" v-model="message" 
-                  placeholder="Digite sua mensagem">
-              </div>
-              
+                  <input
+                    id="message"
+                    type="text"
+                    v-model="message"
+                    placeholder="Digite sua mensagem"
+                  />
+                </div>
 
-
-               <v-btn color="primary" dark class="mb-2" @click="EnviarMsg">Enviar</v-btn>
-
-             
-          </form>
-      </div>
-                                
-            
-           
+                <v-btn color="primary" dark class="mb-2" @click="enviarMsg()"
+                  >Enviar</v-btn
+                >
+              </form>
+            </div>
           </v-container>
         </v-card>
       </v-dialog>
 
-
-   <!-- EMPRESAS - Fim Mensagens  -->
+      <!-- EMPRESAS - Fim Mensagens  -->
 
       <!-- PRODUTOS/SERVICOS -->
       <!-- BUG 1 (VUETIFY COM ERRO AO DEFINIR ENDEREÇO DINAMICO PARA V-IMG, ENCONTREI NA INTERNET SOLUÇÃO DE USAR 'REQUEST', IMPLEMENTEI NOS PRODUTOS/SERVIÇOS PRÉ-GERADOS, MAS AINDA NÃO É UMA SOLUÇÃO PRÁTICA) -->
@@ -663,12 +656,14 @@
 
 <script>
 import { mask } from "vue-the-mask";
-import ConverterUtil from '@/util/ConverterUtil'
+import ConverterUtil from "@/util/ConverterUtil";
 
 export default {
   directives: { mask },
 
   data: () => ({
+    user: "",
+    message: "",
     valid: true,
     readonly: false,
     novoCadastro: false,
@@ -679,7 +674,7 @@ export default {
       { text: "CNPJ", value: "cnpj" },
       { text: "E-mail", value: "email" },
       { text: "Telefone", value: "telefone" },
-      { text: "Ações", value: "actions", sortable: false },
+      { text: "Ações", value: "actions", sortable: false }
     ],
     empresas: [],
     editedIndex: -1,
@@ -705,7 +700,7 @@ export default {
       cidade: "",
       uf: "",
       ramo: "",
-      ativo: Boolean,
+      ativo: Boolean
     },
 
     defaultItem: {
@@ -721,7 +716,7 @@ export default {
       cidade: "",
       uf: "",
       ramo: "",
-      ativo: Boolean,
+      ativo: Boolean
     },
 
     visualizedtItem: {
@@ -737,7 +732,7 @@ export default {
       cidade: "",
       uf: "",
       ramo: "",
-      ativo: Boolean,
+      ativo: Boolean
     },
 
     uf: [
@@ -767,25 +762,25 @@ export default {
       "SC",
       "SE",
       "SP",
-      "TO",
+      "TO"
     ],
 
-    campoRules: [(v) => !!v || "Campo obrigatório"],
-    emailRules: [(v) => /.+@.+\..+/.test(v) || "Digite um e-mail válido"],
+    campoRules: [v => !!v || "Campo obrigatório"],
+    emailRules: [v => /.+@.+\..+/.test(v) || "Digite um e-mail válido"],
     cnpjRules: [
-      (v) =>
+      v =>
         (!!v && v.length >= 14 && v.length <= 18) ||
-        "CPF ou CNPJ deve ser válido",
+        "CPF ou CNPJ deve ser válido"
     ],
-    telRules: [(v) => (!!v && v.length >= 14) || "Digite telefone com DDD"],
-    cepRules: [(v) => (!!v && v.length == 9) || "Digite o CEP com 8 dígitos"],
+    telRules: [v => (!!v && v.length >= 14) || "Digite telefone com DDD"],
+    cepRules: [v => (!!v && v.length == 9) || "Digite o CEP com 8 dígitos"],
 
     // Data de Produtos e Serviços
     empresaProdutosServicos: {},
     vDialogProdutosServicosPersistentVariable: true,
     validProdutosServicos: true,
     nomeProdutoServicoRules: [
-      (v) => (!!v && v.length >= 4) || "Digite o nome do Produto/Serviço",
+      v => (!!v && v.length >= 4) || "Digite o nome do Produto/Serviço"
     ],
     dialogDetalhaProdutoServico: false,
     dialogProdutosServicos: false,
@@ -798,11 +793,11 @@ export default {
     msnCadastraListaProdutosServicos: "Cadastro de Produtos ou Serviços",
     msnBotaoNovoProdServ: "Novo Produto ou Serviço",
     produtosServicosDescricaoRules: [
-      (v) =>
+      v =>
         (!!v && v.length >= 20) ||
-        "Descreva o Produto/Serviço - Mín. 20 caracteres",
+        "Descreva o Produto/Serviço - Mín. 20 caracteres"
     ],
-    produtosServicosValorRules: [(v) => !!v || "Digite o valor"],
+    produtosServicosValorRules: [v => !!v || "Digite o valor"],
     selectProdServTipo: ["Produto", "Serviço"],
     produtoServico: {},
     produtosServicos: [],
@@ -814,7 +809,7 @@ export default {
       valor: "",
       descricao: "",
       img: "",
-      ativo: Boolean,
+      ativo: Boolean
     },
     produtoServicoEditado: {
       nome: "",
@@ -822,7 +817,7 @@ export default {
       valor: "",
       descricao: "",
       img: "",
-      ativo: Boolean,
+      ativo: Boolean
     },
     produtoServicoPadrao: {
       nome: "",
@@ -830,7 +825,7 @@ export default {
       valor: "",
       descricao: "",
       img: "",
-      ativo: Boolean,
+      ativo: Boolean
     },
     testeImagem: require("../assets/maquiadora.jpg"),
     headersProdutosServicos: [
@@ -838,8 +833,8 @@ export default {
       { text: "Nome", value: "nome" },
       { text: "Produto/Serviço", value: "tipo" },
       { text: "Valor", value: "valor" },
-      { text: "Ações", value: "actions", sortable: false },
-    ],
+      { text: "Ações", value: "actions", sortable: false }
+    ]
     // Data de Produtos e Serviços
   }),
 
@@ -869,7 +864,7 @@ export default {
           cnpj: "11122233344455",
           email: "empresa1@empresa1.com.br",
           telefone: "6733334444",
-          ativo: true,
+          ativo: true
         },
         {
           empresa: "Empresa 2",
@@ -884,7 +879,7 @@ export default {
               valor: 80.0,
               descricao: "Faço serviço de jardinagem",
               img: require("../assets/manutencao.jpg"),
-              ativo: true,
+              ativo: true
             },
             {
               nome: "Sapato1",
@@ -892,9 +887,9 @@ export default {
               valor: 10,
               descricao: "Vendo sapato semi-novo",
               img: require("../assets/sapato.jpg"),
-              ativo: true,
-            },
-          ],
+              ativo: true
+            }
+          ]
         },
         {
           empresa: "Empresa 3",
@@ -902,8 +897,8 @@ export default {
           email: "empresa3@empresa3.com.br",
           telefone: "6733334444",
           ativo: true,
-          produtosServicos: null,
-        },
+          produtosServicos: null
+        }
       ]),
         // Initialize de Produtos e Serviços
         (this.produtosServicos = [
@@ -913,7 +908,7 @@ export default {
             valor: 80.0,
             descricao: "Faço serviço de jardinagem",
             img: require("../assets/manutencao.jpg"),
-            ativo: true,
+            ativo: true
           },
           {
             nome: "Sapato1",
@@ -921,7 +916,7 @@ export default {
             valor: 10,
             descricao: "Vendo sapato semi-novo",
             img: require("../assets/sapato.jpg"),
-            ativo: true,
+            ativo: true
           },
           {
             nome: "Maquiadora1",
@@ -929,7 +924,7 @@ export default {
             valor: 10,
             descricao: "Maquiadora profissional",
             img: require("../assets/maquiadora.jpg"),
-            ativo: false,
+            ativo: false
           },
           {
             nome: "Sapato2",
@@ -937,7 +932,7 @@ export default {
             valor: 20,
             descricao: "Vendo sapato semi-novo",
             img: require("../assets/sapato.jpg"),
-            ativo: false,
+            ativo: false
           },
           {
             nome: "Maquiadora2",
@@ -945,7 +940,7 @@ export default {
             valor: 20,
             descricao: "Maquiadora profissional",
             img: require("../assets/maquiadora.jpg"),
-            ativo: false,
+            ativo: false
           },
           {
             nome: "Sapato3",
@@ -953,7 +948,7 @@ export default {
             valor: 30,
             descricao: "Vendo sapato semi-novo",
             img: require("../assets/sapato.jpg"),
-            ativo: true,
+            ativo: true
           },
           {
             nome: "Maquiadora3",
@@ -961,10 +956,14 @@ export default {
             valor: 30,
             descricao: "Maquiadora profissional",
             img: require("../assets/maquiadora.jpg"),
-            ativo: true,
-          },
+            ativo: true
+          }
         ]);
       // Initialize de Produtos e Serviços
+    },
+
+    enviarMsg() {
+      //TODO: Implementar envio de mensagem
     },
 
     editItem(item) {
@@ -1075,19 +1074,16 @@ export default {
     },
     // Methods de Produtos e Serviços
 
-
-
-   // Methods para Mensagens
-  abrirDialogMenssagem() {
+    // Methods para Mensagens
+    abrirDialogMenssagem() {
       this.dialogMenssagem = true;
     },
-    
+
     fecharDialogMenssagem() {
       this.dialogMenssagem = false;
-    },
-  // Methods para Mensagens
-
-}
+    }
+    // Methods para Mensagens
+  }
 };
 </script>
 
@@ -1114,8 +1110,6 @@ html {
 }
 /* Styles de Produtos e Serviços */
 
-
-
 /* Styles Mensagens */
 #chat {
   height: 80%;
@@ -1132,5 +1126,4 @@ html {
   padding: 20px;
 }
 /* Styles Mensagens */
-
 </style>
