@@ -1,4 +1,3 @@
-
 <template>
   <v-data-table :headers="headers" :items="empresas" sort-by="empresa">
     <template v-slot:top>
@@ -95,7 +94,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" dark class="mb-2" @click="save" :disabled="!valid">Salvar</v-btn>
-                <v-btn color="primary" dark class="mb-2" @click="reset">Cancelar</v-btn>
+                <v-btn color="primary" dark class="mb-2" @click="resetClose">Cancelar</v-btn>
               </v-card-actions>
             </v-layout>
           </v-form>
@@ -113,32 +112,55 @@
     </template>
 
     <template v-slot:item.empresa="{ item }">
-      <tr v-bind:class="{ empresaInativa: !item.ativo }">{{item.empresa}}</tr>
+      <tr v-bind:class="{ empresaInativa: !item.ativo }">
+        {{
+        item.empresa
+        }}
+      </tr>
     </template>
     <template v-slot:item.cnpj="{ item }">
-      <tr v-bind:class="{ empresaInativa: !item.ativo }">{{item.cnpj}}</tr>
+      <tr v-bind:class="{ empresaInativa: !item.ativo }">
+        {{
+        item.cnpj
+        }}
+      </tr>
     </template>
     <template v-slot:item.email="{ item }">
-      <tr v-bind:class="{ empresaInativa: !item.ativo }">{{item.email}}</tr>
+      <tr v-bind:class="{ empresaInativa: !item.ativo }">
+        {{
+        item.email
+        }}
+      </tr>
     </template>
     <template v-slot:item.telefone="{ item }">
-      <tr v-bind:class="{ empresaInativa: !item.ativo }">{{item.telefone}}</tr>
+      <tr v-bind:class="{ empresaInativa: !item.ativo }">
+        {{
+        item.telefone
+        }}
+      </tr>
     </template>
 
     <template v-slot:item.actions="{ item }">
       <v-icon
         small
-        @click="abrirDialogProdutosServicos()"
+        @click="abrirDialogProdutosServicos(item)"
         v-bind:title="msnCadastraListaProdutosServicos"
       >mdi-wrench-outline</v-icon>
-      <v-icon small @click="abrirDialogMenssagem()" v-bind:title="msgMensagens">mdi-email-outline</v-icon>
+
+      <v-icon
+        class="ml-1"
+        small
+        @click="abrirDialogMenssagem()"
+        v-bind:title="msgMensagens"
+      >mdi-email-outline</v-icon>
       <v-icon
         small
-        class="mr-2"
+        class="ml-1"
         @click="visualizaEmpresa(item)"
         v-bind:title="msgVisualizar"
       >mdi-magnify</v-icon>
       <v-icon
+        class="ml-1"
         v-if="!item.ativo"
         color="red"
         small
@@ -146,15 +168,20 @@
         v-bind:title="messageEnable"
       >mdi-cancel</v-icon>
       <v-icon
+        class="ml-1"
         v-if="item.ativo"
         small
         color="green"
         @click="ativarDesativarEmpresa(item)"
         v-bind:title="messageDisable"
       >mdi-check-bold</v-icon>
-      <v-icon small v-if="item.ativo" @click="editItem(item)" v-bind:title="msnEditar">mdi-pencil</v-icon>
-
-
+      <v-icon
+        class="ml-1"
+        small
+        v-if="item.ativo"
+        @click="editItem(item)"
+        v-bind:title="msnEditar"
+      >mdi-pencil</v-icon>
 
       <v-dialog v-model="dialog" overlay-color="grey">
         <v-card>
@@ -210,7 +237,7 @@
       </v-dialog>
 
 
-      <!-- EMPRESAS - Mensagens  -->
+            <!-- EMPRESAS - Mensagens  -->
 
   
    <v-dialog
@@ -221,42 +248,154 @@
         transition="dialog-transition"
         overlay-color="grey"
       >
-        <v-card>
-          <v-container>
-            <v-row>
-              <h3 class="ml-3">Mensagens :</h3>
-            </v-row>
-                                    
-          
-  <!--  TO DO   colocar inputs  
-               
-                   <div class="messages" v-for="(msg, index) in messages" :key="index">
-                  <p><span class="font-weight-bold">{{ msg.user }}: </span>{{ msg.message }}</p>
-                  </div>
-      
- -->
-          
-     
-                                
+      <v-card>
+          <v-toolbar class="toolbarCadMsg" flat color="dark-grey">
+            <v-toolbar-title>Mensagens: </v-toolbar-title>
+            <v-spacer></v-spacer>
             
-           
-          </v-container>
-        </v-card>
-      </v-dialog>
+          </v-toolbar>             
+       
+     
+
+         
+         <v-container>
+           <v-row>
+
+                        <v-col cols="12" sm="6" md="6" lg="4" xl="3">
+                          <v-text-field
+                            v-model="mensagemEditada.user"
+                            label="Usuario"
+                            :maxlength="30"
+                            type="text"
+                            placeholder="Digite seu usuario"
+                          ></v-text-field>
+                           </v-col>
+                        </v-row> 
+
+
+
+      <v-row>
+                  <v-col cols="12" sm="12" md="12" lg="6" xl="6">
+               <v-text-field
+                v-model="mensagemEditada.mensagem"
+                label="mensagem"
+                type="text"
+                placeholder="Sua mensagem aqui"
+                :maxlength="200"
+                ></v-text-field>
+                </v-col>
+            </v-row>
+
+
+
+
+
+
+         </v-container>
+        
+             
+        <!--  </v-form>        -->
+          <v-layout justify-center>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        type="submit"
+                        color="primary"
+                        dark
+                        class="mb-2"
+                        @click="SalvarMensagemEditada()"
+                        :disabled="!valida"
+                      >Enviar</v-btn>
+                   </v-card-actions>
+              </v-layout> 
+      
+        
+     <!-- <div class="messages">  layout bonitinho   -->
+
+
+       <v-data-table
+              :headers="headersMensagens"
+              :items="mensagens"
+              sort-by="nome"
+              class="elevation-1"
+              
+            >
+        
+         <template v-slot:item.nome ="{ item }">
+                
+                <tr>
+                  {{ 
+                  item.nome
+                  }} 
+                  
+                </tr>
+         </template>
+
+
+            <template v-slot:item.valor ="{ item }">
+                
+                <tr>
+               
+               
+                {{ item.message }}
+                  
+                </tr>
+                
+              </template>      
+
+              <template v-slot:item.actions="{ item }">
+                <v-icon
+                  small
+                  @click="detalharProdutoServico(item)"
+                  v-bind:title="msnDetalharProdutoServico"
+                >mdi-check-bold</v-icon>
+
+               <v-icon
+                  v-if="item.ativo"
+                  small
+                  color="green"
+                  @click="ativarDesativarProdutoServico(item)"
+                  v-bind:title="msnDesativarProdutoServico"
+                >mdi-check-bold</v-icon>
+
+                <v-icon
+                  v-if="!item.ativo"
+                  small
+                  color="red"
+                  @click="ativarDesativarProdutoServico(item)"
+                  v-bind:title="msnAtivarProdutoServico"
+                >mdi-cancel</v-icon>
+          
+             </template>  
+            </v-data-table>
+
+      
+ 
+
+
+     </v-card>
+     </v-dialog>
 
 
    <!-- EMPRESAS - Fim Mensagens  -->
 
 
+      <!-- PRODUTOS/SERVICOS -->
 
-     <!-- EMPRESAS PRODUTOS/SERVICOS -->
-      <!-- BUG 1 (ABRIR E FECHAR O DETALHAR TRAVA O NAVEGADOR) -->
-      <!-- BUG 2 (VUETIFY COM ERRO AO DEFINIR ENDEREÇO DINAMICO PARA V-IMG, ENCONTREI NA INTERNET SOLUÇÃO DE USAR 'REQUEST', IMPLEMENTEI NOS PRODUTOS/SERVIÇOS PRÉ-GERADOS, MAS AINDA NÃO É UMA SOLUÇÃO PRÁTICA) -->
-      <!-- BUG 3 (POR CAUSA DO BUG 2 NOVOS PRODUTOS/SERVIÇOS CADASTRADOS NÃO MOSTRAM IMG) -->
+      <!-- BUG 1 (VUETIFY COM ERRO AO DEFINIR ENDEREÇO DINAMICO PARA V-IMG, ENCONTREI NA INTERNET SOLUÇÃO DE USAR 'REQUEST', IMPLEMENTEI NOS PRODUTOS/SERVIÇOS PRÉ-GERADOS, MAS AINDA NÃO É UMA SOLUÇÃO PRÁTICA) -->
+      <!-- BUG 2 (POR CAUSA DO BUG 2 NOVOS PRODUTOS/SERVIÇOS CADASTRADOS NÃO MOSTRAM IMG) -->
+
+      <!-- TODO: (Produtos e Serviços):
+      // 1- Integrar variáveis/objetos/arrays de Produtos e Serviços com Chat
+      // 2- Implementar máscara nos campos 'Valor' de Novo e Editar Produto/Serviço e também em consulta/detalha
+      // 3- Arrumar as imagens na lista de Produtos e Serviços
+      // 3.1- fazer imagens por url para demonstração
+      // 3.2- implementar upload de arquivo, endereçamento, pasta e efetivo dowload do arquivo para algum lugar
+      // 3.3- verificar se uma pasta na mesma 'altura de hierarquia da pasta "assets" resolveria'-->
 
       <v-dialog
         :retain-focus="false"
-        persistent="true"
+        :persistent="vDialogProdutosServicosPersistentVariable"
         v-model="dialogProdutosServicos"
         scrollable
         transition="dialog-transition"
@@ -268,16 +407,20 @@
             <v-spacer></v-spacer>
             <v-btn @click="fecharDialogProdutosServicos()" color="primary" dark small>VOLTAR</v-btn>
           </v-toolbar>
+
           <v-content class="ma-0 pa-0">
             <v-expand-transition>
               <v-card v-if="mostraNovoProdServ">
                 <v-card-title>
                   <span class="headline">{{ formTitleProdutosServicos }}</span>
                 </v-card-title>
+
                 <v-form @submit="e.keyCode === 13" v-model="validProdutosServicos" ref="form">
                   <v-card-text>
                     <v-container>
                       <v-row>
+
+
                         <v-col cols="12" sm="6" md="6" lg="4" xl="3">
                           <v-text-field
                             v-model="produtoServicoEditado.nome"
@@ -287,7 +430,8 @@
                             :maxlength="30"
                             type="text"
                           ></v-text-field>
-                        </v-col>
+                          </v-col>
+                        
                         <v-col cols="12" sm="6" md="6" lg="4" xl="3">
                           <v-select
                             :items="selectProdServTipo"
@@ -295,6 +439,7 @@
                             label="Tipo"
                           ></v-select>
                         </v-col>
+                        
                         <v-col cols="12" sm="6" md="6" lg="4" xl="3">
                           <v-text-field
                             class="inputNumeroLimpo"
@@ -305,17 +450,16 @@
                             type="number"
                           ></v-text-field>
                         </v-col>
+
+
                         <v-col cols="12" sm="6" md="6" lg="4" xl="3">
-                          <v-file-input
-                            v-model="produtoServicoEditado.img"
-                            accept="image/*"
-                            label="Imagem (Opcional)"
-                            prepend-icon
-                          ></v-file-input>
+                          <v-file-input accept="image/*" label="Imagem (Opcional)" prepend-icon></v-file-input>
                         </v-col>
+                        
                       </v-row>
+                      
                       <v-row>
-                        <v-col cols="12" sm="12" md="12" lg="6" xl="6">
+                         <v-col cols="12" sm="12" md="12" lg="6" xl="6">
                           <v-textarea
                             v-model="produtoServicoEditado.descricao"
                             label="Descrição"
@@ -326,6 +470,7 @@
                           ></v-textarea>
                         </v-col>
                       </v-row>
+
                     </v-container>
                   </v-card-text>
 
@@ -351,6 +496,8 @@
                 </v-form>
               </v-card>
             </v-expand-transition>
+
+
             <v-toolbar flat color="dark-grey">
               <v-toolbar-title>Lista de Produtos e Serviços</v-toolbar-title>
               <v-spacer></v-spacer>
@@ -360,6 +507,8 @@
                 <v-icon v-if="mostraNovoProdServ" dark>mdi-minus</v-icon>
               </v-btn>
             </v-toolbar>
+
+
             <v-data-table
               :headers="headersProdutosServicos"
               :items="produtosServicos"
@@ -484,23 +633,41 @@
           </v-content>
         </v-card>
       </v-dialog>
-      <!-- EMPRESAS PRODUTOS/SERVICOS -->
+      <!-- PRODUTOS/SERVICOS -->
     </template>
   </v-data-table>
 </template>
 
 <script>
 import { mask } from "vue-the-mask";
+import ConverterUtil from "@/util/ConverterUtil";
 
 export default {
   directives: { mask },
 
   data: () => ({
+    
+  
+  //Telas
     valid: true,
     readonly: false,
     novoCadastro: false,
     dialog: false,
     dialogMenssagem: false,
+  //Telas
+
+// declaraçao  mensagem
+    user: '',
+    message: '',
+    mensagem:{},
+    mensagens:[],
+    valida: true,
+
+  // fim da mensagem 
+  
+
+
+
     headers: [
       { text: "Empresa", value: "empresa" },
       { text: "CNPJ", value: "cnpj" },
@@ -510,6 +677,10 @@ export default {
     ],
     empresas: [],
     editedIndex: -1,
+
+
+    // mensagens
+   
     msgCadastrarProduto: "Cadastrar Produto",
     messageDisable: "Desativar Empresa",
     messageEnable: "Ativar Empresa",
@@ -518,6 +689,9 @@ export default {
     msgMensagens: "Área de Mensagens",
     msnEditar: "Editar Empresa",
     msgClose: "Fechar Campos",
+   
+   //mensagens
+
 
     editedItem: {
       empresa: "",
@@ -608,6 +782,8 @@ export default {
     cepRules: [v => (!!v && v.length == 9) || "Digite o CEP com 8 dígitos"],
 
     // Data de Produtos e Serviços
+    empresaProdutosServicos: {},
+    vDialogProdutosServicosPersistentVariable: true,
     validProdutosServicos: true,
     nomeProdutoServicoRules: [
       v => (!!v && v.length >= 4) || "Digite o nome do Produto/Serviço"
@@ -664,9 +840,42 @@ export default {
       { text: "Produto/Serviço", value: "tipo" },
       { text: "Valor", value: "valor" },
       { text: "Ações", value: "actions", sortable: false }
-    ]
+    ],
     // Data de Produtos e Serviços
+
+
+// mensagens -  data 
+   headersMensagens:[
+      
+   {text:"Usuario", value:"user"},
+   {text:"Memssagem", value:"message"},
+   {text:"Visualizado", value:"actions", sortable:false},  ],
+
+
+  mensagemEditadaIndex:-1,
+
+  mensagemEditada:{
+      user:"",
+      messagem:"",
+      visualizado: Boolean
+
+  },
+  mensagemPadrao:{
+    user:"",
+    messagem:"",
+    visualizado: Boolean
+  }
+
+
+// fim data mensagens
+
+
+
+
+
+
   }),
+
 
   computed: {
     formTitle() {
@@ -679,9 +888,12 @@ export default {
         ? "Novo Produto/Serviço"
         : "Editar Produto/Serviço";
     }
-
-
   },
+
+
+
+
+
 
   created() {
     this.initialize();
@@ -689,7 +901,8 @@ export default {
 
   methods: {
     initialize() {
-      (this.empresas = [
+      // ConverterUtil.converterCNPJParaNumero()
+      this.empresas = [
         {
           empresa: "Empresa 1",
           cnpj: "11122233344455",
@@ -702,71 +915,84 @@ export default {
           cnpj: "11122233344456",
           email: "empresa2@empresa2.com.br",
           telefone: "6733334444",
-          ativo: true
+          ativo: true,
+          produtosServicos: [
+            {
+              nome: "Jardineiro",
+              tipo: "Serviço",
+              valor: 80.0,
+              descricao: "Faço serviço de jardinagem",
+              img: require("../assets/manutencao.jpg"),
+              ativo: true
+            },
+            {
+              nome: "Sapato1",
+              tipo: "Produto",
+              valor: 10,
+              descricao: "Vendo sapato semi-novo",
+              img: require("../assets/sapato.jpg"),
+              ativo: true
+            }
+          ]
+        },
+        {
+          empresa: "Empresa 3",
+          cnpj: "11122233344455",
+          email: "empresa3@empresa3.com.br",
+          telefone: "6733334444",
+          ativo: true,
+          produtosServicos: null
+        },
+        {
+          empresa: "Empresa 4",
+          cnpj: "11122233344456",
+          email: "empresa4@empresa4.com.br",
+          telefone: "6733334444",
+          ativo: true,
+          produtosServicos: [
+            {
+              nome: "Jardineiro",
+              tipo: "Serviço",
+              valor: 80.0,
+              descricao: "Faço serviço de jardinagem",
+              img: {},
+              ativo: true
+            },
+            {
+              nome: "Sapato1",
+              tipo: "Produto",
+              valor: 10,
+              descricao: "Vendo sapato semi-novo",
+              img: {},
+              ativo: true
+            }
+          ]
+        }
+      ];
+
+(this.mensagens = [
+        {
+          user: "JAO",
+          
+          message: "ola gostaria de saber como funciona esse produto",
+          
+          visualizado: true
+        },
+        {
+          user: "Empresa 1",
+          
+          message: "o produto possue x y e z intes para mais informaçoes entre em contato como nossos canais  x y e z",
+          
+          visualizado: true
         }
       ]),
-        // initialize de Produtos e Serviços
-        (this.produtosServicos = [
-          {
-            nome: "Jardineiro",
-            tipo: "Serviço",
-            valor: 80.0,
-            descricao: "Faço serviço de jardinagem",
-            img: require("../assets/manutencao.jpg"),
-            ativo: true
-          },
-          {
-            nome: "Sapato1",
-            tipo: "Produto",
-            valor: 10,
-            descricao: "Vendo sapato semi-novo",
-            img: require("../assets/sapato.jpg"),
-            ativo: true
-          },
-          {
-            nome: "Maquiadora1",
-            tipo: "Serviço",
-            valor: 10,
-            descricao: "Maquiadora profissional",
-            img: require("../assets/maquiadora.jpg"),
-            ativo: false
-          },
-          {
-            nome: "Sapato2",
-            tipo: "Produto",
-            valor: 20,
-            descricao: "Vendo sapato semi-novo",
-            img: require("../assets/sapato.jpg"),
-            ativo: false
-          },
-          {
-            nome: "Maquiadora2",
-            tipo: "Serviço",
-            valor: 20,
-            descricao: "Maquiadora profissional",
-            img: require("../assets/maquiadora.jpg"),
-            ativo: false
-          },
-          {
-            nome: "Sapato3",
-            tipo: "Produto",
-            valor: 30,
-            descricao: "Vendo sapato semi-novo",
-            img: require("../assets/sapato.jpg"),
-            ativo: true
-          },
-          {
-            nome: "Maquiadora3",
-            tipo: "Serviço",
-            valor: 30,
-            descricao: "Maquiadora profissional",
-            img: require("../assets/maquiadora.jpg"),
-            ativo: true
-          }
-        ]);
-      // initialize de Produtos e Serviços
+
+
+
+
     },
 
+    
     editItem(item) {
       this.novoCadastro = true;
       this.editedIndex = this.empresas.indexOf(item);
@@ -786,19 +1012,21 @@ export default {
 
     mostrarCadastro() {
       this.novoCadastro = !this.novoCadastro;
-      this.reset();
+
+      setTimeout(() => {
+        if (this.novoCadastro) {
+          this.reset();
+        }
+      }, 200);
+    },
+
+    fechaCadastro() {
+      this.novoCadastro = false;
     },
 
     visualizaEmpresa(item) {
       this.visualizedtItem = Object.assign({}, item);
       this.dialog = true;
-    },
-
-    close() {
-      this.novoCadastro = false;
-      this.editedItem = Object.assign({}, this.defaultItem);
-      this.editedIndex = -1;
-      this.reset();
     },
 
     save() {
@@ -815,21 +1043,44 @@ export default {
 
     reset() {
       this.$refs.form.reset();
+    },
+
+    close() {
+      this.editedItem = Object.assign({}, this.defaultItem);
+      this.editedIndex = -1;
+      this.reset();
       this.novoCadastro = false;
+    },
+
+    resetClose() {
+      this.reset();
+      this.close();
     },
 
     // Methods de Produtos e Serviços
     mostrarNovoProdServ() {
       this.mostraNovoProdServ = !this.mostraNovoProdServ;
-      this.resetProdutosServicos;
+      setTimeout(() => {
+        this.resetProdutosServicos();
+      }, 100);
     },
     abreNovoProdServ() {
       this.mostraNovoProdServ = true;
     },
-    abrirDialogProdutosServicos() {
+    fechaNovoProdServ() {
+      this.mostraNovoProdServ = false;
+    },
+    abrirDialogProdutosServicos(empresa) {
+      this.empresaProdutosServicos = empresa;
+      if (empresa.produtosServicos == null) {
+        empresa.produtosServicos = [];
+      }
+      this.produtosServicos = empresa.produtosServicos;
       this.dialogProdutosServicos = true;
     },
     fecharDialogProdutosServicos() {
+      this.resetProdutosServicos();
+      this.fechaNovoProdServ();
       this.dialogProdutosServicos = false;
     },
     salvarProdutoServicoEditado() {
@@ -857,8 +1108,10 @@ export default {
       this.produtoServicoEditado = Object.assign({}, item);
     },
     resetProdutosServicos() {
-      this.$refs.form.reset();
-      this.produtoServicoEditadoIndex = -1;
+      if (this.mostraNovoProdServ) {
+        this.$refs.form.reset();
+        this.produtoServicoEditadoIndex = -1;
+      }
     },
     detalharProdutoServico(item) {
       this.produtoServicoDetalhado = Object.assign(
@@ -870,20 +1123,45 @@ export default {
     },
     // Methods de Produtos e Serviços
 
+    
+   // Methods de mensagens
 
 
-   // Methods para Mensagens
-  abrirDialogMenssagem() {
+   abrirDialogMenssagem() {
       this.dialogMenssagem = true;
     },
     
     fecharDialogMenssagem() {
       this.dialogMenssagem = false;
     },
-  // Methods para Mensagens
 
+
+      SalvarMensagemEditada() {
+                    
+        if (this.mensagemEditadaIndex > -1) {
+        Object.assign(this.mensagens[this.mensagemEditadaIndex], this.mensagemEditada);
+
+      } else {
+        
+        this.mensagemEditada.visualizado = true;
+        this.mensagens.push(Object.assign({}, this.mensagemEditada));
+      }
+               
+              this.resetaMenssagem ();
+        },
+
+
+    resetaMenssagem() {
+      
+    },
+
+
+  
+// fim do metodo de mensagens
+
+
+  }
 }
-};
 </script>
 
 <style>
@@ -909,8 +1187,6 @@ html {
 }
 /* Styles de Produtos e Serviços */
 
-
-
 /* Styles Mensagens */
 #chat {
   height: 80%;
@@ -927,5 +1203,4 @@ html {
   padding: 20px;
 }
 /* Styles Mensagens */
-
 </style>
