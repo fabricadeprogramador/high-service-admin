@@ -70,7 +70,10 @@
           <v-icon v-if="!mostraNovoUsuario" dark v-bind:title="msnBotaoUser"
             >mdi-plus</v-icon
           >
+<<<<<<< HEAD
           
+=======
+>>>>>>> a1a5225dccd18efc91ec53b193dff61b3c2e3cbf
           <v-icon v-if="mostraNovoUsuario" dark>mdi-minus</v-icon>
         </v-btn>
       </v-toolbar>

@@ -1,5 +1,6 @@
 <template>
   <v-responsive class="overflow-y-auto">
+<<<<<<< HEAD
     <div class="pa-6 text-center">
       <img src="../assets/logo_hs.svg" height="100px" />
     </div>
@@ -32,6 +33,37 @@
         </v-row>
       </v-container>
 
+=======
+    <v-responsive class="text-center pa-2">
+            <v-parallax height="600" src="../assets/img-background.svg">
+            <v-col cols="12" md="12" sm="12">
+              <v-row class="`d-flex align-center mb-6`">
+                <v-col cols="6" md="6" sm="6">
+                  <img src="../assets/somente_logo.svg" height="300px">
+                  <v-card></v-card>
+                </v-col>
+                <v-col cols="6" md="6" sm="6">
+                    <v-col cols="12" md="12" sm="12">
+                      <img height="300">
+                    </v-col>
+                    <v-col cols="12" md="12" sm="12">
+                      <v-text class="display-1 font-weight-black">
+                        <div class="cor-texto-topo">
+                          Aumente a rentabilidade do seu negócio com segurança e praticidade
+                        </div>
+                      </v-text>
+                    </v-col>
+                    <v-col cols="12" md="12" sm="12">
+                      <img height="300">
+                    </v-col>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-parallax>
+    </v-responsive>
+
+    <v-responsive class="text-center pa-2">
+>>>>>>> a1a5225dccd18efc91ec53b193dff61b3c2e3cbf
       <v-responsive min-height="50vh">
         <div class="headline" id="titulo-q2">
           Evoluímos continuamente para colaborar com nossos clientes e
@@ -77,6 +109,7 @@
         <div class="display-1" id="titulo-q2">Depoimentos</div>
         <v-container>
           <v-row>
+<<<<<<< HEAD
             <v-col cols="12" md="12" sm="12">
               <v-carousel
                 hide-delimiters
@@ -109,6 +142,58 @@
                   </v-container>
                 </v-carousel-item>
               </v-carousel>
+=======
+            <v-col cols="12" md="4" sm="12">
+              <v-card height="400">
+                <v-avatar class="ma-3" size="100">
+                  <img src="../assets/social-media.svg">
+                </v-avatar>
+                <v-card-subtitle>Ana Gabriela</v-card-subtitle>
+                <v-card-text>
+                  Phasellus magna. Quisque rutrum. Nunc egestas, augue at
+                  pellentesque laoreet, felis eros vehicula leo, at malesuada
+                  velit leo quis pede. Aliquam lobortis. Quisque libero metus,
+                  condimentum nec, tempor a, commodo mollis, magna. In turpis.
+                  In dui magna, posuere eget, vestibulum et, tempor auctor,
+                  justo. In turpis. Pellentesque dapibus hendrerit tortor. Ut
+                  varius tincidunt libero. 
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col cols="12" md="4" sm="12">
+              <v-card height="400">
+                <v-avatar class="ma-3" size="100">
+                  <img src="../assets/social-media.svg">
+                </v-avatar>
+                <v-card-subtitle>Angela</v-card-subtitle>
+                <v-card-text>
+                  Phasellus magna. Quisque rutrum. Nunc egestas, augue at
+                  pellentesque laoreet, felis eros vehicula leo, at malesuada
+                  velit leo quis pede. Aliquam lobortis. Quisque libero metus,
+                  condimentum nec, tempor a, commodo mollis, magna. In turpis.
+                  In dui magna, posuere eget, vestibulum et, tempor auctor,
+                  justo. In turpis. Pellentesque dapibus hendrerit tortor. Ut
+                  varius tincidunt libero. 
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col cols="12" md="4" sm="12">
+              <v-card height="400">
+                <v-avatar class="ma-3" size="100">
+                  <img src="../assets/social-media.svg">
+                </v-avatar>
+                <v-card-subtitle>Roberto</v-card-subtitle>
+                <v-card-text>
+                  Phasellus magna. Quisque rutrum. Nunc egestas, augue at
+                  pellentesque laoreet, felis eros vehicula leo, at malesuada
+                  velit leo quis pede. Aliquam lobortis. Quisque libero metus,
+                  condimentum nec, tempor a, commodo mollis, magna. In turpis.
+                  In dui magna, posuere eget, vestibulum et, tempor auctor,
+                  justo. In turpis. Pellentesque dapibus hendrerit tortor. Ut
+                  varius tincidunt libero. 
+                </v-card-text>
+              </v-card>
+>>>>>>> a1a5225dccd18efc91ec53b193dff61b3c2e3cbf
             </v-col>
           </v-row>
         </v-container>
@@ -225,6 +310,15 @@ export default {
         src: require("../assets/social-media.svg"),
         descricao:
           "Phasellus magna. Quisque rutrum. Nunc egestas, augue at pellentesque laoreet, felis eros vehicula leo, at malesuada velit leo quis pede. Aliquam lobortis. Quisque libero metus, condimentum nec, tempor a, commodo mollis, magna In turpis. In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In turpis. Pellentesque dapibus hendrerit tortor. Ut varius tincidunt libero."
+<<<<<<< HEAD
+=======
+      },
+      {
+        nome: "Jessie J",
+        src: require("../assets/social-media.svg"),
+        descricao:
+          "Phasellus magna. Quisque rutrum. Nunc egestas, augue at pellentesque laoreet, felis eros vehicula leo, at malesuada velit leo quis pede. Aliquam lobortis. Quisque libero metus, condimentum nec, tempor a, commodo mollis, magna In turpis. In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In turpis. Pellentesque dapibus hendrerit tortor. Ut varius tincidunt libero."
+>>>>>>> a1a5225dccd18efc91ec53b193dff61b3c2e3cbf
       }
     ]
   })
@@ -235,4 +329,8 @@ export default {
 #titulo-q2 {
   margin-top: 5%;
 }
+.cor-texto-topo{
+  color: rgba(255, 255, 255, 0.835);
+}
+
 </style>
