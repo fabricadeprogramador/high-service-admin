@@ -41,6 +41,7 @@
                 </v-row>
               </v-container>
             </v-card-text>
+           
             <v-layout justify-center>
               <v-card-actions class="mb-3">
                 <v-spacer></v-spacer>
@@ -61,6 +62,7 @@
           </v-form>
         </v-card>
       </v-expand-transition>
+      
       <v-toolbar flat color="dark-grey">
         <v-toolbar-title>Lista de Usuários</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -68,6 +70,10 @@
           <v-icon v-if="!mostraNovoUsuario" dark v-bind:title="msnBotaoUser"
             >mdi-plus</v-icon
           >
+<<<<<<< HEAD
+          
+=======
+>>>>>>> a1a5225dccd18efc91ec53b193dff61b3c2e3cbf
           <v-icon v-if="mostraNovoUsuario" dark>mdi-minus</v-icon>
         </v-btn>
       </v-toolbar>

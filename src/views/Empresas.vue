@@ -6,7 +6,6 @@
           <v-card-title>
             <span class="headline">{{ formTitle }}</span>
           </v-card-title>
-
           <v-form ref="form" v-model="valid">
             <v-card-text>
               <v-container>
@@ -144,7 +143,6 @@
         @click="abrirDialogProdutosServicos(item)"
         v-bind:title="msnCadastraListaProdutosServicos"
       >mdi-wrench-outline</v-icon>
-
       <v-icon
         class="ml-1"
         small
@@ -234,7 +232,7 @@
         </v-card>
       </v-dialog>
 
-      <!-- EMPRESAS - Mensagens  -->
+      <!-- EMPRESAS - Mensagens -->
 
       <v-dialog
         :retain-focus="false"
@@ -244,46 +242,104 @@
         overlay-color="grey"
       >
         <v-card>
+          <v-toolbar class="toolbarCadMsg" flat color="dark-grey">
+            <v-toolbar-title>Mensagens:</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+
           <v-container>
             <v-row>
-              <h3 class="ml-3">Mensagens :</h3>
+              <v-col cols="12" sm="6" md="6" lg="4" xl="3">
+                <v-text-field
+                  v-model="mensagemEditada.user"
+                  label="Usuario"
+                  :maxlength="30"
+                  type="text"
+                  placeholder="Digite seu usuario"
+                ></v-text-field>
+              </v-col>
             </v-row>
 
-            <div class="card-footer">
-              <form id="chat">
-                <div class="gorm-group">
-                  <label for="user">Usuario:</label>
-                  <input type="text" id="user" v-model="user" placeholder="Digite seu usuario" />
-                </div>
-
-                <div class="messages"></div>
-
-                <!-- logica pra aplicar
-               <div class="messages" v-for="(msg, index) in messages" :key="index">
-                  <p><span class="font-weight-bold">{{ msg.user }}: </span>{{ msg.message }}</p>
-              </div>
-                -->
-
-                <div class="gorm-group pb-3">
-                  <label for="message">Mensagem:</label>
-                  <input
-                    id="message"
-                    type="text"
-                    v-model="message"
-                    placeholder="Digite sua mensagem"
-                  />
-                </div>
-
-                <v-btn color="primary" dark class="mb-2" @click="enviarMsg()">Enviar</v-btn>
-              </form>
-            </div>
+            <v-row>
+              <v-col cols="12" sm="12" md="12" lg="6" xl="6">
+                <v-text-field
+                  v-model="mensagemEditada.mensagem"
+                  label="mensagem"
+                  type="text"
+                  placeholder="Sua mensagem aqui"
+                  :maxlength="200"
+                ></v-text-field>
+              </v-col>
+            </v-row>
           </v-container>
+          <!-- </v-form> -->
+          <v-layout justify-center>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                type="submit"
+                color="primary"
+                dark
+                class="mb-2"
+                @click="SalvarMensagemEditada()"
+                :disabled="!valida"
+              >Enviar</v-btn>
+            </v-card-actions>
+          </v-layout>
+          <!-- <div class="messages"> layout bonitinho -->
+
+          <v-data-table
+            :headers="headersMensagens"
+            :items="mensagens"
+            sort-by="nome"
+            class="elevation-1"
+          >
+            <template v-slot:item.nome="{ item }">
+              <tr>
+                {{
+                item.nome
+                }}
+              </tr>
+            </template>
+
+            <template v-slot:item.valor="{ item }">
+              <tr>
+                {{
+                item.message
+                }}
+              </tr>
+            </template>
+
+            <template v-slot:item.actions="{ item }">
+              <v-icon
+                small
+                @click="detalharProdutoServico(item)"
+                v-bind:title="msnDetalharProdutoServico"
+              >mdi-check-bold</v-icon>
+
+              <v-icon
+                v-if="item.ativo"
+                small
+                color="green"
+                @click="ativarDesativarProdutoServico(item)"
+                v-bind:title="msnDesativarProdutoServico"
+              >mdi-check-bold</v-icon>
+
+              <v-icon
+                v-if="!item.ativo"
+                small
+                color="red"
+                @click="ativarDesativarProdutoServico(item)"
+                v-bind:title="msnAtivarProdutoServico"
+              >mdi-cancel</v-icon>
+            </template>
+          </v-data-table>
         </v-card>
       </v-dialog>
 
-      <!-- EMPRESAS - Fim Mensagens  -->
+      <!-- EMPRESAS - Fim Mensagens -->
 
-      <!-- HTML PRODUTOS/SERVICOS INICIO -->
+      <!-- * HTML PRODUTOS/SERVICOS INICIO * -->
 
       <!-- BUG 1 (VUETIFY COM ERRO AO DEFINIR ENDEREÇO DINAMICO PARA V-IMG, ENCONTREI NA INTERNET SOLUÇÃO DE USAR 'REQUEST', IMPLEMENTEI NOS PRODUTOS/SERVIÇOS PRÉ-GERADOS, MAS AINDA NÃO É UMA SOLUÇÃO PRÁTICA) -->
       <!-- BUG 2 (POR CAUSA DO BUG 2 NOVOS PRODUTOS/SERVIÇOS CADASTRADOS NÃO MOSTRAM IMG) -->
@@ -308,6 +364,7 @@
             <v-spacer></v-spacer>
             <v-btn @click="fecharDialogProdutosServicos()" color="primary" dark small>VOLTAR</v-btn>
           </v-toolbar>
+
           <v-content class="ma-0 pa-0">
             <v-expand-transition>
               <v-card v-if="mostraNovoProdServ">
@@ -365,7 +422,6 @@
                       </v-row>
                     </v-container>
                   </v-card-text>
-
                   <v-layout justify-center>
                     <v-card-actions>
                       <v-spacer></v-spacer>
@@ -388,15 +444,16 @@
                 </v-form>
               </v-card>
             </v-expand-transition>
+
             <v-toolbar flat color="dark-grey">
               <v-toolbar-title>Lista de Produtos e Serviços</v-toolbar-title>
               <v-spacer></v-spacer>
-
               <v-btn color="primary" fab dark small @click="mostrarNovoProdServ">
                 <v-icon v-if="!mostraNovoProdServ" dark v-bind:title="msnBotaoNovoProdServ">mdi-plus</v-icon>
                 <v-icon v-if="mostraNovoProdServ" dark>mdi-minus</v-icon>
               </v-btn>
             </v-toolbar>
+
             <v-data-table
               :headers="headersProdutosServicos"
               :items="produtosServicos"
@@ -408,7 +465,6 @@
                   <v-img :src="item.img" height="50px" width="50px"></v-img>
                 </tr>
               </template>
-
               <template v-slot:item.nome="{ item }">
                 <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
                   {{
@@ -416,7 +472,6 @@
                   }}
                 </tr>
               </template>
-
               <template v-slot:item.tipo="{ item }">
                 <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
                   {{
@@ -424,13 +479,11 @@
                   }}
                 </tr>
               </template>
-
               <template v-slot:item.valor="{ item }">
                 <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
                   <money v-model="item.valor" v-bind="money" readonly="true"></money>
                 </tr>
               </template>
-
               <template v-slot:item.actions="{ item }">
                 <v-icon
                   small
@@ -495,7 +548,6 @@
                   @click="ativarDesativarProdutoServico(item)"
                   v-bind:title="msnDesativarProdutoServico"
                 >mdi-check-bold</v-icon>
-
                 <v-icon
                   v-if="!item.ativo"
                   small
@@ -503,14 +555,12 @@
                   @click="ativarDesativarProdutoServico(item)"
                   v-bind:title="msnAtivarProdutoServico"
                 >mdi-cancel</v-icon>
-
                 <v-icon
                   small
                   v-if="item.ativo"
                   @click="editarProdutoServico(item)"
                   v-bind:title="msnEditarProdutoServico"
                 >mdi-pencil</v-icon>
-
                 <v-icon
                   v-bind:title="msnNaoEditaProdutoServicoInativo"
                   small
@@ -521,7 +571,6 @@
           </v-content>
         </v-card>
       </v-dialog>
-
       <!-- HTML PRODUTOS/SERVICOS FIM -->
     </template>
   </v-data-table>
@@ -537,13 +586,22 @@ export default {
   components: { Money },
 
   data: () => ({
-    user: "",
-    message: "",
+    //Telas
     valid: true,
     readonly: false,
     novoCadastro: false,
     dialog: false,
     dialogMenssagem: false,
+    //Telas
+
+    // declaraçao mensagem
+    user: "",
+    message: "",
+    mensagem: {},
+    mensagens: [],
+    valida: true,
+    // fim da mensagem
+
     headers: [
       { text: "Empresa", value: "empresa" },
       { text: "CNPJ", value: "cnpj" },
@@ -553,6 +611,8 @@ export default {
     ],
     empresas: [],
     editedIndex: -1,
+
+    // mensagens
     msgCadastrarProduto: "Cadastrar Produto",
     messageDisable: "Desativar Empresa",
     messageEnable: "Ativar Empresa",
@@ -561,6 +621,7 @@ export default {
     msgMensagens: "Área de Mensagens",
     msnEditar: "Editar Empresa",
     msgClose: "Fechar Campos",
+    //mensagens
 
     editedItem: {
       empresa: "",
@@ -650,6 +711,7 @@ export default {
     telRules: [v => (!!v && v.length >= 14) || "Digite telefone com DDD"],
     cepRules: [v => (!!v && v.length == 9) || "Digite o CEP com 8 dígitos"],
 
+    // Data de Produtos e Serviços
     // Data de Produtos e Serviços INICIO
     money: {
       decimal: ",",
@@ -717,8 +779,27 @@ export default {
       { text: "Produto/Serviço", value: "tipo" },
       { text: "Valor", value: "valor" },
       { text: "Ações", value: "actions", sortable: false }
-    ]
+    ],
     // Data de Produtos e Serviços FIM
+
+    // mensagens - data
+    headersMensagens: [
+      { text: "Usuario", value: "user" },
+      { text: "Memssagem", value: "message" },
+      { text: "Visualizado", value: "actions", sortable: false }
+    ],
+    mensagemEditadaIndex: -1,
+    mensagemEditada: {
+      user: "",
+      messagem: "",
+      visualizado: Boolean
+    },
+    mensagemPadrao: {
+      user: "",
+      messagem: "",
+      visualizado: Boolean
+    }
+    // fim data mensagens
   }),
 
   computed: {
@@ -816,7 +897,7 @@ export default {
           ativo: true,
           produtosServicos: [
             {
-              nome: "Manutenção Geral",
+              nome: "Manutenção Geral 3",
               tipo: "Serviço",
               valor: 80,
               descricao: "Faço serviço de manutenção geral",
@@ -851,10 +932,20 @@ export default {
           ]
         }
       ];
-    },
 
-    enviarMsg() {
-      //TODO: Implementar envio de mensagem
+      this.mensagens = [
+        {
+          user: "JAO",
+          message: "ola gostaria de saber como funciona esse produto",
+          visualizado: true
+        },
+        {
+          user: "Empresa 1",
+          message:
+            "o produto possue x y e z intes para mais informaçoes entre em contato como nossos canais x y e z",
+          visualizado: true
+        }
+      ];
     },
 
     editItem(item) {
@@ -894,7 +985,7 @@ export default {
     },
 
     save() {
-      /*             alert(JSON.stringify(this.editedItem)); */
+      /* alert(JSON.stringify(this.editedItem)); */
 
       if (this.editedIndex > -1) {
         Object.assign(this.empresas[this.editedIndex], this.editedItem);
@@ -990,15 +1081,27 @@ export default {
     },
     // Methods de Produtos e Serviços FIM
 
-    // Methods para Mensagens
+    // Methods de mensagens
     abrirDialogMenssagem() {
       this.dialogMenssagem = true;
     },
-
     fecharDialogMenssagem() {
       this.dialogMenssagem = false;
-    }
-    // Methods para Mensagens
+    },
+    SalvarMensagemEditada() {
+      if (this.mensagemEditadaIndex > -1) {
+        Object.assign(
+          this.mensagens[this.mensagemEditadaIndex],
+          this.mensagemEditada
+        );
+      } else {
+        this.mensagemEditada.visualizado = true;
+        this.mensagens.push(Object.assign({}, this.mensagemEditada));
+      }
+      this.resetaMenssagem();
+    },
+    resetaMenssagem() {}
+    // fim do metodo de mensagens
   }
 };
 </script>
