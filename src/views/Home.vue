@@ -1,69 +1,34 @@
 <template>
   <v-responsive class="overflow-y-auto">
-<<<<<<< HEAD
-    <div class="pa-6 text-center">
-      <img src="../assets/logo_hs.svg" height="100px" />
-    </div>
-
     <v-responsive class="text-center pa-2">
-      <v-container>
-        <v-row>
-          <v-col cols="6" md="7" sm="12">
-            <v-carousel hide-delimiter-background show-arrows-on-hover>
-              <v-carousel-item
-                v-for="(item, i) in items"
-                :key="i"
-                :src="item.src"
-                reverse-transition="fade-transition"
-                transition="fade-transition"
-              >
-                <v-row class="fill-height" align="center" justify="center">
-                  <div class="display-2 font-weight-black">
-                    <div class="orangelighten-1--text">{{ item.title }}</div>
-                  </div>
-                </v-row>
-              </v-carousel-item>
-            </v-carousel>
-          </v-col>
-          <v-col cols="6" md="5" sm="12" class="align-self-center">
-            <div class="headline">
-              Aumente a rentabilidade do seu negócio com segurança e praticidade
-            </div>
-          </v-col>
-        </v-row>
-      </v-container>
-
-=======
-    <v-responsive class="text-center pa-2">
-            <v-parallax height="600" src="../assets/img-background.svg">
-            <v-col cols="12" md="12" sm="12">
-              <v-row class="`d-flex align-center mb-6`">
-                <v-col cols="6" md="6" sm="6">
-                  <img src="../assets/somente_logo.svg" height="300px">
-                  <v-card></v-card>
-                </v-col>
-                <v-col cols="6" md="6" sm="6">
-                    <v-col cols="12" md="12" sm="12">
-                      <img height="300">
-                    </v-col>
-                    <v-col cols="12" md="12" sm="12">
-                      <v-text class="display-1 font-weight-black">
-                        <div class="cor-texto-topo">
-                          Aumente a rentabilidade do seu negócio com segurança e praticidade
-                        </div>
-                      </v-text>
-                    </v-col>
-                    <v-col cols="12" md="12" sm="12">
-                      <img height="300">
-                    </v-col>
-                </v-col>
-              </v-row>
+      <v-parallax height="600" src="../assets/img-background.svg">
+        <v-col cols="12" md="12" sm="12">
+          <v-row class="`d-flex align-center mb-6`">
+            <v-col cols="6" md="6" sm="6">
+              <img src="../assets/somente_logo.svg" height="300px" />
+              <v-card></v-card>
             </v-col>
-          </v-parallax>
+            <v-col cols="6" md="6" sm="6">
+              <v-col cols="12" md="12" sm="12">
+                <img height="300" />
+              </v-col>
+              <v-col cols="12" md="12" sm="12">
+                <v-text class="display-1 font-weight-black">
+                  <div
+                    class="cor-texto-topo"
+                  >Aumente a rentabilidade do seu negócio com segurança e praticidade</div>
+                </v-text>
+              </v-col>
+              <v-col cols="12" md="12" sm="12">
+                <img height="300" />
+              </v-col>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-parallax>
     </v-responsive>
 
     <v-responsive class="text-center pa-2">
->>>>>>> a1a5225dccd18efc91ec53b193dff61b3c2e3cbf
       <v-responsive min-height="50vh">
         <div class="headline" id="titulo-q2">
           Evoluímos continuamente para colaborar com nossos clientes e
@@ -109,44 +74,10 @@
         <div class="display-1" id="titulo-q2">Depoimentos</div>
         <v-container>
           <v-row>
-<<<<<<< HEAD
-            <v-col cols="12" md="12" sm="12">
-              <v-carousel
-                hide-delimiters
-                hide-delimiter-background
-                show-arrows-on-hover
-                height="900"
-              >
-                <v-carousel-item>
-                  <v-container>
-                    <v-row>
-                      <v-item v-for="(slide, i) in slides" :key="i">
-                        <v-col cols="3" md="4" sm="12">
-                          <v-sheet height="100%">
-                            <v-card>
-                              <v-avatar class="ma-3" size="100" tile>
-                                <img :src="slide.src" />
-                              </v-avatar>
-                              <v-card-text
-                                v-text="slide.nome"
-                                class="title"
-                              ></v-card-text>
-                              <v-card-text
-                                v-text="slide.descricao"
-                              ></v-card-text>
-                            </v-card>
-                          </v-sheet>
-                        </v-col>
-                      </v-item>
-                    </v-row>
-                  </v-container>
-                </v-carousel-item>
-              </v-carousel>
-=======
             <v-col cols="12" md="4" sm="12">
               <v-card height="400">
                 <v-avatar class="ma-3" size="100">
-                  <img src="../assets/social-media.svg">
+                  <img src="../assets/social-media.svg" />
                 </v-avatar>
                 <v-card-subtitle>Ana Gabriela</v-card-subtitle>
                 <v-card-text>
@@ -156,14 +87,14 @@
                   condimentum nec, tempor a, commodo mollis, magna. In turpis.
                   In dui magna, posuere eget, vestibulum et, tempor auctor,
                   justo. In turpis. Pellentesque dapibus hendrerit tortor. Ut
-                  varius tincidunt libero. 
+                  varius tincidunt libero.
                 </v-card-text>
               </v-card>
             </v-col>
             <v-col cols="12" md="4" sm="12">
               <v-card height="400">
                 <v-avatar class="ma-3" size="100">
-                  <img src="../assets/social-media.svg">
+                  <img src="../assets/social-media.svg" />
                 </v-avatar>
                 <v-card-subtitle>Angela</v-card-subtitle>
                 <v-card-text>
@@ -173,14 +104,14 @@
                   condimentum nec, tempor a, commodo mollis, magna. In turpis.
                   In dui magna, posuere eget, vestibulum et, tempor auctor,
                   justo. In turpis. Pellentesque dapibus hendrerit tortor. Ut
-                  varius tincidunt libero. 
+                  varius tincidunt libero.
                 </v-card-text>
               </v-card>
             </v-col>
             <v-col cols="12" md="4" sm="12">
               <v-card height="400">
                 <v-avatar class="ma-3" size="100">
-                  <img src="../assets/social-media.svg">
+                  <img src="../assets/social-media.svg" />
                 </v-avatar>
                 <v-card-subtitle>Roberto</v-card-subtitle>
                 <v-card-text>
@@ -190,10 +121,9 @@
                   condimentum nec, tempor a, commodo mollis, magna. In turpis.
                   In dui magna, posuere eget, vestibulum et, tempor auctor,
                   justo. In turpis. Pellentesque dapibus hendrerit tortor. Ut
-                  varius tincidunt libero. 
+                  varius tincidunt libero.
                 </v-card-text>
               </v-card>
->>>>>>> a1a5225dccd18efc91ec53b193dff61b3c2e3cbf
             </v-col>
           </v-row>
         </v-container>
@@ -209,11 +139,7 @@
             <v-col></v-col>
 
             <v-col cols="6" md="5" sm="12">
-              <v-carousel
-                hide-delimiters
-                hide-delimiter-background
-                show-arrows-on-hover
-              >
+              <v-carousel hide-delimiters hide-delimiter-background show-arrows-on-hover>
                 <v-carousel-item v-for="(slide, i) in slides" :key="i">
                   <v-container>
                     <v-row>
@@ -222,10 +148,7 @@
                           <v-avatar class="ma-3" size="100" tile>
                             <img :src="slide.src" />
                           </v-avatar>
-                          <v-card-text
-                            v-text="slide.nome"
-                            class="title"
-                          ></v-card-text>
+                          <v-card-text v-text="slide.nome" class="title"></v-card-text>
                           <v-card-text v-text="slide.descricao"></v-card-text>
                         </v-card>
                       </v-col>
@@ -310,15 +233,12 @@ export default {
         src: require("../assets/social-media.svg"),
         descricao:
           "Phasellus magna. Quisque rutrum. Nunc egestas, augue at pellentesque laoreet, felis eros vehicula leo, at malesuada velit leo quis pede. Aliquam lobortis. Quisque libero metus, condimentum nec, tempor a, commodo mollis, magna In turpis. In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In turpis. Pellentesque dapibus hendrerit tortor. Ut varius tincidunt libero."
-<<<<<<< HEAD
-=======
       },
       {
         nome: "Jessie J",
         src: require("../assets/social-media.svg"),
         descricao:
           "Phasellus magna. Quisque rutrum. Nunc egestas, augue at pellentesque laoreet, felis eros vehicula leo, at malesuada velit leo quis pede. Aliquam lobortis. Quisque libero metus, condimentum nec, tempor a, commodo mollis, magna In turpis. In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In turpis. Pellentesque dapibus hendrerit tortor. Ut varius tincidunt libero."
->>>>>>> a1a5225dccd18efc91ec53b193dff61b3c2e3cbf
       }
     ]
   })
@@ -329,8 +249,7 @@ export default {
 #titulo-q2 {
   margin-top: 5%;
 }
-.cor-texto-topo{
+.cor-texto-topo {
   color: rgba(255, 255, 255, 0.835);
 }
-
 </style>
