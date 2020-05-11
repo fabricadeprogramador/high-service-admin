@@ -266,22 +266,22 @@
 
             <template v-slot:item.actions="{ item }">
               <v-icon
-                small
+                size="20"
                 @click="abrirDialogMensagem(item)"
-                class="ml-4"
+                class="ml-3"
                 v-bind:title="msnAcessarMensagens"
               >mdi-message-text-outline</v-icon>
               <v-icon
-                class="ml-11"
+                size="20"
+                class="ml-10"
                 v-if="item.visualizada"
-                small
                 color="green"
                 v-bind:title="msnMensagensVisualizadas"
               >mdi-checkbox-marked-circle-outline</v-icon>
               <v-icon
-                class="ml-11"
+                size="20"
+                class="ml-10"
                 v-if="!item.visualizada"
-                small
                 color="yellow"
                 v-bind:title="msnMensagensNaoVisualizadas"
               >mdi-alert-circle-outline</v-icon>
@@ -473,7 +473,12 @@
               <v-toolbar-title>Lista de Produtos e Serviços</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn color="primary" fab dark small @click="mostrarNovoProdServ">
-                <v-icon size="20" v-if="!mostraNovoProdServ" dark v-bind:title="msnBotaoNovoProdServ">mdi-plus</v-icon>
+                <v-icon
+                  size="20"
+                  v-if="!mostraNovoProdServ"
+                  dark
+                  v-bind:title="msnBotaoNovoProdServ"
+                >mdi-plus</v-icon>
                 <v-icon size="20" v-if="mostraNovoProdServ" dark>mdi-minus</v-icon>
               </v-btn>
             </v-toolbar>
@@ -578,7 +583,6 @@
                   size="20"
                   class="ml-2"
                   v-if="!item.ativo"
-                  
                   color="red"
                   @click="ativarDesativarProdutoServico(item)"
                   v-bind:title="msnAtivarProdutoServico"
