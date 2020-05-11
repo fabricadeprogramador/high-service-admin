@@ -473,8 +473,8 @@
               <v-toolbar-title>Lista de Produtos e Serviços</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn color="primary" fab dark small @click="mostrarNovoProdServ">
-                <v-icon v-if="!mostraNovoProdServ" dark v-bind:title="msnBotaoNovoProdServ">mdi-plus</v-icon>
-                <v-icon v-if="mostraNovoProdServ" dark>mdi-minus</v-icon>
+                <v-icon size="20" v-if="!mostraNovoProdServ" dark v-bind:title="msnBotaoNovoProdServ">mdi-plus</v-icon>
+                <v-icon size="20" v-if="mostraNovoProdServ" dark>mdi-minus</v-icon>
               </v-btn>
             </v-toolbar>
 
@@ -510,12 +510,13 @@
               </template>
               <template v-slot:item.actions="{ item }">
                 <v-icon
-                  small
+                  size="20"
                   @click="detalharProdutoServico(item)"
                   v-bind:title="msnDetalharProdutoServico"
                 >mdi-magnify</v-icon>
 
                 <v-dialog
+                  size="20"
                   v-model="dialogDetalhaProdutoServico"
                   :retain-focus="false"
                   transition="dialog-transition"
@@ -566,24 +567,25 @@
                 </v-dialog>
 
                 <v-icon
+                  size="20"
                   class="ml-2"
                   v-if="item.ativo"
-                  small
                   color="green"
                   @click="ativarDesativarProdutoServico(item)"
                   v-bind:title="msnDesativarProdutoServico"
                 >mdi-check-bold</v-icon>
                 <v-icon
+                  size="20"
                   class="ml-2"
                   v-if="!item.ativo"
-                  small
+                  
                   color="red"
                   @click="ativarDesativarProdutoServico(item)"
                   v-bind:title="msnAtivarProdutoServico"
                 >mdi-cancel</v-icon>
                 <v-icon
                   class="ml-2"
-                  small
+                  size="20"
                   v-if="item.ativo"
                   @click="editarProdutoServico(item)"
                   v-bind:title="msnEditarProdutoServico"
@@ -591,7 +593,7 @@
                 <v-icon
                   class="ml-2"
                   v-bind:title="msnNaoEditaProdutoServicoInativo"
-                  small
+                  size="20"
                   v-if="!item.ativo"
                 >mdi-pencil-remove</v-icon>
               </template>
