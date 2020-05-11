@@ -146,7 +146,7 @@
       <v-icon
         class="ml-1"
         small
-        @click="abrirDialogMenssagem()"
+        @click="abrirDialogMensagens(item)"
         v-bind:title="msgMensagens"
       >mdi-email-outline</v-icon>
       <v-icon
@@ -232,22 +232,25 @@
         </v-card>
       </v-dialog>
 
-      <!-- EMPRESAS - Mensagens -->
-
+      <!-- * HTML MENSAGENS INICIO * -->
+      <!-- Todas as mensagens de uma empresa inicio -->
       <v-dialog
+        max-width="800px"
         :retain-focus="false"
-        v-model="dialogMenssagem"
+        v-model="dialogMensagens"
         scrollable
         transition="dialog-transition"
         overlay-color="grey"
+        :persistent="vDialogMensagensPersistent"
       >
         <v-card>
           <v-toolbar class="toolbarCadMsg" flat color="dark-grey">
             <v-toolbar-title>Mensagens:</v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-btn @click="fecharDialogMensagens" color="primary">Fechar</v-btn>
           </v-toolbar>
 
-          <v-container>
+          <!-- <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="6" lg="4" xl="3">
                 <v-text-field
@@ -271,9 +274,8 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-          </v-container>
-          <!-- </v-form> -->
-          <v-layout justify-center>
+          </v-container>-->
+          <!-- <v-layout justify-center>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
@@ -285,65 +287,122 @@
                 :disabled="!valida"
               >Enviar</v-btn>
             </v-card-actions>
-          </v-layout>
+          </v-layout>-->
           <!-- <div class="messages"> layout bonitinho -->
 
           <v-data-table
             :headers="headersMensagens"
-            :items="mensagens"
+            :items="empresaMensagens.mensagens"
             sort-by="nome"
             class="elevation-1"
           >
-            <template v-slot:item.nome="{ item }">
+            <template v-slot:item.cliente="{ item }">
               <tr>
                 {{
-                item.nome
+                item.cliente
                 }}
               </tr>
             </template>
 
-            <template v-slot:item.valor="{ item }">
+            <!-- <template v-slot:item.valor="{ item }">
               <tr>
                 {{
                 item.message
                 }}
               </tr>
-            </template>
+            </template>-->
 
             <template v-slot:item.actions="{ item }">
+              <v-icon small @click="abrirDialogMensagem(item)" class="ml-4">mdi-message-text-outline</v-icon>
               <v-icon
-                small
-                @click="detalharProdutoServico(item)"
-                v-bind:title="msnDetalharProdutoServico"
-              >mdi-check-bold</v-icon>
-
-              <v-icon
-                v-if="item.ativo"
+                class="ml-11"
+                v-if="item.visualizada"
                 small
                 color="green"
-                @click="ativarDesativarProdutoServico(item)"
                 v-bind:title="msnDesativarProdutoServico"
-              >mdi-check-bold</v-icon>
-
+              >mdi-checkbox-marked-circle-outline</v-icon>
               <v-icon
-                v-if="!item.ativo"
+                class="ml-11"
+                v-if="!item.visualizada"
                 small
-                color="red"
-                @click="ativarDesativarProdutoServico(item)"
+                color="yellow"
                 v-bind:title="msnAtivarProdutoServico"
-              >mdi-cancel</v-icon>
+              >mdi-alert-circle-outline</v-icon>
             </template>
           </v-data-table>
         </v-card>
       </v-dialog>
+      <!-- Todas as mensagens de uma empresa fim -->
 
-      <!-- EMPRESAS - Fim Mensagens -->
+      <!-- Uma conversa individualizada de um cliente com a empresa inicio -->
+      <v-dialog
+        :retain-focus="false"
+        :persistent="vDialogMensagemPersistent"
+        scrollable
+        v-model="dialogMensagem"
+        width="800"
+        overlay-opacity="0.3"
+      >
+        <v-card>
+          <v-container class="pa-5 ma-0">
+            <v-row>
+              <v-col cols="12" sm="12">
+                <v-card>
+                  <v-toolbar>
+                    <v-card-title primary-title>Mensagens de {{ clienteMensagemConsultada.cliente }}</v-card-title>
+                    <v-spacer></v-spacer>
+                    <v-btn @click="fecharDialogMensagem()" color="primary">Fechar</v-btn>
+                  </v-toolbar>
+
+                  <v-list-item
+                    two-line
+                    v-for="conversa in clienteMensagemConsultada.conversa"
+                    :key="conversa.mensagem"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title>{{conversa.origem}}: {{conversa.mensagem}}</v-list-item-title>
+                      <v-list-item-subtitle>Data e hora</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-form ref="form" v-model="validChat">
+              <v-row class="mt-10 mb-0">
+                <v-col cols="12" sm="12">
+                  <v-textarea
+                    filled
+                    outlined
+                    v-model="mensagemEmEdicao"
+                    name="inputTextoMensagem"
+                    label="Escreva sua mensagem"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
+              <v-row class="mt-0">
+                <v-col cols="12" sm="12">
+                  <v-layout row wrap justify-center>
+                    <v-btn
+                      color="primary"
+                      dark
+                      class
+                      @click="salvaMensagem()"
+                      :disabled="!valid"
+                    >Enviar</v-btn>
+                    <v-btn color="primary" dark class="ml-5" @click="resetCampoMensagem()">Cancelar</v-btn>
+                  </v-layout>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-container>
+        </v-card>
+      </v-dialog>
+      <!-- Uma conversa individualizada de um cliente com a empresa fim -->
+      <!-- * HTML MENSAGENS FIM * -->
 
       <!-- * HTML PRODUTOS/SERVICOS INICIO * -->
-
       <!-- BUG 1 (VUETIFY COM ERRO AO DEFINIR ENDEREÇO DINAMICO PARA V-IMG, ENCONTREI NA INTERNET SOLUÇÃO DE USAR 'REQUEST', IMPLEMENTEI NOS PRODUTOS/SERVIÇOS PRÉ-GERADOS, MAS AINDA NÃO É UMA SOLUÇÃO PRÁTICA) -->
       <!-- BUG 2 (POR CAUSA DO BUG 2 NOVOS PRODUTOS/SERVIÇOS CADASTRADOS NÃO MOSTRAM IMG) -->
-
       <!-- TODO: (Produtos e Serviços):
       // 1- Arrumar as imagens na lista de Produtos e Serviços (não foi possível até a entrega)
       // 2.1- fazer imagens por url para demonstração ()
@@ -542,6 +601,7 @@
                 </v-dialog>
 
                 <v-icon
+                  class="ml-2"
                   v-if="item.ativo"
                   small
                   color="green"
@@ -549,6 +609,7 @@
                   v-bind:title="msnDesativarProdutoServico"
                 >mdi-check-bold</v-icon>
                 <v-icon
+                  class="ml-2"
                   v-if="!item.ativo"
                   small
                   color="red"
@@ -556,12 +617,14 @@
                   v-bind:title="msnAtivarProdutoServico"
                 >mdi-cancel</v-icon>
                 <v-icon
+                  class="ml-2"
                   small
                   v-if="item.ativo"
                   @click="editarProdutoServico(item)"
                   v-bind:title="msnEditarProdutoServico"
                 >mdi-pencil</v-icon>
                 <v-icon
+                  class="ml-2"
                   v-bind:title="msnNaoEditaProdutoServicoInativo"
                   small
                   v-if="!item.ativo"
@@ -591,7 +654,8 @@ export default {
     readonly: false,
     novoCadastro: false,
     dialog: false,
-    dialogMenssagem: false,
+    dialogMensagens: false,
+    dialogMensagem: false,
     //Telas
 
     // declaraçao mensagem
@@ -711,7 +775,6 @@ export default {
     telRules: [v => (!!v && v.length >= 14) || "Digite telefone com DDD"],
     cepRules: [v => (!!v && v.length == 9) || "Digite o CEP com 8 dígitos"],
 
-    // Data de Produtos e Serviços
     // Data de Produtos e Serviços INICIO
     money: {
       decimal: ",",
@@ -783,10 +846,21 @@ export default {
     // Data de Produtos e Serviços FIM
 
     // mensagens - data
+    mensagemEmEdicao: "",
+    validChat: false,
+    clienteMensagemConsultada: {},
+    clienteMensagemConsultadaPadrao: {},
+    vDialogMensagensPersistent: true,
+    vDialogMensagemPersistent: true,
+    empresaMensagens: {},
     headersMensagens: [
-      { text: "Usuario", value: "user" },
-      { text: "Memssagem", value: "message" },
-      { text: "Visualizado", value: "actions", sortable: false }
+      { text: "Cliente", value: "cliente", class: "" },
+      {
+        text: "Acessar / Visualizado?",
+        value: "actions",
+        width: "160px",
+        sortable: false
+      }
     ],
     mensagemEditadaIndex: -1,
     mensagemEditada: {
@@ -854,6 +928,58 @@ export default {
               img: require("../assets/maquiadora.jpg"),
               ativo: true
             }
+          ],
+          mensagens: [
+            {
+              cliente: "Chaves",
+              conversa: [
+                {
+                  mensagem: "Olá gostaria de saber se vocês parcelam?",
+                  origem: "Cliente"
+                },
+                {
+                  mensagem: "Sim, parcelamos sim.",
+                  origem: "Empresa"
+                }
+              ],
+              visualizada: true
+            },
+            {
+              cliente: "Chiquinha",
+              conversa: [
+                {
+                  mensagem: "Oi, vocês tem vestidos vermelhos?",
+                  origem: "Cliente"
+                },
+                {
+                  mensagem: "Não temos não",
+                  origem: "Empresa"
+                },
+                {
+                  mensagem: "E sapatos pretos?",
+                  origem: "Cliente"
+                }
+              ],
+              visualizada: false
+            },
+            {
+              cliente: "Kiko",
+              conversa: [
+                {
+                  mensagem: "Quanto custa a bola?",
+                  origem: "Cliente"
+                },
+                {
+                  mensagem: "Não vendemos esse produtos Senhor. ",
+                  origem: "empresa"
+                },
+                {
+                  mensagem: "Ok, muito obrigado.",
+                  origem: "cliente"
+                }
+              ],
+              visualizada: false
+            }
           ]
         },
         {
@@ -887,6 +1013,34 @@ export default {
               img: require("../assets/maquiadora.jpg"),
               ativo: true
             }
+          ],
+          mensagens: [
+            {
+              cliente: "Mulher Maravilha",
+              conversa: [
+                {
+                  mensagem: "Boa noite. A maquiadora atende em casa?",
+                  origem: "Cliente"
+                }
+              ],
+              visualizada: false
+            },
+            {
+              cliente: "Batman",
+              conversa: [
+                {
+                  mensagem:
+                    "Bom dia. O Jardineiro consegue atender em Gotham City?",
+                  origem: "Cliente"
+                },
+                {
+                  mensagem:
+                    "Infelizmente não, Sr. Batman, somente em Campo Grande.",
+                  origem: "Empresa"
+                }
+              ],
+              visualizada: true
+            }
           ]
         },
         {
@@ -903,6 +1057,19 @@ export default {
               descricao: "Faço serviço de manutenção geral",
               img: require("../assets/manutencao.jpg"),
               ativo: true
+            }
+          ],
+          mensagens: [
+            {
+              cliente: "Jão Zé",
+              conversa: [
+                {
+                  mensagem:
+                    "Quero reclamar sobre o serviço de manutenção prestado por vocês. Foi muito ruim.",
+                  origem: "Cliente"
+                }
+              ],
+              visualizada: false
             }
           ]
         },
@@ -929,23 +1096,36 @@ export default {
               img: {},
               ativo: true
             }
+          ],
+          mensagens: [
+            {
+              cliente: "Mario Bros",
+              conversa: [
+                {
+                  mensagem:
+                    "Boa tarde. Por algum acaso vocês não teriam também o sapato tamanho 45?",
+                  origem: "Cliente"
+                }
+              ],
+              visualizada: false
+            }
           ]
         }
       ];
 
-      this.mensagens = [
-        {
-          user: "JAO",
-          message: "ola gostaria de saber como funciona esse produto",
-          visualizado: true
-        },
-        {
-          user: "Empresa 1",
-          message:
-            "o produto possue x y e z intes para mais informaçoes entre em contato como nossos canais x y e z",
-          visualizado: true
-        }
-      ];
+      // this.mensagens = [
+      //   {
+      //     user: "JAO",
+      //     message: "ola gostaria de saber como funciona esse produto",
+      //     visualizado: true
+      //   },
+      //   {
+      //     user: "Empresa 1",
+      //     message:
+      //       "o produto possue x y e z intes para mais informaçoes entre em contato como nossos canais x y e z",
+      //     visualizado: true
+      //   }
+      // ];
     },
 
     editItem(item) {
@@ -1082,11 +1262,25 @@ export default {
     // Methods de Produtos e Serviços FIM
 
     // Methods de mensagens
-    abrirDialogMenssagem() {
-      this.dialogMenssagem = true;
+    salvaMensagem() {
+      let mensagem = {};
+      mensagem.mensagem = this.mensagemEmEdicao;
+      mensagem.origem = "Empresa";
+      this.clienteMensagemConsultada.conversa.push(mensagem);
+      this.mensagemEmEdicao = "";
     },
-    fecharDialogMenssagem() {
-      this.dialogMenssagem = false;
+    resetCampoMensagem() {
+      this.mensagemEmEdicao = "";
+    },
+    abrirDialogMensagens(empresa) {
+      this.empresaMensagens = empresa;
+      if (this.empresaMensagens.mensagens == null) {
+        this.empresaMensagens.mensagens = [];
+      }
+      this.dialogMensagens = true;
+    },
+    fecharDialogMensagens() {
+      this.dialogMensagens = false;
     },
     SalvarMensagemEditada() {
       if (this.mensagemEditadaIndex > -1) {
@@ -1098,9 +1292,22 @@ export default {
         this.mensagemEditada.visualizado = true;
         this.mensagens.push(Object.assign({}, this.mensagemEditada));
       }
-      this.resetaMenssagem();
+      this.resetaMensagem();
     },
-    resetaMenssagem() {}
+    resetaMenssagem() {},
+    abrirDialogMensagem(cliente) {
+      this.clienteMensagemConsultada = cliente;
+      this.clienteMensagemConsultada.visualizada = true;
+      this.dialogMensagem = true;
+    },
+    fecharDialogMensagem() {
+      this.clienteMensagemConsultada = Object.assign(
+        {},
+        this.clienteMensagemConsultadaPadrao
+      );
+      this.dialogMensagem = false;
+    }
+
     // fim do metodo de mensagens
   }
 };
