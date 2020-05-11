@@ -41,7 +41,7 @@
                 </v-row>
               </v-container>
             </v-card-text>
-           
+
             <v-layout justify-center>
               <v-card-actions class="mb-3">
                 <v-spacer></v-spacer>
@@ -52,28 +52,19 @@
                   class="mb-2"
                   @click="save"
                   :disabled="!valid"
-                  >Salvar</v-btn
-                >
-                <v-btn color="primary" dark class="mb-2" @click="reset"
-                  >Cancelar</v-btn
-                >
+                >Salvar</v-btn>
+                <v-btn color="primary" dark class="mb-2" @click="reset">Cancelar</v-btn>
               </v-card-actions>
             </v-layout>
           </v-form>
         </v-card>
       </v-expand-transition>
-      
+
       <v-toolbar flat color="dark-grey">
         <v-toolbar-title>Lista de Usuários</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn color="primary" fab dark small @click="mostrarNovoUsuario">
-          <v-icon v-if="!mostraNovoUsuario" dark v-bind:title="msnBotaoUser"
-            >mdi-plus</v-icon
-          >
-<<<<<<< HEAD
-          
-=======
->>>>>>> a1a5225dccd18efc91ec53b193dff61b3c2e3cbf
+          <v-icon v-if="!mostraNovoUsuario" dark v-bind:title="msnBotaoUser">mdi-plus</v-icon>
           <v-icon v-if="mostraNovoUsuario" dark>mdi-minus</v-icon>
         </v-btn>
       </v-toolbar>
@@ -81,14 +72,14 @@
     <template v-slot:item.tipo="{ item }">
       <tr v-bind:class="{ usuarioInativo: !item.ativo }">
         {{
-          item.tipo
+        item.tipo
         }}
       </tr>
     </template>
     <template v-slot:item.username="{ item }">
       <tr v-bind:class="{ usuarioInativo: !item.ativo }">
         {{
-          item.username
+        item.username
         }}
       </tr>
     </template>
@@ -99,23 +90,15 @@
         color="green"
         @click="ativarDesativarUsuario(item)"
         v-bind:title="msnDesativar"
-        >mdi-check-bold</v-icon
-      >
+      >mdi-check-bold</v-icon>
       <v-icon
         v-if="!item.ativo"
         small
         color="red"
         @click="ativarDesativarUsuario(item)"
         v-bind:title="msnAtivar"
-        >mdi-cancel</v-icon
-      >
-      <v-icon
-        small
-        v-if="item.ativo"
-        @click="editItem(item)"
-        v-bind:title="msnEditar"
-        >mdi-pencil</v-icon
-      >
+      >mdi-cancel</v-icon>
+      <v-icon small v-if="item.ativo" @click="editItem(item)" v-bind:title="msnEditar">mdi-pencil</v-icon>
       <v-icon small v-if="!item.ativo">mdi-pencil-remove</v-icon>
     </template>
     <template v-slot:no-data>

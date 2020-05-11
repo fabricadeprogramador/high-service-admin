@@ -313,20 +313,25 @@
             </template>-->
 
             <template v-slot:item.actions="{ item }">
-              <v-icon small @click="abrirDialogMensagem(item)" class="ml-4">mdi-message-text-outline</v-icon>
+              <v-icon
+                small
+                @click="abrirDialogMensagem(item)"
+                class="ml-4"
+                v-bind:title="msnAcessarMensagens"
+              >mdi-message-text-outline</v-icon>
               <v-icon
                 class="ml-11"
                 v-if="item.visualizada"
                 small
                 color="green"
-                v-bind:title="msnDesativarProdutoServico"
+                v-bind:title="msnMensagensVisualizadas"
               >mdi-checkbox-marked-circle-outline</v-icon>
               <v-icon
                 class="ml-11"
                 v-if="!item.visualizada"
                 small
                 color="yellow"
-                v-bind:title="msnAtivarProdutoServico"
+                v-bind:title="msnMensagensNaoVisualizadas"
               >mdi-alert-circle-outline</v-icon>
             </template>
           </v-data-table>
@@ -367,10 +372,12 @@
                 </v-card>
               </v-col>
             </v-row>
-            <v-form ref="form" v-model="validChat">
+            <v-form ref="formMensagens" v-model="validChat">
               <v-row class="mt-10 mb-0">
                 <v-col cols="12" sm="12">
                   <v-textarea
+                    required
+                    :rules="mensagemRules"
                     filled
                     outlined
                     v-model="mensagemEmEdicao"
@@ -387,9 +394,15 @@
                       dark
                       class
                       @click="salvaMensagem()"
-                      :disabled="!valid"
+                      :disabled="!validChat"
                     >Enviar</v-btn>
-                    <v-btn color="primary" dark class="ml-5" @click="resetCampoMensagem()">Cancelar</v-btn>
+                    <v-btn
+                      color="primary"
+                      ref="refBotaoCancelarMensagem"
+                      dark
+                      class="ml-5"
+                      @click="resetCampoMensagem()"
+                    >Cancelar</v-btn>
                   </v-layout>
                 </v-col>
               </v-row>
@@ -846,6 +859,10 @@ export default {
     // Data de Produtos e Serviços FIM
 
     // mensagens - data
+    msnMensagensVisualizadas: "Mensagens visualizadas",
+    msnMensagensNaoVisualizadas: "Existem mensagens não visualizadas",
+    msnAcessarMensagens: "Acessar mensagens do cliente",
+    mensagemRules: [v => !!v || "Digite uma mensagem"],
     mensagemEmEdicao: "",
     validChat: false,
     clienteMensagemConsultada: {},
@@ -1267,10 +1284,10 @@ export default {
       mensagem.mensagem = this.mensagemEmEdicao;
       mensagem.origem = "Empresa";
       this.clienteMensagemConsultada.conversa.push(mensagem);
-      this.mensagemEmEdicao = "";
+      this.$refs.formMensagens.reset();
     },
     resetCampoMensagem() {
-      this.mensagemEmEdicao = "";
+      this.$refs.formMensagens.reset();
     },
     abrirDialogMensagens(empresa) {
       this.empresaMensagens = empresa;
@@ -1307,7 +1324,6 @@ export default {
       );
       this.dialogMensagem = false;
     }
-
     // fim do metodo de mensagens
   }
 };
