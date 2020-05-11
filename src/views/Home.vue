@@ -79,7 +79,7 @@
                 <v-avatar class="ma-3" size="100">
                   <img src="../assets/social-media.svg" />
                 </v-avatar>
-                <v-card-subtitle>Ana Gabriela</v-card-subtitle>
+                <v-card-subtitle class="title">Ana Gabriela</v-card-subtitle>
                 <v-card-text>
                   Phasellus magna. Quisque rutrum. Nunc egestas, augue at
                   pellentesque laoreet, felis eros vehicula leo, at malesuada
@@ -96,7 +96,7 @@
                 <v-avatar class="ma-3" size="100">
                   <img src="../assets/social-media.svg" />
                 </v-avatar>
-                <v-card-subtitle>Angela</v-card-subtitle>
+                <v-card-subtitle class="title">Angela</v-card-subtitle>
                 <v-card-text>
                   Phasellus magna. Quisque rutrum. Nunc egestas, augue at
                   pellentesque laoreet, felis eros vehicula leo, at malesuada
@@ -113,7 +113,7 @@
                 <v-avatar class="ma-3" size="100">
                   <img src="../assets/social-media.svg" />
                 </v-avatar>
-                <v-card-subtitle>Roberto</v-card-subtitle>
+                <v-card-subtitle class="title">Roberto</v-card-subtitle>
                 <v-card-text>
                   Phasellus magna. Quisque rutrum. Nunc egestas, augue at
                   pellentesque laoreet, felis eros vehicula leo, at malesuada
