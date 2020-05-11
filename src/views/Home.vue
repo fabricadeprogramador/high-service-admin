@@ -10,14 +10,14 @@
             </v-col>
             <v-col cols="6" md="6" sm="6">
               <v-col cols="12" md="12" sm="12">
-                <img height="300" />
+                <img height="300">
               </v-col>
               <v-col cols="12" md="12" sm="12">
-                <v-text class="display-1 font-weight-black">
-                  <div
-                    class="cor-texto-topo"
-                  >Aumente a rentabilidade do seu negócio com segurança e praticidade</div>
-                </v-text>
+                <div class="display-1 font-weight-black">
+                  <div class="cor-texto-topo">
+                    Aumente a rentabilidade do seu negócio com segurança e praticidade
+                  </div>
+                </div>
               </v-col>
               <v-col cols="12" md="12" sm="12">
                 <img height="300" />
