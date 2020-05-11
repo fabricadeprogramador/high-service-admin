@@ -139,41 +139,41 @@
 
     <template v-slot:item.actions="{ item }">
       <v-icon
-        small
+        size="20"
         @click="abrirDialogProdutosServicos(item)"
         v-bind:title="msnCadastraListaProdutosServicos"
       >mdi-wrench-outline</v-icon>
       <v-icon
+        size="20"
         class="ml-1"
-        small
         @click="abrirDialogMensagens(item)"
         v-bind:title="msgMensagens"
       >mdi-email-outline</v-icon>
       <v-icon
-        small
+        size="20"
         class="ml-1"
         @click="visualizaEmpresa(item)"
         v-bind:title="msgVisualizar"
       >mdi-magnify</v-icon>
       <v-icon
+        size="20"
         class="ml-1"
         v-if="!item.ativo"
         color="red"
-        small
         @click="ativarDesativarEmpresa(item)"
         v-bind:title="messageEnable"
       >mdi-cancel</v-icon>
       <v-icon
+        size="20"
         class="ml-1"
         v-if="item.ativo"
-        small
         color="green"
         @click="ativarDesativarEmpresa(item)"
         v-bind:title="messageDisable"
       >mdi-check-bold</v-icon>
       <v-icon
+        size="20"
         class="ml-1"
-        small
         v-if="item.ativo"
         @click="editItem(item)"
         v-bind:title="msnEditar"
@@ -250,46 +250,6 @@
             <v-btn @click="fecharDialogMensagens" color="primary">Fechar</v-btn>
           </v-toolbar>
 
-          <!-- <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="6" lg="4" xl="3">
-                <v-text-field
-                  v-model="mensagemEditada.user"
-                  label="Usuario"
-                  :maxlength="30"
-                  type="text"
-                  placeholder="Digite seu usuario"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="12" sm="12" md="12" lg="6" xl="6">
-                <v-text-field
-                  v-model="mensagemEditada.mensagem"
-                  label="mensagem"
-                  type="text"
-                  placeholder="Sua mensagem aqui"
-                  :maxlength="200"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>-->
-          <!-- <v-layout justify-center>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                type="submit"
-                color="primary"
-                dark
-                class="mb-2"
-                @click="SalvarMensagemEditada()"
-                :disabled="!valida"
-              >Enviar</v-btn>
-            </v-card-actions>
-          </v-layout>-->
-          <!-- <div class="messages"> layout bonitinho -->
-
           <v-data-table
             :headers="headersMensagens"
             :items="empresaMensagens.mensagens"
@@ -303,14 +263,6 @@
                 }}
               </tr>
             </template>
-
-            <!-- <template v-slot:item.valor="{ item }">
-              <tr>
-                {{
-                item.message
-                }}
-              </tr>
-            </template>-->
 
             <template v-slot:item.actions="{ item }">
               <v-icon
@@ -916,9 +868,9 @@ export default {
       this.empresas = [
         {
           empresa: "Empresa 1",
-          cnpj: "11122233344455",
+          cnpj: "11.122.233/3444-55",
           email: "empresa1@empresa1.com.br",
-          telefone: "6733334444",
+          telefone: "(67) 3333-4444",
           ativo: true,
           produtosServicos: [
             {
@@ -1001,9 +953,9 @@ export default {
         },
         {
           empresa: "Empresa 2",
-          cnpj: "11122233344456",
+          cnpj: "11.122.233/3444-56",
           email: "empresa2@empresa2.com.br",
-          telefone: "6733334444",
+          telefone: "(67) 3333-4445",
           ativo: true,
           produtosServicos: [
             {
@@ -1062,9 +1014,9 @@ export default {
         },
         {
           empresa: "Empresa 3",
-          cnpj: "11122233344455",
+          cnpj: "111.222.333-44",
           email: "empresa3@empresa3.com.br",
-          telefone: "6733334444",
+          telefone: "(67) 3333-4446",
           ativo: true,
           produtosServicos: [
             {
@@ -1092,9 +1044,9 @@ export default {
         },
         {
           empresa: "Empresa 4",
-          cnpj: "11122233344456",
+          cnpj: "11.122.233/3444-56",
           email: "empresa4@empresa4.com.br",
-          telefone: "6733334444",
+          telefone: "(67) 3333-4447",
           ativo: true,
           produtosServicos: [
             {
