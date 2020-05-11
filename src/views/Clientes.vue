@@ -189,7 +189,7 @@
       </tr>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon small @click="detalhaCliente(item)" v-bind:title="msnDetalhar">mdi-magnify</v-icon>
+      <v-icon size="20" @click="detalhaCliente(item)" v-bind:title="msnDetalhar">mdi-magnify</v-icon>
       <v-dialog v-model="dialog" transition="dialog-transition">
         <v-card>
           <v-container>
@@ -312,21 +312,29 @@
         </v-card>
       </v-dialog>
       <v-icon
+        size="20"
+        class="ml-1"
         v-if="item.ativo"
-        small
         color="green"
         @click="ativarDesativarCliente(item)"
         v-bind:title="msnDesativar"
       >mdi-check-bold</v-icon>
       <v-icon
+        size="20"
+        class="ml-1"
         v-if="!item.ativo"
-        small
         color="red"
         @click="ativarDesativarCliente(item)"
         v-bind:title="msnAtivar"
       >mdi-cancel</v-icon>
-      <v-icon small v-if="item.ativo" @click="editItem(item)" v-bind:title="msnEditar">mdi-pencil</v-icon>
-      <v-icon small v-if="!item.ativo">mdi-pencil-remove</v-icon>
+      <v-icon
+        size="20"
+        class="ml-1"
+        v-if="item.ativo"
+        @click="editItem(item)"
+        v-bind:title="msnEditar"
+      >mdi-pencil</v-icon>
+      <v-icon size="20" class="ml-1" v-if="!item.ativo">mdi-pencil-remove</v-icon>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
