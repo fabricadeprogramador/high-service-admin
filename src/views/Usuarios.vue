@@ -132,7 +132,7 @@ export default {
     headers: [
       { text: "Nome de usuário", value: "username" },
       { text: "Tipo", value: "tipo" },
-      { text: "Ações", value: "actions", sortable: false }
+      { text: "Ações", value: "actions", sortable: false, width: "160" }
     ],
     editedIndex: -1,
     msnBotaoUser: "Novo Usuario",

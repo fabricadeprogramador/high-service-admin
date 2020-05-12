@@ -793,7 +793,7 @@ export default {
     produtoServicoEditado: {
       nome: "",
       tipo: "",
-      valor: "",
+      valor: 0,
       descricao: "",
       img: "",
       ativo: Boolean
@@ -801,7 +801,7 @@ export default {
     produtoServicoPadrao: {
       nome: "",
       tipo: "",
-      valor: "",
+      valor: 0,
       descricao: "",
       img: "",
       ativo: Boolean
@@ -1221,11 +1221,15 @@ export default {
     },
     resetProdutosServicos() {
       if (this.mostraNovoProdServ) {
-        this.produtoServicoEditado.valor = 0;
         this.$refs.form.reset();
         this.produtoServicoEditadoIndex = -1;
+        this.produtoServicoEditado = Object.assign(
+          {},
+          this.produtoServicoPadrao
+        );
       }
     },
+    // this.produtoServicoEditado.valor = 0;
     detalharProdutoServico(item) {
       this.produtoServicoDetalhado = Object.assign(
         {},
