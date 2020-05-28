@@ -90,29 +90,32 @@
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
+        size="20"
         v-if="item.ativo"
-        small
         color="green"
         @click="ativarDesativarUsuario(item)"
         v-bind:title="msnDesativar"
         >mdi-check-bold</v-icon
       >
       <v-icon
+        size="20"
         v-if="!item.ativo"
-        small
         color="red"
         @click="ativarDesativarUsuario(item)"
         v-bind:title="msnAtivar"
         >mdi-cancel</v-icon
       >
       <v-icon
-        small
+        size="20"
+        class="ml-1"
         v-if="item.ativo"
         @click="editItem(item)"
         v-bind:title="msnEditar"
         >mdi-pencil</v-icon
       >
-      <v-icon small v-if="!item.ativo">mdi-pencil-remove</v-icon>
+      <v-icon size="20" class="ml-1" v-if="!item.ativo"
+        >mdi-pencil-remove</v-icon
+      >
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -141,7 +144,7 @@ export default {
     headers: [
       { text: "Nome de usuário", value: "username" },
       { text: "Tipo", value: "tipo" },
-      { text: "Ações", value: "actions", sortable: false },
+      { text: "Ações", value: "actions", sortable: false, width: "160" },
     ],
     editedIndex: -1,
     msnBotaoUser: "Novo Usuario",

@@ -15,9 +15,9 @@
           <td v-bind:class="{ transacaoInativa: !item.ativo }">{{item.data}}</td>
           <td v-bind:class="{ transacaoInativa: !item.ativo }">{{item.status}}</td>
           <td>
-            <v-icon small class="mr-2" @click="editItem(item)" v-bind:title="messageVisuzalizar">mdi-magnify</v-icon>
-            <v-icon v-if="item.ativo" small @click="ativarDesativarTransacao(item)" v-bind:title="messageDisable">mdi-close</v-icon>
-            <v-icon v-if="!item.ativo" small color="red" @click="ativarDesativarTransacao(item)" v-bind:title="messageEnable">mdi-cancel</v-icon>
+            <v-icon size="20" class="mr-2" @click="editItem(item)" v-bind:title="messageVisuzalizar">mdi-magnify</v-icon>
+            <v-icon v-if="item.ativo" size="20" @click="ativarDesativarTransacao(item)" v-bind:title="messageDisable">mdi-close</v-icon>
+            <v-icon v-if="!item.ativo" size="20" color="red" @click="ativarDesativarTransacao(item)" v-bind:title="messageEnable">mdi-cancel</v-icon>
           </td>
         </tr>
       </tbody>
