@@ -52,8 +52,11 @@
                   class="mb-2"
                   @click="save"
                   :disabled="!valid"
-                >Salvar</v-btn>
-                <v-btn color="primary" dark class="mb-2" @click="reset">Cancelar</v-btn>
+                  >Salvar</v-btn
+                >
+                <v-btn color="primary" dark class="mb-2" @click="reset"
+                  >Cancelar</v-btn
+                >
               </v-card-actions>
             </v-layout>
           </v-form>
@@ -64,7 +67,9 @@
         <v-toolbar-title>Lista de Usuários</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn color="primary" fab dark small @click="mostrarNovoUsuario">
-          <v-icon v-if="!mostraNovoUsuario" dark v-bind:title="msnBotaoUser">mdi-plus</v-icon>
+          <v-icon v-if="!mostraNovoUsuario" dark v-bind:title="msnBotaoUser"
+            >mdi-plus</v-icon
+          >
           <v-icon v-if="mostraNovoUsuario" dark>mdi-minus</v-icon>
         </v-btn>
       </v-toolbar>
@@ -72,14 +77,14 @@
     <template v-slot:item.tipo="{ item }">
       <tr v-bind:class="{ usuarioInativo: !item.ativo }">
         {{
-        item.tipo
+          item.tipo
         }}
       </tr>
     </template>
     <template v-slot:item.username="{ item }">
       <tr v-bind:class="{ usuarioInativo: !item.ativo }">
         {{
-        item.username
+          item.username
         }}
       </tr>
     </template>
@@ -90,15 +95,23 @@
         color="green"
         @click="ativarDesativarUsuario(item)"
         v-bind:title="msnDesativar"
-      >mdi-check-bold</v-icon>
+        >mdi-check-bold</v-icon
+      >
       <v-icon
         v-if="!item.ativo"
         small
         color="red"
         @click="ativarDesativarUsuario(item)"
         v-bind:title="msnAtivar"
-      >mdi-cancel</v-icon>
-      <v-icon small v-if="item.ativo" @click="editItem(item)" v-bind:title="msnEditar">mdi-pencil</v-icon>
+        >mdi-cancel</v-icon
+      >
+      <v-icon
+        small
+        v-if="item.ativo"
+        @click="editItem(item)"
+        v-bind:title="msnEditar"
+        >mdi-pencil</v-icon
+      >
       <v-icon small v-if="!item.ativo">mdi-pencil-remove</v-icon>
     </template>
     <template v-slot:no-data>
@@ -107,6 +120,8 @@
   </v-data-table>
 </template>
 <script>
+import ConvidadoResquestUtil from "@/util/request-utils/ConvidadoRequestUtil";
+
 export default {
   data: () => ({
     usuario: {},
@@ -114,19 +129,19 @@ export default {
     mostraNovoUsuario: false,
     valid: true,
     nameRules: [
-      v => !!v || "Digite um nome de usuário!",
-      v =>
+      (v) => !!v || "Digite um nome de usuário!",
+      (v) =>
         (!!v && v.length >= 3 && v.length <= 10) ||
-        "Nome de usuário deve possuir no mínimo 3 e no máximo 10 caracteres!"
+        "Nome de usuário deve possuir no mínimo 3 e no máximo 10 caracteres!",
     ],
     passwordRules: [
-      v => !!v || "Digite uma senha!",
-      v => (!!v && v.length == 6) || "A senha deve possuir 6 caracteres!"
+      (v) => !!v || "Digite uma senha!",
+      (v) => (!!v && v.length == 6) || "A senha deve possuir 6 caracteres!",
     ],
     headers: [
       { text: "Nome de usuário", value: "username" },
       { text: "Tipo", value: "tipo" },
-      { text: "Ações", value: "actions", sortable: false }
+      { text: "Ações", value: "actions", sortable: false },
     ],
     editedIndex: -1,
     msnBotaoUser: "Novo Usuario",
@@ -137,22 +152,26 @@ export default {
       username: "",
       password: "",
       tipo: "",
-      ativo: Boolean
+      ativo: Boolean,
     },
     defaultItem: {
       username: "",
       password: "",
       tipo: "",
-      ativo: Boolean
-    }
+      ativo: Boolean,
+    },
   }),
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Novo Usuário" : "Editar Usuário";
-    }
+    },
   },
   created() {
     this.initialize();
+
+    ConvidadoResquestUtil.buscarTodos().then((convidados) => {
+      alert(JSON.stringify(convidados));
+    });
   },
   methods: {
     initialize() {
@@ -161,14 +180,14 @@ export default {
           username: "ADMIN",
           password: "0123",
           tipo: "ADMIN",
-          ativo: true
+          ativo: true,
         },
         {
           username: "ADMIN2",
           password: "112233",
           tipo: "ADMIN",
-          ativo: false
-        }
+          ativo: false,
+        },
       ];
     },
     abreNovoUsuario() {
@@ -204,8 +223,8 @@ export default {
         this.usuarios.push(Object.assign({}, this.editedItem));
       }
       this.reset();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
