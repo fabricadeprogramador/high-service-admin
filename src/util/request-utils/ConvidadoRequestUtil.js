@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/convidados";
+const API_URL = "https://high-service-api.herokuapp.com/convidados";
 import axios from "axios";
 
 export default {
