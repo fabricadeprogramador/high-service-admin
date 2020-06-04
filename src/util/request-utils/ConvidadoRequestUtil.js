@@ -5,4 +5,8 @@ export default {
   async buscarTodos() {
     return axios.get(API_URL).then((response) => response.data);
   },
+
+  async salvar(convidado) {
+    return axios.post(API_URL, convidado).then((response) => response.data);
+  },
 };
