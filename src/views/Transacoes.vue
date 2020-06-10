@@ -151,6 +151,8 @@
 <script>
   import {Money} from 'v-money'
 
+  import TransacaoRequestUtil from "@/util/request-utils/TransacaoRequestUtil";
+
   export default {
     components: {Money},
 
@@ -251,53 +253,14 @@
 
     created () {
       this.initialize()
-      this.balancoTotal()
     },
 
     methods: {
       initialize () {
-        this.transacoes = [
-          {
-            empresa: 'Empresa 1',
-            cliente: 'Ana Carla Silva',
-            valor: 2500.00,
-            data: '18/04/2020',
-            status: 'Em Andamento',
-            ativo: false
-          },
-          {
-            empresa: 'Empresa 2',
-            cliente: 'José Francisco Cooper',
-            valor: 5700.00,
-            data: '19/04/2020',
-            status: 'Concluído',
-            ativo: true
-          },
-           {
-            empresa: 'Empresa 3',
-            cliente: 'José Francisco Cooper',
-            valor: 1800.00,
-            data: '20/04/2020',
-            status: 'Concluído',
-            ativo: false
-          },
-           {
-            empresa: 'Empresa 4',
-            cliente: 'Ana Carla Silva',
-            valor: 900.00,
-            data: '21/04/2020',
-            status: 'Concluído',
-            ativo: true
-          },
-           {
-            empresa: 'Empresa 5',
-            cliente: 'José Francisco Cooper',
-            valor: 230.00,
-            data: '20/04/2020',
-            status: 'Concluído',
-            ativo: true
-          },
-        ]
+        TransacaoRequestUtil.buscarTodos().then((transacao) => {
+          this.transacoes = transacao;
+          this.balancoTotal()
+        });
       },
 
       balancoTotal() {
@@ -330,7 +293,9 @@
           resp = confirm("Tem certeza que deseja reativar essa transação?") 
         
         if(resp){
-          item.ativo = !item.ativo
+          //item.ativo = !item.ativo
+           TransacaoRequestUtil.ativardesativar(item).then((editedItem) => {
+            }); 
         }
       },
 
@@ -351,9 +316,12 @@
           }
           else {
             this.editedItem.ativo = true
-            this.transacoes.push(this.editedItem)
+           // this.transacoes.push(this.editedItem)
+            TransacaoRequestUtil.salvar(this.editedItem).then((editedItem) => {
+              //alert(JSON.stringify(this.editedItem));
+            });
           }
-        this.balancoTotal()
+        this.initialize()
         this.close()
         }
       },
