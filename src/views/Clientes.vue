@@ -514,7 +514,7 @@ export default {
     async ativarDesativarCliente(cliente) {
       confirm("Tem certeza que deseja Ativar/Desativar esse cliente?") &&
         (await ClientesRequestUtil.ativarInativar(cliente).then(res => {
-          alert(res);
+          alert(JSON.stringify(res));
           ClientesRequestUtil.buscarTodos().then(
             clientesRetornadosBuscarTodos => {
               this.clientes = clientesRetornadosBuscarTodos;
