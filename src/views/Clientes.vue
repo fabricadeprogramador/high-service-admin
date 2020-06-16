@@ -341,8 +341,10 @@
     </template>
   </v-data-table>
 </template>
+
 <script>
 import { mask } from "vue-the-mask"; //Fiz esse import do Mask
+import ClientesRequestUtil from "@/util/request-utils/ClientesRequestUtil";
 export default {
   directives: { mask }, //Aqui não usa o mask como um componente
   data: () => ({
@@ -463,38 +465,42 @@ export default {
   },
   methods: {
     initialize() {
-      this.clientes = [
-        {
-          nome: "Teste1",
-          cpf: "111.111.111-11",
-          sexo: "M",
-          tel: "(11)11111-1111",
-          email: "teste1@teste.com",
-          logradouro: "Rua teste1",
-          nr: "111",
-          complemento: "teste1",
-          bairro: "teste1",
-          cep: "11111-111",
-          cidade: "teste1",
-          uf: "MS",
-          ativo: true
-        },
-        {
-          nome: "Teste2",
-          cpf: "222.222.222-22",
-          sexo: "F",
-          tel: "(22)22222-2222",
-          email: "teste2@teste.com",
-          logradouro: "Rua teste2",
-          nr: "222",
-          complemento: "teste2",
-          bairro: "teste2",
-          cep: "22222-222",
-          cidade: "teste2",
-          uf: "MT",
-          ativo: false
-        }
-      ];
+      ClientesRequestUtil.buscarTodos().then(clientesRetornadosBuscarTodos => {
+        this.clientes = clientesRetornadosBuscarTodos;
+      });
+
+      // this.clientes = [
+      //   {
+      //     nome: "Teste1",
+      //     cpf: "111.111.111-11",
+      //     sexo: "M",
+      //     tel: "(11)11111-1111",
+      //     email: "teste1@teste.com",
+      //     logradouro: "Rua teste1",
+      //     nr: "111",
+      //     complemento: "teste1",
+      //     bairro: "teste1",
+      //     cep: "11111-111",
+      //     cidade: "teste1",
+      //     uf: "MS",
+      //     ativo: true
+      //   },
+      //   {
+      //     nome: "Teste2",
+      //     cpf: "222.222.222-22",
+      //     sexo: "F",
+      //     tel: "(22)22222-2222",
+      //     email: "teste2@teste.com",
+      //     logradouro: "Rua teste2",
+      //     nr: "222",
+      //     complemento: "teste2",
+      //     bairro: "teste2",
+      //     cep: "22222-222",
+      //     cidade: "teste2",
+      //     uf: "MT",
+      //     ativo: false
+      //   }
+      // ];
     },
     abreNovocliente() {
       this.mostraNovoCliente = true;
@@ -507,7 +513,11 @@ export default {
     },
     ativarDesativarCliente(cliente) {
       confirm("Tem certeza que deseja Ativar/Desativar esse cliente?") &&
-        (cliente.ativo = !cliente.ativo);
+        ClientesRequestUtil.ativarInativar(
+          cliente
+        ).then(clienteRetornado => {});
+      cliente = clienteRetornado;
+      // (cliente.ativo = !cliente.ativo);
     },
     reset() {
       if (this.mostraNovoCliente) {
@@ -526,10 +536,22 @@ export default {
     },
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.clientes[this.editedIndex], this.editedItem);
+        // Object.assign(this.clientes[this.editedIndex], this.editedItem);
+        ClientesRequestUtil.editar(this.editedItem).then(res => {
+          alert(res);
+          ClientesRequestUtil.buscarTodos().then(clientes => {
+            this.clientes = clientes;
+          });
+        });
       } else {
         this.editedItem.ativo = true;
-        this.clientes.push(Object.assign({}, this.editedItem));
+        ClientesRequestUtil.salvar(this.editedItem).then(res => {
+          alert(res);
+          ClientesRequestUtil.buscarTodos().then(clientes => {
+            this.clientes = clientes;
+          });
+        });
+        // this.clientes.push(Object.assign({}, this.editedItem));
       }
       this.reset();
     }
