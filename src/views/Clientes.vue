@@ -511,14 +511,16 @@ export default {
         this.reset();
       }, 100);
     },
-    ativarDesativarCliente(cliente) {
+    async ativarDesativarCliente(cliente) {
       confirm("Tem certeza que deseja Ativar/Desativar esse cliente?") &&
-        ClientesRequestUtil.ativarInativar(cliente).then(res => {
+        (await ClientesRequestUtil.ativarInativar(cliente).then(res => {
           alert(res);
-          ClientesRequestUtil.buscarTodos().then(clientes => {
-            this.clientes = clientes;
-          });
-        });
+          ClientesRequestUtil.buscarTodos().then(
+            clientesRetornadosBuscarTodos => {
+              this.clientes = clientesRetornadosBuscarTodos;
+            }
+          );
+        }));
       // (cliente.ativo = !cliente.ativo);
     },
     reset() {
@@ -541,17 +543,21 @@ export default {
         // Object.assign(this.clientes[this.editedIndex], this.editedItem);
         ClientesRequestUtil.editar(this.editedItem).then(res => {
           alert(res);
-          ClientesRequestUtil.buscarTodos().then(clientes => {
-            this.clientes = clientes;
-          });
+          ClientesRequestUtil.buscarTodos().then(
+            clientesRetornadosBuscarTodos => {
+              this.clientes = clientesRetornadosBuscarTodos;
+            }
+          );
         });
       } else {
         this.editedItem.ativo = true;
         ClientesRequestUtil.salvar(this.editedItem).then(res => {
           alert(res);
-          ClientesRequestUtil.buscarTodos().then(clientes => {
-            this.clientes = clientes;
-          });
+          ClientesRequestUtil.buscarTodos().then(
+            clientesRetornadosBuscarTodos => {
+              this.clientes = clientesRetornadosBuscarTodos;
+            }
+          );
         });
         // this.clientes.push(Object.assign({}, this.editedItem));
       }
