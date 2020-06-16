@@ -6,7 +6,7 @@
           <v-card-title>
             <span class="headline">{{ formTitle }}</span>
           </v-card-title>
-          <v-form @submit="e.keyCode === 13" v-model="valid" ref="form">
+          <v-form v-model="valid" ref="form">
             <v-card-text>
               <v-container>
                 <v-row>
@@ -541,7 +541,6 @@ export default {
       if (this.editedIndex > -1) {
         // Object.assign(this.clientes[this.editedIndex], this.editedItem);
         await ClientesRequestUtil.editar(this.editedItem).then(res => {
-          alert(res);
           ClientesRequestUtil.buscarTodos().then(
             clientesRetornadosBuscarTodos => {
               this.clientes = clientesRetornadosBuscarTodos;
@@ -551,7 +550,6 @@ export default {
       } else {
         this.editedItem.ativo = true;
         await ClientesRequestUtil.salvar(this.editedItem).then(res => {
-          alert(res);
           ClientesRequestUtil.buscarTodos().then(
             clientesRetornadosBuscarTodos => {
               this.clientes = clientesRetornadosBuscarTodos;
