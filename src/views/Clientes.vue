@@ -514,7 +514,6 @@ export default {
     async ativarDesativarCliente(cliente) {
       confirm("Tem certeza que deseja Ativar/Desativar esse cliente?") &&
         (await ClientesRequestUtil.ativarInativar(cliente).then(res => {
-          alert(JSON.stringify(res));
           ClientesRequestUtil.buscarTodos().then(
             clientesRetornadosBuscarTodos => {
               this.clientes = clientesRetornadosBuscarTodos;
@@ -538,10 +537,10 @@ export default {
       this.editedIndex = this.clientes.indexOf(item);
       this.editedItem = Object.assign({}, item);
     },
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
         // Object.assign(this.clientes[this.editedIndex], this.editedItem);
-        ClientesRequestUtil.editar(this.editedItem).then(res => {
+        await ClientesRequestUtil.editar(this.editedItem).then(res => {
           alert(res);
           ClientesRequestUtil.buscarTodos().then(
             clientesRetornadosBuscarTodos => {
@@ -551,7 +550,7 @@ export default {
         });
       } else {
         this.editedItem.ativo = true;
-        ClientesRequestUtil.salvar(this.editedItem).then(res => {
+        await ClientesRequestUtil.salvar(this.editedItem).then(res => {
           alert(res);
           ClientesRequestUtil.buscarTodos().then(
             clientesRetornadosBuscarTodos => {
