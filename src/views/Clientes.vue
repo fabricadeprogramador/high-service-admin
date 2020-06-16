@@ -513,10 +513,9 @@ export default {
     },
     ativarDesativarCliente(cliente) {
       confirm("Tem certeza que deseja Ativar/Desativar esse cliente?") &&
-        ClientesRequestUtil.ativarInativar(
-          cliente
-        ).then(clienteRetornado => {});
-      cliente = clienteRetornado;
+        ClientesRequestUtil.ativarInativar(cliente).then(res => {
+          cliente = res;
+        });
       // (cliente.ativo = !cliente.ativo);
     },
     reset() {
