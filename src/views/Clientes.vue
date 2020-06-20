@@ -1,6 +1,75 @@
 <template>
   <v-data-table :headers="headers" :items="clientes" sort-by="nome" class="elevation-1">
     <template v-slot:top>
+      <!-- Início * Snackbars feedback de ativarInativar * Início -->
+      <v-snackbar
+        color="primary"
+        v-model="snackbarClienteAtivarInativarSucesso"
+        :timeout="snackbarTimeout"
+        :multi-line="multiLineVariavel"
+        :top="topVariavel"
+      >Cliente ativado/inativado com sucesso!</v-snackbar>
+      <v-snackbar
+        color="yellow accent-4"
+        v-model="snackbarClienteAtivarInativarAtributosInsuficientes"
+        :timeout="snackbarTimeout"
+        :multi-line="multiLineVariavel"
+        :top="topVariavel"
+      >Não foi possível ativar/inativar, atributos insuficientes para a ação!</v-snackbar>
+      <v-snackbar
+        color="red"
+        v-model="snackbarClienteAtivarInativarErro"
+        :timeout="snackbarTimeout"
+        :multi-line="multiLineVariavel"
+        :top="topVariavel"
+      >Não foi possível ativar/inativar, ocorreu um erro!</v-snackbar>
+      <!-- Fim * Snackbars feedback de ativarInativar * Fim -->
+      <!-- Início * Snackbars feedback de salvar * Início -->
+      <v-snackbar
+        color="primary"
+        v-model="snackbarClienteSaveSucesso"
+        :timeout="snackbarTimeout"
+        :multi-line="multiLineVariavel"
+        :top="topVariavel"
+      >Cliente salvo com sucesso!</v-snackbar>
+      <v-snackbar
+        color="yellow accent-4"
+        v-model="snackbarClienteSaveAtributosInsuficientes"
+        :timeout="snackbarTimeout"
+        :multi-line="multiLineVariavel"
+        :top="topVariavel"
+      >Cliente não foi salvo, atributos insuficientes para a ação!</v-snackbar>
+      <v-snackbar
+        color="red"
+        v-model="snackbarClienteSaveErro"
+        :timeout="snackbarTimeout"
+        :multi-line="multiLineVariavel"
+        :top="topVariavel"
+      >Cliente não foi salvo, ocorreu um erro!</v-snackbar>
+      <!-- Fim * Snackbars feedback de salvar * Fim -->
+      <!-- Início * Snackbars feedback de editar * Início -->
+      <v-snackbar
+        color="primary"
+        v-model="snackbarClienteEditarSucesso"
+        :timeout="snackbarTimeout"
+        :multi-line="multiLineVariavel"
+        :top="topVariavel"
+      >Cliente editado com sucesso!</v-snackbar>
+      <v-snackbar
+        color="yellow accent-4"
+        v-model="snackbarClienteEditarAtributosInsuficientes"
+        :timeout="snackbarTimeout"
+        :multi-line="multiLineVariavel"
+        :top="topVariavel"
+      >Não foi possível editar, atributos insuficientes para a ação!</v-snackbar>
+      <v-snackbar
+        color="red"
+        v-model="snackbarClienteEditarErro"
+        :timeout="snackbarTimeout"
+        :multi-line="multiLineVariavel"
+        :top="topVariavel"
+      >Não foi possível editar, ocorreu um erro!</v-snackbar>
+      <!-- Fim * Snackbars feedback de editar * Fim -->
       <v-expand-transition>
         <v-card v-if="mostraNovoCliente">
           <v-card-title>
@@ -151,6 +220,7 @@
           </v-form>
         </v-card>
       </v-expand-transition>
+
       <v-toolbar flat color="dark-grey">
         <v-toolbar-title>Lista de clientes</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -160,6 +230,7 @@
         </v-btn>
       </v-toolbar>
     </template>
+
     <template v-slot:item.nome="{ item }">
       <tr v-bind:class="{ clienteInativo: !item.ativo }">
         {{
@@ -339,6 +410,20 @@
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
     </template>
+    <v-snackbar
+      color="primary"
+      v-model="snackbarClienteAtivarInativarSucesso"
+      :timeout="snackbarTimeout"
+      :multi-line="multiLineVariavel"
+      :top="topVariavel"
+    >CLiente ativado/inativado com sucesso</v-snackbar>
+    <!-- <v-snackbar
+      color="red"
+      v-model="snackbarInvalido"
+      :timeout="snackbarTimeout"
+      :multi-line="multiLineVariavel"
+      :top="topVariavel"
+    >Usuário ou senha inválido(s)</v-snackbar>-->
   </v-data-table>
 </template>
 
@@ -348,6 +433,18 @@ import ClientesRequestUtil from "@/util/request-utils/ClientesRequestUtil";
 export default {
   directives: { mask }, //Aqui não usa o mask como um componente
   data: () => ({
+    multiLineVariavel: true,
+    topVariavel: true,
+    snackbarClienteAtivarInativarSucesso: false,
+    snackbarClienteAtivarInativarAtributosInsuficientes: false,
+    snackbarClienteAtivarInativarErro: false,
+    snackbarClienteSaveSucesso: false,
+    snackbarClienteSaveAtributosInsuficientes: false,
+    snackbarClienteSaveErro: false,
+    snackbarClienteEditarSucesso: false,
+    snackbarClienteEditarAtributosInsuficientes: false,
+    snackbarClienteEditarErro: false,
+    snackbarTimeout: 2500,
     sexo: ["M", "F"],
     cliente: {},
     clientes: [],
@@ -511,14 +608,27 @@ export default {
         this.reset();
       }, 100);
     },
+
+    atualizaClientes() {
+      ClientesRequestUtil.buscarTodos().then(clientesRetornadosBuscarTodos => {
+        this.clientes = clientesRetornadosBuscarTodos;
+      });
+    },
+
     async ativarDesativarCliente(cliente) {
       confirm("Tem certeza que deseja Ativar/Desativar esse cliente?") &&
         (await ClientesRequestUtil.ativarInativar(cliente).then(res => {
-          ClientesRequestUtil.buscarTodos().then(
-            clientesRetornadosBuscarTodos => {
-              this.clientes = clientesRetornadosBuscarTodos;
-            }
-          );
+          if (res == "Atributos insuficientes para a ação!") {
+            // alert("Atributos insuficientes para a ação!");
+            this.snackbarClienteAtivarInativarAtributosInsuficientes = true;
+          } else if (res == "Erro ao ativar ou inativar cliente!") {
+            // alert(res);
+            this.snackbarClienteAtivarInativarErro = true;
+          } else {
+            // alert("Cliente Ativado/Inativado com sucesso!");
+            this.snackbarClienteAtivarInativarSucesso = true;
+          }
+          this.atualizaClientes();
         }));
       // (cliente.ativo = !cliente.ativo);
     },
@@ -537,28 +647,45 @@ export default {
       this.editedIndex = this.clientes.indexOf(item);
       this.editedItem = Object.assign({}, item);
     },
+    resetaThisEditedItem() {
+      this.editedItem = Object.assign({}, {});
+    },
     async save() {
       if (this.editedIndex > -1) {
         // Object.assign(this.clientes[this.editedIndex], this.editedItem);
         await ClientesRequestUtil.editar(this.editedItem).then(res => {
-          ClientesRequestUtil.buscarTodos().then(
-            clientesRetornadosBuscarTodos => {
-              this.clientes = clientesRetornadosBuscarTodos;
-            }
-          );
+          if (res == "Atributos insuficientes para a ação!") {
+            // alert("Atributos insuficientes para a ação!");
+            this.snackbarClienteEditarAtributosInsuficientes = true;
+          } else if (res == "Erro ao editar cliente!") {
+            // alert(res);
+            this.snackbarClienteEditarErro = true;
+          } else {
+            // alert("Cliente editado com sucesso!");
+            this.snackbarClienteEditarSucesso = true;
+          }
+          this.atualizaClientes();
+          this.resetaThisEditedItem();
         });
       } else {
         this.editedItem.ativo = true;
         await ClientesRequestUtil.salvar(this.editedItem).then(res => {
-          ClientesRequestUtil.buscarTodos().then(
-            clientesRetornadosBuscarTodos => {
-              this.clientes = clientesRetornadosBuscarTodos;
-            }
-          );
+          if (res == "Atributos insuficientes para a ação!") {
+            // alert("Atributos insuficientes para a ação!");
+            this.snackbarClienteSaveAtributosInsuficientes = true;
+          } else if (res == "Erro ao inserir novo cliente!") {
+            // alert(res);
+            this.snackbarClienteSaveErro = true;
+          } else {
+            // alert("Cliente salvo com sucesso!");
+            this.snackbarClienteSaveSucesso = true;
+          }
+          this.atualizaClientes();
         });
         // this.clientes.push(Object.assign({}, this.editedItem));
       }
       this.reset();
+      this.resetaThisEditedItem();
     }
   }
 };
