@@ -1196,14 +1196,21 @@ export default {
     },
     salvarProdutoServicoEditado() {
       if (this.produtoServicoEditadoIndex > -1) {
+        // EDITAR
         Object.assign(
           this.produtosServicos[this.produtoServicoEditadoIndex],
           this.produtoServicoEditado
+          //Aqui dispara a requisição enviando pacoteEdicaoProdutoServico para a API usando o seguinte:
+          // let pacoteEdicaoProdutoServico = {}
+          // pacoteEdicaoProdutoServico.idDaEmpresa = this.empressaProdutosServicos._id)
+          // pacoteEdicaoProdutoServico.indexDoProduto = this.produtoServicoEditadoIndex)
         );
       } else {
+        // SALVAR
         this.produtoServicoEditado.ativo = true;
         this.produtosServicos.push(
           Object.assign({}, this.produtoServicoEditado)
+          //Aqui dispara a requisição enviando this.empresaProdutosServicos para a API
         );
       }
       this.produtoServicoEditado.valor = 0;
