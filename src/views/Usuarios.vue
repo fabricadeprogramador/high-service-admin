@@ -123,7 +123,8 @@
   </v-data-table>
 </template>
 <script>
-import ConvidadoResquestUtil from "@/util/request-utils/ConvidadoRequestUtil";
+import UsuariosRequestUtil from "@/util/request-utils/UsuariosRequestUtil";
+import bcrypt from 'bcryptjs';
 
 export default {
   data: () => ({
@@ -171,27 +172,12 @@ export default {
   },
   created() {
     this.initialize();
-
-    ConvidadoResquestUtil.buscarTodos().then((convidados) => {
-      alert(JSON.stringify(convidados));
-    });
   },
   methods: {
     initialize() {
-      this.usuarios = [
-        {
-          username: "ADMIN",
-          password: "0123",
-          tipo: "ADMIN",
-          ativo: true,
-        },
-        {
-          username: "ADMIN2",
-          password: "112233",
-          tipo: "ADMIN",
-          ativo: false,
-        },
-      ];
+      UsuariosRequestUtil.buscarTodos().then((usuarios) => {
+        this.usuarios = usuarios
+     });
     },
     abreNovoUsuario() {
       this.mostraNovoUsuario = true;
@@ -218,13 +204,23 @@ export default {
       this.editedItem = Object.assign({}, item);
     },
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.usuarios[this.editedIndex], this.editedItem);
-      } else {
-        this.editedItem.tipo = "ADMIN";
-        this.editedItem.ativo = true;
-        this.usuarios.push(Object.assign({}, this.editedItem));
-      }
+          if (this.editedIndex > -1) {
+            //Object.assign(this.usuarios[this.editedIndex], this.editedItem);
+             UsuariosRequestUtil.editar(this.editedItem).then(res => {
+                 alert(JSON.stringify(res));
+                 this.initialize();
+            });
+
+          } else {
+            this.editedItem.tipo = "ADMIN";
+            this.editedItem.ativo = true;
+            alert(JSON.stringify(this.editedItem));
+            //this.usuarios.push(Object.assign({}, this.editedItem));
+            UsuariosRequestUtil.salvar(this.editedItem).then((res) => {
+              alert(JSON.stringify(res));
+              this.initialize();
+            });
+          }
       this.reset();
     },
   },

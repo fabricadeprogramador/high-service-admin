@@ -12,6 +12,10 @@ export default {
   },
 
   async ativardesativar(transacao) {
-    return axios.put("http://localhost:3000/transacao/ativarInativar/", transacao).then((response) => response.data);
+    return axios.put(API_URL + "/ativarInativar", transacao).then((response) => response.data);
   },
+
+  async editar(transacao) {
+    return axios.put(API_URL, transacao).then((response) => response.data);
+  }
 };

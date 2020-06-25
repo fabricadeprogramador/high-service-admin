@@ -66,6 +66,8 @@
   </v-content>
 </template>
 <script>
+import UsuariosRequestUtil from "@/util/request-utils/UsuariosRequestUtil";
+
 export default {
   data() {
     return {
@@ -91,23 +93,18 @@ export default {
   },
   methods: {
     initialize() {
-      this.usuarios = [
-        {
-          username: "ADMIN",
-          password: "0123",
-          tipo: "ADMIN",
-          ativo: true
-        },
-        {
-          username: "ADMIN2",
-          password: "112233",
-          tipo: "ADMIN",
-          ativo: false
-        }
-      ];
+      UsuariosRequestUtil.buscarTodos().then(usuario => {
+        this.usuarios = usuario;
+      });
     },
+
     autenticar() {
-      this.usuarioAutenticado = {};
+      alert(JSON.stringify(this.usuario))
+      let user = this.usuario
+      UsuariosRequestUtil.logar(user).then(res => {
+        alert(JSON.stringify(res))
+      });
+      /* this.usuarioAutenticado = {};
       let stop = false;
       let i = 0;
       while (stop == false && i <= this.usuarios.length - 1) {
@@ -134,9 +131,16 @@ export default {
       }
       this.$refs.form.reset();
       this.$refs.refInputUsername.focus();
-    }
+    },
+
+    login(){
+      let user = {}
+      user.username = this.usuario.username
+      user.password = this.usuario.password
+ */    }
   }
 };
+
 </script>
 <style>
 .botaoLogin {
