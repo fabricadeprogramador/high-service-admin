@@ -2,7 +2,6 @@ const API_URL = "https://high-service-api.herokuapp.com";
 
 // "http://localhost:3000"
 // "https://high-service-api.herokuapp.com"
-// "https://high-service-api.herokuapp.com/clientes"
 
 import axios from "axios";
 

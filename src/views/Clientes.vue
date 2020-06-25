@@ -261,7 +261,7 @@
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon size="20" @click="detalhaCliente(item)" v-bind:title="msnDetalhar">mdi-magnify</v-icon>
-      <v-dialog v-model="dialog" transition="dialog-transition">
+      <v-dialog :retain-focus="false" v-model="dialog" transition="dialog-transition">
         <v-card>
           <v-container>
             <v-row>
@@ -410,20 +410,6 @@
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
     </template>
-    <v-snackbar
-      color="primary"
-      v-model="snackbarClienteAtivarInativarSucesso"
-      :timeout="snackbarTimeout"
-      :multi-line="multiLineVariavel"
-      :top="topVariavel"
-    >CLiente ativado/inativado com sucesso</v-snackbar>
-    <!-- <v-snackbar
-      color="red"
-      v-model="snackbarInvalido"
-      :timeout="snackbarTimeout"
-      :multi-line="multiLineVariavel"
-      :top="topVariavel"
-    >Usuário ou senha inválido(s)</v-snackbar>-->
   </v-data-table>
 </template>
 
@@ -561,10 +547,12 @@ export default {
     this.initialize();
   },
   methods: {
-    initialize() {
-      ClientesRequestUtil.buscarTodos().then(clientesRetornadosBuscarTodos => {
-        this.clientes = clientesRetornadosBuscarTodos;
-      });
+    async initialize() {
+      await ClientesRequestUtil.buscarTodos().then(
+        clientesRetornadosBuscarTodos => {
+          this.clientes = clientesRetornadosBuscarTodos;
+        }
+      );
 
       // this.clientes = [
       //   {
@@ -602,6 +590,10 @@ export default {
     abreNovocliente() {
       this.mostraNovoCliente = true;
     },
+    fechaFichaEdicaoCliente() {
+      this.mostraNovoCliente = false;
+    },
+
     mostrarNovocliente() {
       this.mostraNovoCliente = !this.mostraNovoCliente;
       setTimeout(() => {
@@ -609,10 +601,12 @@ export default {
       }, 100);
     },
 
-    atualizaClientes() {
-      ClientesRequestUtil.buscarTodos().then(clientesRetornadosBuscarTodos => {
-        this.clientes = clientesRetornadosBuscarTodos;
-      });
+    async atualizaClientes() {
+      await ClientesRequestUtil.buscarTodos().then(
+        clientesRetornadosBuscarTodos => {
+          this.clientes = clientesRetornadosBuscarTodos;
+        }
+      );
     },
 
     async ativarDesativarCliente(cliente) {
@@ -664,8 +658,6 @@ export default {
             // alert("Cliente editado com sucesso!");
             this.snackbarClienteEditarSucesso = true;
           }
-          this.atualizaClientes();
-          this.resetaThisEditedItem();
         });
       } else {
         this.editedItem.ativo = true;
@@ -680,12 +672,13 @@ export default {
             // alert("Cliente salvo com sucesso!");
             this.snackbarClienteSaveSucesso = true;
           }
-          this.atualizaClientes();
         });
         // this.clientes.push(Object.assign({}, this.editedItem));
       }
-      this.reset();
-      this.resetaThisEditedItem();
+      await this.reset();
+      await this.resetaThisEditedItem();
+      await this.fechaFichaEdicaoCliente();
+      await this.atualizaClientes();
     }
   }
 };
