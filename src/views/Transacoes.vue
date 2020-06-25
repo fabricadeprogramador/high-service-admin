@@ -285,6 +285,12 @@
         this.editedItem = Object.assign({}, item)
       },
 
+     recarregaTransacao() {
+      TransacaoRequestUtil.buscarTodos().then(transacao => {
+        this.transacoes = transacao;
+      });
+    },
+
       ativarDesativarTransacao(item) {
         let resp = ""
         if(item.ativo)
@@ -295,8 +301,10 @@
         if(resp){
           //item.ativo = !item.ativo
            TransacaoRequestUtil.ativardesativar(item).then((editedItem) => {
+             this.recarregaTransacao();
             }); 
         }
+
       },
 
       close () {
@@ -307,25 +315,30 @@
           this.editedIndex = -1
           this.resetValidation()
         }, 300)
+        this.recarregaTransacao();
       },
 
-      save () {
+      async save () {
         if(this.editedItem.empresa != "" && this.editedItem.cliente != "" && this.editedItem.valor != 0 && this.editedItem.data != null && this.editedItem.status != ""){
           if (this.editedIndex > -1) {
-            Object.assign(this.transacoes[this.editedIndex], this.editedItem)
+              await TransacaoRequestUtil.editar(this.editedItem).then(res => {
+                 alert(JSON.stringify(res));
+              this.recarregaTransacao();
+            });
           }
+            //Object.assign(this.transacoes[this.editedIndex], this.editedItem)
           else {
             this.editedItem.ativo = true
            // this.transacoes.push(this.editedItem)
-            TransacaoRequestUtil.salvar(this.editedItem).then((editedItem) => {
+            await TransacaoRequestUtil.salvar(this.editedItem).then((editedItem) => {
               //alert(JSON.stringify(this.editedItem));
+              this.recarregaTransacao();
             });
           }
-        this.initialize()
-        this.close()
+        this.close();
+        this.reset();
         }
       },
-
       resetValidation(){
         this.$refs.form.resetValidation()
         this.date = new Date().toISOString().substr(0, 10)

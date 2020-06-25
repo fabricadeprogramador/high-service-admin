@@ -140,7 +140,7 @@
     <template v-slot:item.actions="{ item }">
       <v-icon
         size="20"
-        @click="abrirDialogProdutosServicos(item)"
+        @click="mostrarNovoProdServ(item)"
         v-bind:title="msnCadastraListaProdutosServicos"
       >mdi-wrench-outline</v-icon>
       <v-icon
@@ -229,6 +229,129 @@
               </v-col>
             </v-row>
           </v-container>
+
+          <v-toolbar flat color="dark-grey">
+              <v-toolbar-title>Lista de Produtos e Serviços</v-toolbar-title>
+          </v-toolbar>
+
+            <v-data-table
+              :headers="headersProdutosServicos"
+              :items="produtosServicos"
+              sort-by="nome"
+              class="elevation-1">
+              <template v-slot:item.img="{ item }">
+                <tr>
+                  <v-img :src="item.img" height="50px" width="50px"></v-img>
+                </tr>
+              </template>
+              <template v-slot:item.nome="{ item }">
+                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
+                  {{
+                  item.nome
+                  }}
+                </tr>
+              </template>
+              <template v-slot:item.tipo="{ item }">
+                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
+                  {{
+                  item.tipo
+                  }}
+                </tr>
+              </template>
+              <template v-slot:item.valor="{ item }">
+                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
+                  <money v-model="item.valor" v-bind="money" readonly="true"></money>
+                </tr>
+              </template>
+              <template v-slot:item.actions="{ item }">
+                <v-icon
+                  size="20"
+                  @click="detalharProdutoServico(item)"
+                  v-bind:title="msnDetalharProdutoServico"
+                >mdi-magnify</v-icon>
+
+                <v-dialog
+                  size="20"
+                  v-model="dialogDetalhaProdutoServico"
+                  :retain-focus="false"
+                  transition="dialog-transition"
+                  overlay-opacity="0"
+                >
+                  <v-card>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" sm="6" md="6" lg="4" xl="3">
+                          <v-text-field
+                            v-model="produtoServicoDetalhado.nome"
+                            label="Nome"
+                            type="text"
+                            readonly
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" lg="4" xl="3">
+                          <v-select
+                            v-model="produtoServicoDetalhado.tipo"
+                            :items="selectProdServTipo"
+                            label="Tipo"
+                            readonly
+                          ></v-select>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="5" lg="3">
+                          <!-- <v-text-field
+                            v-model="produtoServicoDetalhado.valor"
+                            label="Valor"
+                            type="text"
+                            readonly
+                          ></v-text-field>-->
+                          <money v-model="produtoServicoDetalhado.valor" v-bind="money" readonly></money>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="5" lg="3">
+                          <v-img :src="produtoServicoDetalhado.img" height="50px" width="50px"></v-img>
+                        </v-col>
+                        <v-col cols="12" sm="12" md="12" lg="6" xl="6">
+                          <v-textarea
+                            v-model="produtoServicoDetalhado.descricao"
+                            label="Descrição"
+                            type="text"
+                            readonly
+                          ></v-textarea>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card>
+                </v-dialog>
+
+                <v-icon
+                  size="20"
+                  class="ml-2"
+                  v-if="item.ativo"
+                  color="green"
+                  @click="ativarDesativarProdutoServico(item)"
+                  v-bind:title="msnDesativarProdutoServico"
+                >mdi-check-bold</v-icon>
+                <v-icon
+                  size="20"
+                  class="ml-2"
+                  v-if="!item.ativo"
+                  color="red"
+                  @click="ativarDesativarProdutoServico(item)"
+                  v-bind:title="msnAtivarProdutoServico"
+                >mdi-cancel</v-icon>
+                <v-icon
+                  class="ml-2"
+                  size="20"
+                  v-if="item.ativo"
+                  @click="editarProdutoServico(item)"
+                  v-bind:title="msnEditarProdutoServico"
+                >mdi-pencil</v-icon>
+                <v-icon
+                  class="ml-2"
+                  v-bind:title="msnNaoEditaProdutoServicoInativo"
+                  size="20"
+                  v-if="!item.ativo"
+                >mdi-pencil-remove</v-icon>
+              </template>
+            </v-data-table>
         </v-card>
       </v-dialog>
 
@@ -417,14 +540,7 @@
                           ></v-select>
                         </v-col>
                         <v-col cols="12" sm="6" md="6" lg="4" xl="3">
-                          <!-- <v-text-field
-                            class="inputNumeroLimpo"
-                            v-model="produtoServicoEditado.valor"
-                            label="Valor"
-                            :rules="produtosServicosValorRules"
-                            :maxlength="14"
-                            type="number"
-                          ></v-text-field>-->
+
                           <label>Valor:</label>
                           <money v-model="produtoServicoEditado.valor" v-bind="money"></money>
                         </v-col>
@@ -469,139 +585,7 @@
               </v-card>
             </v-expand-transition>
 
-            <v-toolbar flat color="dark-grey">
-              <v-toolbar-title>Lista de Produtos e Serviços</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" fab dark small @click="mostrarNovoProdServ">
-                <v-icon
-                  size="20"
-                  v-if="!mostraNovoProdServ"
-                  dark
-                  v-bind:title="msnBotaoNovoProdServ"
-                >mdi-plus</v-icon>
-                <v-icon size="20" v-if="mostraNovoProdServ" dark>mdi-minus</v-icon>
-              </v-btn>
-            </v-toolbar>
-
-            <v-data-table
-              :headers="headersProdutosServicos"
-              :items="produtosServicos"
-              sort-by="nome"
-              class="elevation-1"
-            >
-              <template v-slot:item.img="{ item }">
-                <tr>
-                  <v-img :src="item.img" height="50px" width="50px"></v-img>
-                </tr>
-              </template>
-              <template v-slot:item.nome="{ item }">
-                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
-                  {{
-                  item.nome
-                  }}
-                </tr>
-              </template>
-              <template v-slot:item.tipo="{ item }">
-                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
-                  {{
-                  item.tipo
-                  }}
-                </tr>
-              </template>
-              <template v-slot:item.valor="{ item }">
-                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
-                  <money v-model="item.valor" v-bind="money" readonly="true"></money>
-                </tr>
-              </template>
-              <template v-slot:item.actions="{ item }">
-                <v-icon
-                  size="20"
-                  @click="detalharProdutoServico(item)"
-                  v-bind:title="msnDetalharProdutoServico"
-                >mdi-magnify</v-icon>
-
-                <v-dialog
-                  size="20"
-                  v-model="dialogDetalhaProdutoServico"
-                  :retain-focus="false"
-                  transition="dialog-transition"
-                  overlay-opacity="0"
-                >
-                  <v-card>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="6" lg="4" xl="3">
-                          <v-text-field
-                            v-model="produtoServicoDetalhado.nome"
-                            label="Nome"
-                            type="text"
-                            readonly
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="6" lg="4" xl="3">
-                          <v-select
-                            v-model="produtoServicoDetalhado.tipo"
-                            :items="selectProdServTipo"
-                            label="Tipo"
-                            readonly
-                          ></v-select>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="5" lg="3">
-                          <!-- <v-text-field
-                            v-model="produtoServicoDetalhado.valor"
-                            label="Valor"
-                            type="text"
-                            readonly
-                          ></v-text-field>-->
-                          <money v-model="produtoServicoDetalhado.valor" v-bind="money" readonly></money>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="5" lg="3">
-                          <v-img :src="produtoServicoDetalhado.img" height="50px" width="50px"></v-img>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12" lg="6" xl="6">
-                          <v-textarea
-                            v-model="produtoServicoDetalhado.descricao"
-                            label="Descrição"
-                            type="text"
-                            readonly
-                          ></v-textarea>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card>
-                </v-dialog>
-
-                <v-icon
-                  size="20"
-                  class="ml-2"
-                  v-if="item.ativo"
-                  color="green"
-                  @click="ativarDesativarProdutoServico(item)"
-                  v-bind:title="msnDesativarProdutoServico"
-                >mdi-check-bold</v-icon>
-                <v-icon
-                  size="20"
-                  class="ml-2"
-                  v-if="!item.ativo"
-                  color="red"
-                  @click="ativarDesativarProdutoServico(item)"
-                  v-bind:title="msnAtivarProdutoServico"
-                >mdi-cancel</v-icon>
-                <v-icon
-                  class="ml-2"
-                  size="20"
-                  v-if="item.ativo"
-                  @click="editarProdutoServico(item)"
-                  v-bind:title="msnEditarProdutoServico"
-                >mdi-pencil</v-icon>
-                <v-icon
-                  class="ml-2"
-                  v-bind:title="msnNaoEditaProdutoServicoInativo"
-                  size="20"
-                  v-if="!item.ativo"
-                >mdi-pencil-remove</v-icon>
-              </template>
-            </v-data-table>
+            
           </v-content>
         </v-card>
       </v-dialog>
@@ -614,6 +598,8 @@
 import { mask } from "vue-the-mask";
 import ConverterUtil from "@/util/ConverterUtil";
 import { Money } from "v-money";
+
+import EmpresasRequestUtil from "@/util/request-utils/EmpresasRequestUtil";
 
 export default {
   directives: { mask },
@@ -871,223 +857,9 @@ export default {
   methods: {
     initialize() {
       // ConverterUtil.converterCNPJParaNumero()
-      this.empresas = [
-        {
-          empresa: "Empresa 1",
-          cnpj: "11.122.233/3444-55",
-          email: "empresa1@empresa1.com.br",
-          telefone: "(67) 3333-4444",
-          ativo: true,
-          produtosServicos: [
-            {
-              nome: "Jardineiro1",
-              tipo: "Serviço",
-              valor: 80,
-              descricao: "Faço serviço de jardinagem",
-              img: require("../assets/jardineiro.jpg"),
-              ativo: true
-            },
-            {
-              nome: "Sapato1",
-              tipo: "Produto",
-              valor: 10,
-              descricao: "Vendo sapato semi-novo",
-              img: require("../assets/sapato.jpg"),
-              ativo: true
-            },
-            {
-              nome: "Maquiadora1",
-              tipo: "Serviço",
-              valor: 10,
-              descricao: "Serviço de maquiadora",
-              img: require("../assets/maquiadora.jpg"),
-              ativo: true
-            }
-          ],
-          mensagens: [
-            {
-              cliente: "Chaves",
-              conversa: [
-                {
-                  mensagem: "Olá gostaria de saber se vocês parcelam?",
-                  origem: "Cliente"
-                },
-                {
-                  mensagem: "Sim, parcelamos sim.",
-                  origem: "Empresa"
-                }
-              ],
-              visualizada: true
-            },
-            {
-              cliente: "Chiquinha",
-              conversa: [
-                {
-                  mensagem: "Oi, vocês tem vestidos vermelhos?",
-                  origem: "Cliente"
-                },
-                {
-                  mensagem: "Não temos não",
-                  origem: "Empresa"
-                },
-                {
-                  mensagem: "E sapatos pretos?",
-                  origem: "Cliente"
-                }
-              ],
-              visualizada: false
-            },
-            {
-              cliente: "Kiko",
-              conversa: [
-                {
-                  mensagem: "Quanto custa a bola?",
-                  origem: "Cliente"
-                },
-                {
-                  mensagem: "Não vendemos esse produtos Senhor. ",
-                  origem: "empresa"
-                },
-                {
-                  mensagem: "Ok, muito obrigado.",
-                  origem: "cliente"
-                }
-              ],
-              visualizada: false
-            }
-          ]
-        },
-        {
-          empresa: "Empresa 2",
-          cnpj: "11.122.233/3444-56",
-          email: "empresa2@empresa2.com.br",
-          telefone: "(67) 3333-4445",
-          ativo: true,
-          produtosServicos: [
-            {
-              nome: "Jardineiro2",
-              tipo: "Serviço",
-              valor: 80.0,
-              descricao: "Faço serviço de jardinagem",
-              img: require("../assets/jardineiro.jpg"),
-              ativo: true
-            },
-            {
-              nome: "Sapato2",
-              tipo: "Produto",
-              valor: 10,
-              descricao: "Vendo sapato semi-novo",
-              img: require("../assets/sapato.jpg"),
-              ativo: true
-            },
-            {
-              nome: "Maquiadora2",
-              tipo: "Serviço",
-              valor: 10,
-              descricao: "Serviço de maquiadora",
-              img: require("../assets/maquiadora.jpg"),
-              ativo: true
-            }
-          ],
-          mensagens: [
-            {
-              cliente: "Mulher Maravilha",
-              conversa: [
-                {
-                  mensagem: "Boa noite. A maquiadora atende em casa?",
-                  origem: "Cliente"
-                }
-              ],
-              visualizada: false
-            },
-            {
-              cliente: "Batman",
-              conversa: [
-                {
-                  mensagem:
-                    "Bom dia. O Jardineiro consegue atender em Gotham City?",
-                  origem: "Cliente"
-                },
-                {
-                  mensagem:
-                    "Infelizmente não, Sr. Batman, somente em Campo Grande.",
-                  origem: "Empresa"
-                }
-              ],
-              visualizada: true
-            }
-          ]
-        },
-        {
-          empresa: "Empresa 3",
-          cnpj: "111.222.333-44",
-          email: "empresa3@empresa3.com.br",
-          telefone: "(67) 3333-4446",
-          ativo: true,
-          produtosServicos: [
-            {
-              nome: "Manutenção Geral 3",
-              tipo: "Serviço",
-              valor: 80,
-              descricao: "Faço serviço de manutenção geral",
-              img: require("../assets/manutencao.jpg"),
-              ativo: true
-            }
-          ],
-          mensagens: [
-            {
-              cliente: "Jão Zé",
-              conversa: [
-                {
-                  mensagem:
-                    "Quero reclamar sobre o serviço de manutenção prestado por vocês. Foi muito ruim.",
-                  origem: "Cliente"
-                }
-              ],
-              visualizada: false
-            }
-          ]
-        },
-        {
-          empresa: "Empresa 4",
-          cnpj: "11.122.233/3444-56",
-          email: "empresa4@empresa4.com.br",
-          telefone: "(67) 3333-4447",
-          ativo: true,
-          produtosServicos: [
-            {
-              nome: "Jardineiro",
-              tipo: "Serviço",
-              valor: 80,
-              descricao: "Faço serviço de jardinagem",
-              img: require("../assets/jardineiro.jpg"),
-              ativo: true
-            },
-            {
-              nome: "Sapato1",
-              tipo: "Produto",
-              valor: 10,
-              descricao: "Vendo sapato semi-novo",
-              img: {},
-              ativo: true
-            }
-          ],
-          mensagens: [
-            {
-              cliente: "Mario Bros",
-              conversa: [
-                {
-                  mensagem:
-                    "Boa tarde. Por algum acaso vocês não teriam também o sapato tamanho 45?",
-                  origem: "Cliente"
-                }
-              ],
-              visualizada: false
-            }
-          ]
-        }
-      ];
-
+      EmpresasRequestUtil.buscarTodos().then(empresas => {
+        this.empresas = empresas;
+      });
       // this.mensagens = [
       //   {
       //     user: "JAO",
@@ -1170,6 +942,7 @@ export default {
     // Methods de Produtos e Serviços INICIO
     mostrarNovoProdServ() {
       this.mostraNovoProdServ = !this.mostraNovoProdServ;
+      this.dialogProdutosServicos = true;
       setTimeout(() => {
         this.resetProdutosServicos();
       }, 100);
