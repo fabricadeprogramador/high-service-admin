@@ -97,7 +97,186 @@
           </v-form>
         </v-card>
       </v-expand-transition>
+    
+      <v-expand-transition>
+        <v-card v-if="detalharEmpresa">
+          <v-card-title>
+            <h3 class="ml-3">Dados da Empresa:</h3>
+            <v-spacer></v-spacer>
+             <v-btn @click="fecharDetalharEmpresa()" color="primary" dark small>Fechar</v-btn>
+          </v-card-title>
 
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field v-model="visualizedtItem.empresa" label="Nome da Empresa" readonly></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field v-model="visualizedtItem.cnpj" label="CPNJ" readonly></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field v-model="visualizedtItem.email" label="E-mail" readonly></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field v-model="visualizedtItem.telefone" label="Telefone" readonly></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row class="mt-7">
+              <h3 class="ml-3">Endereço:</h3>
+            </v-row>
+            <v-row>
+              <v-col cols="12" sm="6" md="5" lg="3">
+                <v-text-field v-model="visualizedtItem.cep" label="CEP" readonly></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="5" lg="3">
+                <v-text-field v-model="visualizedtItem.rua" label="Rua:" readonly></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="5" lg="3">
+                <v-text-field v-model="visualizedtItem.numero" label="Número" readonly></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="5" lg="3">
+                <v-text-field v-model="visualizedtItem.complemento" label="Complemento" readonly></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="5" lg="3">
+                <v-text-field v-model="visualizedtItem.bairro" label="Bairro" readonly></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="5" lg="3">
+                <v-text-field v-model="visualizedtItem.cidade" label="Cidade" readonly></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="2" md="2" lg="1" xl="1">
+                <v-select v-model="visualizedtItem.uf" :items="uf" label="UF" readonly></v-select>
+              </v-col>
+              <v-col cols="12" sm="6" md="5" lg="3">
+                <v-text-field v-model="visualizedtItem.ramo" label="Ramo de Atividade" readonly></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+
+          <v-toolbar flat color="dark-grey">
+              <v-toolbar-title>Lista de Produtos e Serviços da Empresa</v-toolbar-title>
+          </v-toolbar>
+
+            <v-data-table
+              :headers="headersProdutosServicos"
+              :items="produtosServicos"
+              sort-by="nome"
+              class="elevation-1">
+              <template v-slot:item.img="{ item }">
+                <tr>
+                  <v-img :src="item.img" height="50px" width="50px"></v-img>
+                </tr>
+              </template>
+              <template v-slot:item.nome="{ item }">
+                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
+                  {{
+                  item.nome
+                  }}
+                </tr>
+              </template>
+              <template v-slot:item.tipo="{ item }">
+                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
+                  {{
+                  item.tipo
+                  }}
+                </tr>
+              </template>
+              <template v-slot:item.valor="{ item }">
+                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
+                  <money v-model="item.valor" v-bind="money" readonly="true"></money>
+                </tr>
+              </template>
+              <template v-slot:item.actions="{ item }">
+                <v-icon
+                  size="20"
+                  @click="detalharProdutoServico(item)"
+                  v-bind:title="msnDetalharProdutoServico"
+                >mdi-magnify</v-icon>
+
+                <v-dialog
+                  size="20"
+                  v-model="dialogDetalhaProdutoServico"
+                  :retain-focus="false"
+                  transition="dialog-transition"
+                  overlay-color="grey"
+                >
+                  <v-card>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" sm="6" md="6" lg="4" xl="3">
+                          <v-text-field
+                            v-model="produtoServicoDetalhado.nome"
+                            label="Nome"
+                            type="text"
+                            readonly
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" lg="4" xl="3">
+                          <v-select
+                            v-model="produtoServicoDetalhado.tipo"
+                            :items="selectProdServTipo"
+                            label="Tipo"
+                            readonly
+                          ></v-select>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="5" lg="3">
+                          <money v-model="produtoServicoDetalhado.valor" v-bind="money" readonly></money>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="5" lg="3">
+                          <v-img :src="produtoServicoDetalhado.img" height="50px" width="50px"></v-img>
+                        </v-col>
+                        <v-col cols="12" sm="12" md="12" lg="6" xl="6">
+                          <v-textarea
+                            v-model="produtoServicoDetalhado.descricao"
+                            label="Descrição"
+                            type="text"
+                            readonly
+                          ></v-textarea>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card>
+                </v-dialog>
+
+                <v-icon
+                  size="20"
+                  class="ml-2"
+                  v-if="item.ativo"
+                  color="green"
+                  @click="ativarDesativarProdutoServico(item)"
+                  v-bind:title="msnDesativarProdutoServico"
+                >mdi-check-bold</v-icon>
+                <v-icon
+                  size="20"
+                  class="ml-2"
+                  v-if="!item.ativo"
+                  color="red"
+                  @click="ativarDesativarProdutoServico(item)"
+                  v-bind:title="msnAtivarProdutoServico"
+                >mdi-cancel</v-icon>
+                <v-icon
+                  class="ml-2"
+                  size="20"
+                  v-if="item.ativo"
+                  @click="editarProdutoServico(item)"
+                  v-bind:title="msnEditarProdutoServico"
+                >mdi-pencil</v-icon>
+                <v-icon
+                  class="ml-2"
+                  v-bind:title="msnNaoEditaProdutoServicoInativo"
+                  size="20"
+                  v-if="!item.ativo"
+                >mdi-pencil-remove</v-icon>
+              </template>
+            </v-data-table>
+              <v-layout justify-center>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="primary" dark class="mb-2" @click="fecharDetalharEmpresa()">FECHAR DETALHAMENTO DE EMPRESAS</v-btn>
+                </v-card-actions>
+            </v-layout>
+        </v-card>
+      </v-expand-transition>
+      
       <v-toolbar flat color="dark-grey">
         <v-toolbar-title>Lista de Empresas</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -178,183 +357,7 @@
         @click="editItem(item)"
         v-bind:title="msnEditar"
       >mdi-pencil</v-icon>
-
-      <v-dialog v-model="dialog" overlay-color="grey">
-        <v-card>
-          <v-container>
-            <v-row>
-              <h3 class="ml-3">Dados:</h3>
-            </v-row>
-            <v-row>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="visualizedtItem.empresa" label="Nome da Empresa" readonly></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="visualizedtItem.cnpj" label="CPNJ" readonly></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="visualizedtItem.email" label="E-mail" readonly></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="visualizedtItem.telefone" label="Telefone" readonly></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row class="mt-7">
-              <h3 class="ml-3">Endereço:</h3>
-            </v-row>
-            <v-row>
-              <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field v-model="visualizedtItem.cep" label="CEP" readonly></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field v-model="visualizedtItem.rua" label="Rua:" readonly></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field v-model="visualizedtItem.numero" label="Número" readonly></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field v-model="visualizedtItem.complemento" label="Complemento" readonly></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field v-model="visualizedtItem.bairro" label="Bairro" readonly></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field v-model="visualizedtItem.cidade" label="Cidade" readonly></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="2" md="2" lg="1" xl="1">
-                <v-select v-model="visualizedtItem.uf" :items="uf" label="UF" readonly></v-select>
-              </v-col>
-              <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field v-model="visualizedtItem.ramo" label="Ramo de Atividade" readonly></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-
-          <v-toolbar flat color="dark-grey">
-              <v-toolbar-title>Lista de Produtos e Serviços</v-toolbar-title>
-          </v-toolbar>
-
-            <v-data-table
-              :headers="headersProdutosServicos"
-              :items="produtosServicos"
-              sort-by="nome"
-              class="elevation-1">
-              <template v-slot:item.img="{ item }">
-                <tr>
-                  <v-img :src="item.img" height="50px" width="50px"></v-img>
-                </tr>
-              </template>
-              <template v-slot:item.nome="{ item }">
-                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
-                  {{
-                  item.nome
-                  }}
-                </tr>
-              </template>
-              <template v-slot:item.tipo="{ item }">
-                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
-                  {{
-                  item.tipo
-                  }}
-                </tr>
-              </template>
-              <template v-slot:item.valor="{ item }">
-                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
-                  <money v-model="item.valor" v-bind="money" readonly="true"></money>
-                </tr>
-              </template>
-              <template v-slot:item.actions="{ item }">
-                <v-icon
-                  size="20"
-                  @click="detalharProdutoServico(item)"
-                  v-bind:title="msnDetalharProdutoServico"
-                >mdi-magnify</v-icon>
-
-                <v-dialog
-                  size="20"
-                  v-model="dialogDetalhaProdutoServico"
-                  :retain-focus="false"
-                  transition="dialog-transition"
-                  overlay-opacity="0"
-                >
-                  <v-card>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="6" lg="4" xl="3">
-                          <v-text-field
-                            v-model="produtoServicoDetalhado.nome"
-                            label="Nome"
-                            type="text"
-                            readonly
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="6" lg="4" xl="3">
-                          <v-select
-                            v-model="produtoServicoDetalhado.tipo"
-                            :items="selectProdServTipo"
-                            label="Tipo"
-                            readonly
-                          ></v-select>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="5" lg="3">
-                          <!-- <v-text-field
-                            v-model="produtoServicoDetalhado.valor"
-                            label="Valor"
-                            type="text"
-                            readonly
-                          ></v-text-field>-->
-                          <money v-model="produtoServicoDetalhado.valor" v-bind="money" readonly></money>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="5" lg="3">
-                          <v-img :src="produtoServicoDetalhado.img" height="50px" width="50px"></v-img>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12" lg="6" xl="6">
-                          <v-textarea
-                            v-model="produtoServicoDetalhado.descricao"
-                            label="Descrição"
-                            type="text"
-                            readonly
-                          ></v-textarea>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card>
-                </v-dialog>
-
-                <v-icon
-                  size="20"
-                  class="ml-2"
-                  v-if="item.ativo"
-                  color="green"
-                  @click="ativarDesativarProdutoServico(item)"
-                  v-bind:title="msnDesativarProdutoServico"
-                >mdi-check-bold</v-icon>
-                <v-icon
-                  size="20"
-                  class="ml-2"
-                  v-if="!item.ativo"
-                  color="red"
-                  @click="ativarDesativarProdutoServico(item)"
-                  v-bind:title="msnAtivarProdutoServico"
-                >mdi-cancel</v-icon>
-                <v-icon
-                  class="ml-2"
-                  size="20"
-                  v-if="item.ativo"
-                  @click="editarProdutoServico(item)"
-                  v-bind:title="msnEditarProdutoServico"
-                >mdi-pencil</v-icon>
-                <v-icon
-                  class="ml-2"
-                  v-bind:title="msnNaoEditaProdutoServicoInativo"
-                  size="20"
-                  v-if="!item.ativo"
-                >mdi-pencil-remove</v-icon>
-              </template>
-            </v-data-table>
-        </v-card>
-      </v-dialog>
-
+      
       <!-- * HTML MENSAGENS INICIO * -->
       <!-- Todas as mensagens de uma empresa inicio -->
       <v-dialog
@@ -364,8 +367,7 @@
         scrollable
         transition="dialog-transition"
         overlay-color="grey"
-        :persistent="vDialogMensagensPersistent"
-      >
+        :persistent="vDialogMensagensPersistent">
         <v-card>
           <v-toolbar class="toolbarCadMsg" flat color="dark-grey">
             <v-toolbar-title>Mensagens:</v-toolbar-title>
@@ -421,8 +423,7 @@
         scrollable
         v-model="dialogMensagem"
         width="800"
-        overlay-opacity="0.3"
-      >
+        overlay-opacity="0.3">
         <v-card>
           <v-container class="pa-5 ma-0">
             <v-row>
@@ -497,14 +498,14 @@
       // 2.2- implementar upload de arquivo, endereçamento, pasta e efetivo dowload do arquivo para algum lugar
       // 3- Integrar variáveis/objetos/arrays de Produtos e Serviços com Chat-->
 
+       <!-- * CADASTRO PRODUTOS E SERVIÇOS * -->
       <v-dialog
         :retain-focus="false"
         :persistent="vDialogProdutosServicosPersistentVariable"
         v-model="dialogProdutosServicos"
         scrollable
         transition="dialog-transition"
-        overlay-color="grey"
-      >
+        overlay-color="grey">
         <v-card>
           <v-toolbar class="toolbarCadLisProdServ" flat color="dark-grey">
             <v-toolbar-title>Cadastro de Produtos e Serviços</v-toolbar-title>
@@ -610,6 +611,8 @@ export default {
     valid: true,
     readonly: false,
     novoCadastro: false,
+    detalharEmpresa: false,
+    teste: true,
     dialog: false,
     dialogMensagens: false,
     dialogMensagem: false,
@@ -908,7 +911,13 @@ export default {
 
     visualizaEmpresa(item) {
       this.visualizedtItem = Object.assign({}, item);
-      this.dialog = true;
+      this.produtosServicos = this.visualizedtItem.produtosServicos;
+      this.detalharEmpresa = true;
+      this.teste = false;
+    },
+
+    fecharDetalharEmpresa(){
+      this.detalharEmpresa = false
     },
 
     save() {

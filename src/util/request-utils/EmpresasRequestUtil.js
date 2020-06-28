@@ -24,4 +24,5 @@ export default {
       .put(API_URL + "/empresas/ativarInativar", empresa)
       .then((response) => response.data);
   },
+  
 };
