@@ -231,127 +231,128 @@
           </v-container>
 
           <v-toolbar flat color="dark-grey">
-              <v-toolbar-title>Lista de Produtos e Serviços</v-toolbar-title>
+            <v-toolbar-title>Lista de Produtos e Serviços</v-toolbar-title>
           </v-toolbar>
 
-            <v-data-table
-              :headers="headersProdutosServicos"
-              :items="produtosServicos"
-              sort-by="nome"
-              class="elevation-1">
-              <template v-slot:item.img="{ item }">
-                <tr>
-                  <v-img :src="item.img" height="50px" width="50px"></v-img>
-                </tr>
-              </template>
-              <template v-slot:item.nome="{ item }">
-                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
-                  {{
-                  item.nome
-                  }}
-                </tr>
-              </template>
-              <template v-slot:item.tipo="{ item }">
-                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
-                  {{
-                  item.tipo
-                  }}
-                </tr>
-              </template>
-              <template v-slot:item.valor="{ item }">
-                <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
-                  <money v-model="item.valor" v-bind="money" readonly="true"></money>
-                </tr>
-              </template>
-              <template v-slot:item.actions="{ item }">
-                <v-icon
-                  size="20"
-                  @click="detalharProdutoServico(item)"
-                  v-bind:title="msnDetalharProdutoServico"
-                >mdi-magnify</v-icon>
+          <v-data-table
+            :headers="headersProdutosServicos"
+            :items="produtosServicos"
+            sort-by="nome"
+            class="elevation-1"
+          >
+            <template v-slot:item.img="{ item }">
+              <tr>
+                <v-img :src="item.img" height="50px" width="50px"></v-img>
+              </tr>
+            </template>
+            <template v-slot:item.nome="{ item }">
+              <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
+                {{
+                item.nome
+                }}
+              </tr>
+            </template>
+            <template v-slot:item.tipo="{ item }">
+              <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
+                {{
+                item.tipo
+                }}
+              </tr>
+            </template>
+            <template v-slot:item.valor="{ item }">
+              <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
+                <money v-model="item.valor" v-bind="money" readonly="true"></money>
+              </tr>
+            </template>
+            <template v-slot:item.actions="{ item }">
+              <v-icon
+                size="20"
+                @click="detalharProdutoServico(item)"
+                v-bind:title="msnDetalharProdutoServico"
+              >mdi-magnify</v-icon>
 
-                <v-dialog
-                  size="20"
-                  v-model="dialogDetalhaProdutoServico"
-                  :retain-focus="false"
-                  transition="dialog-transition"
-                  overlay-opacity="0"
-                >
-                  <v-card>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="6" lg="4" xl="3">
-                          <v-text-field
-                            v-model="produtoServicoDetalhado.nome"
-                            label="Nome"
-                            type="text"
-                            readonly
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="6" lg="4" xl="3">
-                          <v-select
-                            v-model="produtoServicoDetalhado.tipo"
-                            :items="selectProdServTipo"
-                            label="Tipo"
-                            readonly
-                          ></v-select>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="5" lg="3">
-                          <!-- <v-text-field
+              <v-dialog
+                size="20"
+                v-model="dialogDetalhaProdutoServico"
+                :retain-focus="false"
+                transition="dialog-transition"
+                overlay-opacity="0"
+              >
+                <v-card>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="6" lg="4" xl="3">
+                        <v-text-field
+                          v-model="produtoServicoDetalhado.nome"
+                          label="Nome"
+                          type="text"
+                          readonly
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="6" lg="4" xl="3">
+                        <v-select
+                          v-model="produtoServicoDetalhado.tipo"
+                          :items="selectProdServTipo"
+                          label="Tipo"
+                          readonly
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="5" lg="3">
+                        <!-- <v-text-field
                             v-model="produtoServicoDetalhado.valor"
                             label="Valor"
                             type="text"
                             readonly
-                          ></v-text-field>-->
-                          <money v-model="produtoServicoDetalhado.valor" v-bind="money" readonly></money>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="5" lg="3">
-                          <v-img :src="produtoServicoDetalhado.img" height="50px" width="50px"></v-img>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12" lg="6" xl="6">
-                          <v-textarea
-                            v-model="produtoServicoDetalhado.descricao"
-                            label="Descrição"
-                            type="text"
-                            readonly
-                          ></v-textarea>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card>
-                </v-dialog>
+                        ></v-text-field>-->
+                        <money v-model="produtoServicoDetalhado.valor" v-bind="money" readonly></money>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="5" lg="3">
+                        <v-img :src="produtoServicoDetalhado.img" height="50px" width="50px"></v-img>
+                      </v-col>
+                      <v-col cols="12" sm="12" md="12" lg="6" xl="6">
+                        <v-textarea
+                          v-model="produtoServicoDetalhado.descricao"
+                          label="Descrição"
+                          type="text"
+                          readonly
+                        ></v-textarea>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card>
+              </v-dialog>
 
-                <v-icon
-                  size="20"
-                  class="ml-2"
-                  v-if="item.ativo"
-                  color="green"
-                  @click="ativarDesativarProdutoServico(item)"
-                  v-bind:title="msnDesativarProdutoServico"
-                >mdi-check-bold</v-icon>
-                <v-icon
-                  size="20"
-                  class="ml-2"
-                  v-if="!item.ativo"
-                  color="red"
-                  @click="ativarDesativarProdutoServico(item)"
-                  v-bind:title="msnAtivarProdutoServico"
-                >mdi-cancel</v-icon>
-                <v-icon
-                  class="ml-2"
-                  size="20"
-                  v-if="item.ativo"
-                  @click="editarProdutoServico(item)"
-                  v-bind:title="msnEditarProdutoServico"
-                >mdi-pencil</v-icon>
-                <v-icon
-                  class="ml-2"
-                  v-bind:title="msnNaoEditaProdutoServicoInativo"
-                  size="20"
-                  v-if="!item.ativo"
-                >mdi-pencil-remove</v-icon>
-              </template>
-            </v-data-table>
+              <v-icon
+                size="20"
+                class="ml-2"
+                v-if="item.ativo"
+                color="green"
+                @click="ativarDesativarProdutoServico(item)"
+                v-bind:title="msnDesativarProdutoServico"
+              >mdi-check-bold</v-icon>
+              <v-icon
+                size="20"
+                class="ml-2"
+                v-if="!item.ativo"
+                color="red"
+                @click="ativarDesativarProdutoServico(item)"
+                v-bind:title="msnAtivarProdutoServico"
+              >mdi-cancel</v-icon>
+              <v-icon
+                class="ml-2"
+                size="20"
+                v-if="item.ativo"
+                @click="editarProdutoServico(item)"
+                v-bind:title="msnEditarProdutoServico"
+              >mdi-pencil</v-icon>
+              <v-icon
+                class="ml-2"
+                v-bind:title="msnNaoEditaProdutoServicoInativo"
+                size="20"
+                v-if="!item.ativo"
+              >mdi-pencil-remove</v-icon>
+            </template>
+          </v-data-table>
         </v-card>
       </v-dialog>
 
@@ -540,7 +541,6 @@
                           ></v-select>
                         </v-col>
                         <v-col cols="12" sm="6" md="6" lg="4" xl="3">
-
                           <label>Valor:</label>
                           <money v-model="produtoServicoEditado.valor" v-bind="money"></money>
                         </v-col>
@@ -584,8 +584,6 @@
                 </v-form>
               </v-card>
             </v-expand-transition>
-
-            
           </v-content>
         </v-card>
       </v-dialog>
@@ -953,10 +951,12 @@ export default {
     fechaNovoProdServ() {
       this.mostraNovoProdServ = false;
     },
+    buscarTodosProdutosServicos() {},
+
     abrirDialogProdutosServicos(empresa) {
       this.empresaProdutosServicos = empresa;
-      if (empresa.produtosServicos == null) {
-        empresa.produtosServicos = [];
+      if (this.empresaProdutosServicos.produtosServicos == null) {
+        this.empresaProdutosServicos.produtosServicos = [];
       }
       this.produtosServicos = empresa.produtosServicos;
       this.dialogProdutosServicos = true;
