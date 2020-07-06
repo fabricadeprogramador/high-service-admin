@@ -208,6 +208,7 @@ export default {
             //Object.assign(this.usuarios[this.editedIndex], this.editedItem);
              UsuariosRequestUtil.editar(this.editedItem).then(res => {
                  alert(JSON.stringify(res));
+                 console.log(res);
                  this.initialize();
             });
 

@@ -510,6 +510,14 @@
               </tr>
             </template>
 
+            <template v-slot:item.cliente="{ item }">
+              <tr>
+                {{
+                  item.cliente
+                }}
+              </tr>
+            </template>
+
             <template v-slot:item.actions="{ item }">
               <v-icon
                 size="20"
