@@ -238,7 +238,7 @@
          })
          }
          else
-          return this.transacoes
+          this.initialize()
      }
     },
 

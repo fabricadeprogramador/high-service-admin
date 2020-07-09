@@ -74,7 +74,7 @@ export default {
         titulo: "Sair",
         icone: "mdi-exit-run",
         rota: "logout"
-      }
+      },
     ]
   }),
   methods: {

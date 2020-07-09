@@ -203,7 +203,7 @@ export default {
       this.editedIndex = this.usuarios.indexOf(item);
       this.editedItem = Object.assign({}, item);
     },
-    save() {
+    async save() {
           if (this.editedIndex > -1) {
             //Object.assign(this.usuarios[this.editedIndex], this.editedItem);
              UsuariosRequestUtil.editar(this.editedItem).then(res => {
@@ -215,14 +215,15 @@ export default {
           } else {
             this.editedItem.tipo = "ADMIN";
             this.editedItem.ativo = true;
-            alert(JSON.stringify(this.editedItem));
+            let user = this.editedItem
+            alert(JSON.stringify(user));
             //this.usuarios.push(Object.assign({}, this.editedItem));
-            UsuariosRequestUtil.salvar(this.editedItem).then((res) => {
+            await UsuariosRequestUtil.salvar(user).then((res) => {
               alert(JSON.stringify(res));
               this.initialize();
             });
           }
-      this.reset();
+      this.reset()
     },
   },
 };

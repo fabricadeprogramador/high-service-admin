@@ -11,7 +11,7 @@
               <v-row justify="center">
                 <img class="mb-0" width="200" alt="Logo High Service" src="../assets/logo_hs_1.png" />
               </v-row>
-              <v-form @submit="e.keyCode === 13" v-model="valid" ref="form">
+              <v-form v-model="valid" ref="form">
                 <v-text-field
                   ref="refInputUsername"
                   label="Username"
@@ -62,7 +62,7 @@
       :timeout="snackbarTimeout"
       :multi-line="multiLineVariavel"
       :top="topVariavel"
-    >Usuário ou senha inválido(s)</v-snackbar>
+    >{{teste}}</v-snackbar>
   </v-content>
 </template>
 <script>
@@ -77,6 +77,7 @@ export default {
       usuarios: [],
       usuarioAutenticado: {},
       dialog: false,
+      teste: "",
       snackbarAutenticado: false,
       snackbarInvalido: false,
       snackbarTimeout: 2000,
@@ -93,51 +94,35 @@ export default {
   },
   methods: {
     initialize() {
-      UsuariosRequestUtil.buscarTodos().then(usuario => {
-        this.usuarios = usuario;
-      });
+      this.usuario={}
     },
+
 
     autenticar() {
-      alert(JSON.stringify(this.usuario))
-      let user = this.usuario
-      UsuariosRequestUtil.logar(user).then(res => {
-        alert(JSON.stringify(res))
-      });
-      /* this.usuarioAutenticado = {};
-      let stop = false;
-      let i = 0;
-      while (stop == false && i <= this.usuarios.length - 1) {
-        stop = true;
-        if (
-          this.usuario.username != this.usuarios[i].username ||
-          this.usuario.password != this.usuarios[i].password
-        ) {
-          stop = false;
-          i++;
+      let usuario = this.usuario
+      this.usuario={}
+      
+      UsuariosRequestUtil.logar(usuario).then(res => {
+                  
+        if(res == "logado"){
+          this.snackbarAutenticado = true;
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 1500);
+        }else {
+          if(res == "erro"){
+            this.teste = "Usuario não encontrado"
+          }else{
+            this.teste = "Login ou senha inválidos"
+          }
+          this.snackbarInvalido = true;        
         }
-        if (i == 50) {
-          stop = true;
-        }
-      }
-      if (stop == true) {
-        this.usuarioAutenticado = Object.assign(this.usuarios[i]);
-        this.snackbarAutenticado = true;
-        setTimeout(() => {
-          this.$router.push("/");
-        }, 2500);
-      } else {
-        this.snackbarInvalido = true;
-      }
-      this.$refs.form.reset();
-      this.$refs.refInputUsername.focus();
-    },
+      }) 
 
-    login(){
-      let user = {}
-      user.username = this.usuario.username
-      user.password = this.usuario.password
- */    }
+      this.$router.push("/login")
+      this.$refs.form.reset();
+
+    }  
   }
 };
 
