@@ -1099,13 +1099,26 @@ export default {
     resetCampoMensagem() {
       this.$refs.formMensagens.reset();
     },
+
+
     abrirDialogMensagens(empresa) {
-      this.empresaMensagens = empresa;
-      if (this.empresaMensagens.mensagens == null) {
-        this.empresaMensagens.mensagens = [];
+     
+     let id = empresa._id;
+
+    EmpresasRequestUtil.buscarM(id).then((empresa)=>
+   {
+    this.empresaMensagens = empresa;
+    alert(JSON.stringify(this.empresaMensagens));
+   });
+     
+   //  this.empresaMensagens = empresa;
+   //   if (this.empresaMensagens.mensagens == null) {
+   //     this.empresaMensagens.mensagens = [];
       }
       this.dialogMensagens = true;
     },
+
+
     fecharDialogMensagens() {
       this.dialogMensagens = false;
     },
