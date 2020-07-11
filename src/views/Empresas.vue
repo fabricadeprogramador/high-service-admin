@@ -1162,24 +1162,19 @@ export default {
       this.$refs.formMensagens.reset();
     },
 
-
     abrirDialogMensagens(empresa) {
-     
-     let id = empresa._id;
+      let id = empresa._id;
 
-    EmpresasRequestUtil.buscarM(id).then((empresa)=>
-   {
-    this.empresaMensagens = empresa;
-    alert(JSON.stringify(this.empresaMensagens));
-   });
-     
-   //  this.empresaMensagens = empresa;
-   //   if (this.empresaMensagens.mensagens == null) {
-   //     this.empresaMensagens.mensagens = [];
-      }
+      EmpresasRequestUtil.buscarM(id).then(empresa => {
+        this.empresaMensagens = empresa;
+        alert(JSON.stringify(this.empresaMensagens));
+      });
+
+      //  this.empresaMensagens = empresa;
+      //   if (this.empresaMensagens.mensagens == null) {
+      //     this.empresaMensagens.mensagens = [];
       this.dialogMensagens = true;
     },
-
 
     fecharDialogMensagens() {
       this.dialogMensagens = false;
