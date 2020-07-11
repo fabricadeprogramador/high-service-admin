@@ -24,5 +24,13 @@ export default {
       .put(API_URL + "/empresas/ativarInativar", empresa)
       .then((response) => response.data);
   },
-  
+  async buscarM(idEmpresa){
+    return axios
+    .get(
+    API_URL + "/empresas/mensagens/"+ idEmpresa
+    ).then((response) => response.data);
+    },
+
+
+
 };
