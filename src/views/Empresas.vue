@@ -600,7 +600,7 @@
                         color="primary"
                         dark
                         class="mb-2"
-                        @click="resetProdutosServicos"
+                        @click="fecharDialogProdutosServicos"
                       >Cancelar</v-btn>
                     </v-card-actions>
                   </v-layout>
@@ -758,6 +758,7 @@ export default {
     memorizaUltimaEmpresaVisualizada: "",
 
     // Data de Produtos e Serviços INICIO
+    idEmpresaParaSalverNovoProdutoServico: "",
     money: {
       decimal: ",",
       thousands: ".",
@@ -784,8 +785,8 @@ export default {
     msnBotaoNovoProdServ: "Novo Produto ou Serviço",
     produtosServicosDescricaoRules: [
       v =>
-        (!!v && v.length >= 20) ||
-        "Descreva o Produto/Serviço - Mín. 20 caracteres"
+        (!!v && v.length >= 10) ||
+        "Descreva o Produto/Serviço - Mín. 10 caracteres"
     ],
     produtosServicosValorRules: [v => !!v || "Digite o valor"],
     selectProdServTipo: ["Produto", "Serviço"],
@@ -882,9 +883,7 @@ export default {
   methods: {
     initialize() {
       // ConverterUtil.converterCNPJParaNumero()
-      EmpresasRequestUtil.buscarTodos().then(empresas => {
-        this.empresas = empresas;
-      });
+      this.buscarTodosEmpresas();
       // this.mensagens = [
       //   {
       //     user: "JAO",
@@ -977,14 +976,12 @@ export default {
     },
 
     // Methods de Produtos e Serviços INICIO
-    mostrarNovoProdServ() {
+    mostrarNovoProdServ(empresa) {
+      alert(JSON.stringify(empresa));
+      this.idEmpresaParaSalverNovoProdutoServico = empresa._id;
+      alert(JSON.stringify(this.idEmpresaParaSalverNovoProdutoServico));
       this.mostraNovoProdServ = !this.mostraNovoProdServ;
       this.dialogProdutosServicos = true;
-      if (this.produtoServicoEditadoIndex > -1) {
-        setTimeout(() => {
-          this.resetProdutosServicos();
-        }, 100);
-      }
     },
 
     escondeNovoProdServ() {
@@ -994,9 +991,11 @@ export default {
     abreNovoProdServ() {
       this.mostraNovoProdServ = true;
     },
+
     fechaNovoProdServ() {
       this.mostraNovoProdServ = false;
     },
+
     buscarTodosProdutosServicos() {},
 
     abrirDialogProdutosServicos(empresa) {
@@ -1007,44 +1006,106 @@ export default {
       this.produtosServicos = empresa.produtosServicos;
       this.dialogProdutosServicos = true;
     },
+
     fecharDialogProdutosServicos() {
       this.produtoServicoEditado.valor = 0;
       this.resetProdutosServicos();
       this.fechaNovoProdServ();
       this.dialogProdutosServicos = false;
+      this.produtoServicoEditadoIndex = -1;
     },
+
     salvarProdutoServicoEditado() {
       if (this.produtoServicoEditadoIndex > -1) {
-        // EDITAR
-        Object.assign(
-          this.produtosServicos[this.produtoServicoEditadoIndex],
-          this.produtoServicoEditado,
-          this.escondeNovoProdServ()
-
-          //Aqui dispara a requisição enviando pacoteEdicaoProdutoServico para a API usando o seguinte:
-          // let pacoteEdicaoProdutoServico = {}
-          // pacoteEdicaoProdutoServico.idDaEmpresa = this.empressaProdutosServicos._id)
-          // pacoteEdicaoProdutoServico.indexDoProduto = this.produtoServicoEditadoIndex)
-        );
+        //EDITAR
+        let pacoteEmpresaEditaProdutoServico = {};
+        pacoteEmpresaEditaProdutoServico._idEmpresa = this.visualizedtItem._id;
+        pacoteEmpresaEditaProdutoServico.produtoServicoEditado = this.produtoServicoEditado;
+        ProdutosEServicosRequestUtil.editar(
+          pacoteEmpresaEditaProdutoServico
+        ).then(res => {
+          if (
+            res ==
+            "Não é possível editar esse Produto/Serviço pois a empresa informada não existe!"
+          ) {
+            alert(res);
+            // this.snackbarClienteAtivarInativarAtributosInsuficientes = true;
+          } else if (
+            res ==
+            "Não é possível editar, Produto/Serviço informado não existe!"
+          ) {
+            alert(res);
+            // this.snackbarClienteAtivarInativarErro = true;
+          } else if (
+            res == "Atributos de Produto/Serviço insuficientes para a ação!"
+          ) {
+            alert(res);
+          } else if (res == "Erro ao adicionar novo Produto/Serviço!") {
+            alert(res);
+          } else if (res == "Produto/Serviço editado com sucesso!") {
+            alert(res);
+            // this.snackbarClienteAtivarInativarSucesso = true;
+          } else {
+            alert("Erro inesperado!");
+          }
+          this.buscarTodosEmpresas();
+          this.produtoServicoEditado.valor = 0;
+          this.resetProdutosServicos();
+          this.produtoServicoEditadoIndex = -1;
+        });
       } else {
-        // SALVAR
+        //SALVAR
+        let pacoteEmpresaNovoProdutoServico = {};
+        pacoteEmpresaNovoProdutoServico._idEmpresa = this.idEmpresaParaSalverNovoProdutoServico;
+        alert(pacoteEmpresaNovoProdutoServico._idEmpresa);
+        pacoteEmpresaNovoProdutoServico.novoProdutoServico = this.produtoServicoEditado;
+        alert(
+          JSON.stringify(pacoteEmpresaNovoProdutoServico.novoProdutoServico)
+        );
+        alert(JSON.stringify(pacoteEmpresaNovoProdutoServico));
+        ProdutosEServicosRequestUtil.salvar(
+          pacoteEmpresaNovoProdutoServico
+        ).then(res => {
+          if (
+            res ==
+            "Não é possível incluir esse Produto/Serviço pois a empresa informada não existe!"
+          ) {
+            alert(res);
+            // this.snackbarClienteAtivarInativarAtributosInsuficientes = true;
+          } else if (
+            res == "Atributos de Produto/Serviço insuficientes para a ação!"
+          ) {
+            alert(res);
+            // this.snackbarClienteAtivarInativarErro = true;
+          } else if (res == "Erro ao adicionar novo Produto/Serviço!") {
+            alert(res);
+          } else if (res == "Novo Produto/Serviço salvo com sucesso") {
+            alert(res);
+            // this.snackbarClienteAtivarInativarSucesso = true;
+          } else {
+            alert("Erro inesperado!");
+          }
+          this.buscarTodosEmpresas();
+          this.produtoServicoEditado.valor = 0;
+          this.resetProdutosServicos();
+          this.produtoServicoEditadoIndex = -1;
+        });
+
         this.produtoServicoEditado.ativo = true;
         this.produtosServicos.push(
           Object.assign({}, this.produtoServicoEditado)
           //Aqui dispara a requisição enviando this.empresaProdutosServicos para a API
         );
       }
-      this.produtoServicoEditado.valor = 0;
-      this.resetProdutosServicos();
     },
-    async ativarDesativarProdutoServico(item) {
+    ativarDesativarProdutoServico(item) {
       let idsEmpresaEProdutoServico = {};
       idsEmpresaEProdutoServico._idEmpresa = this.visualizedtItem._id;
       idsEmpresaEProdutoServico._idProdutoServico = item._id;
       confirm(
         "Tem certeza que deseja Ativar/Desativar esse Produto/Serviço?"
       ) &&
-        (await ProdutosEServicosRequestUtil.ativarInativar(
+        ProdutosEServicosRequestUtil.ativarInativar(
           idsEmpresaEProdutoServico
         ).then(res => {
           if (res == "Atributos insuficientes para a ação!") {
@@ -1059,13 +1120,14 @@ export default {
           }
           this.buscarTodosEmpresas();
           // mesmo após o buscarTodos o this.visualizedtItem não está mudando de forma dinâmica... e já alterei o this.visualizaEmpresa() antes era um Object.assign agora deixei apontando para o próprio item
-          alert(JSON.stringify(this.visualizedtItem));
-        }));
+        });
     },
     editarProdutoServico(item) {
-      this.mostrarNovoProdServ();
       this.produtoServicoEditadoIndex = this.produtosServicos.indexOf(item);
       this.produtoServicoEditado = Object.assign({}, item);
+      this.mostrarNovoProdServ();
+      console.log(JSON.stringify(this.produtoServicoEditado));
+      console.log(JSON.stringify(this.produtoServicoEditadoIndex));
     },
     resetProdutosServicos() {
       if (this.mostraNovoProdServ) {
