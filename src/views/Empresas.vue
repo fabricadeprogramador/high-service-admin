@@ -31,11 +31,7 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      :rules="emailRules"
-                      v-model="editedItem.email"
-                      label="E-mail"
-                    ></v-text-field>
+                    <v-text-field :rules="emailRules" v-model="editedItem.email" label="E-mail"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
@@ -59,11 +55,7 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="5" lg="3">
-                    <v-text-field
-                      :rules="campoRules"
-                      v-model="editedItem.rua"
-                      label="Rua:"
-                    ></v-text-field>
+                    <v-text-field :rules="campoRules" v-model="editedItem.rua" label="Rua:"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="5" lg="3">
                     <v-text-field
@@ -74,32 +66,16 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="5" lg="3">
-                    <v-text-field
-                      v-model="editedItem.complemento"
-                      label="Complemento"
-                    ></v-text-field>
+                    <v-text-field v-model="editedItem.complemento" label="Complemento"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="5" lg="3">
-                    <v-text-field
-                      :rules="campoRules"
-                      v-model="editedItem.bairro"
-                      label="Bairro"
-                    ></v-text-field>
+                    <v-text-field :rules="campoRules" v-model="editedItem.bairro" label="Bairro"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="5" lg="3">
-                    <v-text-field
-                      :rules="campoRules"
-                      v-model="editedItem.cidade"
-                      label="Cidade"
-                    ></v-text-field>
+                    <v-text-field :rules="campoRules" v-model="editedItem.cidade" label="Cidade"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="2" md="2" lg="1" xl="1">
-                    <v-select
-                      :rules="campoRules"
-                      v-model="editedItem.uf"
-                      :items="uf"
-                      label="UF"
-                    ></v-select>
+                    <v-select :rules="campoRules" v-model="editedItem.uf" :items="uf" label="UF"></v-select>
                   </v-col>
                   <v-col cols="12" sm="6" md="5" lg="3">
                     <v-text-field
@@ -114,17 +90,8 @@
             <v-layout justify-center>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn
-                  color="primary"
-                  dark
-                  class="mb-2"
-                  @click="save"
-                  :disabled="!valid"
-                  >Salvar</v-btn
-                >
-                <v-btn color="primary" dark class="mb-2" @click="resetClose"
-                  >Cancelar</v-btn
-                >
+                <v-btn color="primary" dark class="mb-2" @click="save" :disabled="!valid">Salvar</v-btn>
+                <v-btn color="primary" dark class="mb-2" @click="resetClose">Cancelar</v-btn>
               </v-card-actions>
             </v-layout>
           </v-form>
@@ -136,40 +103,22 @@
           <v-card-title>
             <h3 class="ml-3">Dados da Empresa:</h3>
             <v-spacer></v-spacer>
-            <v-btn @click="fecharDetalharEmpresa()" color="primary" dark small
-              >Fechar</v-btn
-            >
+            <v-btn @click="fecharDetalharEmpresa()" color="primary" dark small>Fechar</v-btn>
           </v-card-title>
 
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  v-model="visualizedtItem.empresa"
-                  label="Nome da Empresa"
-                  readonly
-                ></v-text-field>
+                <v-text-field v-model="visualizedtItem.empresa" label="Nome da Empresa" readonly></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  v-model="visualizedtItem.cnpj"
-                  label="CPNJ"
-                  readonly
-                ></v-text-field>
+                <v-text-field v-model="visualizedtItem.cnpj" label="CPNJ" readonly></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  v-model="visualizedtItem.email"
-                  label="E-mail"
-                  readonly
-                ></v-text-field>
+                <v-text-field v-model="visualizedtItem.email" label="E-mail" readonly></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  v-model="visualizedtItem.telefone"
-                  label="Telefone"
-                  readonly
-                ></v-text-field>
+                <v-text-field v-model="visualizedtItem.telefone" label="Telefone" readonly></v-text-field>
               </v-col>
             </v-row>
             <v-row class="mt-7">
@@ -177,69 +126,34 @@
             </v-row>
             <v-row>
               <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field
-                  v-model="visualizedtItem.cep"
-                  label="CEP"
-                  readonly
-                ></v-text-field>
+                <v-text-field v-model="visualizedtItem.cep" label="CEP" readonly></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field
-                  v-model="visualizedtItem.rua"
-                  label="Rua:"
-                  readonly
-                ></v-text-field>
+                <v-text-field v-model="visualizedtItem.rua" label="Rua:" readonly></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field
-                  v-model="visualizedtItem.numero"
-                  label="Número"
-                  readonly
-                ></v-text-field>
+                <v-text-field v-model="visualizedtItem.numero" label="Número" readonly></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field
-                  v-model="visualizedtItem.complemento"
-                  label="Complemento"
-                  readonly
-                ></v-text-field>
+                <v-text-field v-model="visualizedtItem.complemento" label="Complemento" readonly></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field
-                  v-model="visualizedtItem.bairro"
-                  label="Bairro"
-                  readonly
-                ></v-text-field>
+                <v-text-field v-model="visualizedtItem.bairro" label="Bairro" readonly></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field
-                  v-model="visualizedtItem.cidade"
-                  label="Cidade"
-                  readonly
-                ></v-text-field>
+                <v-text-field v-model="visualizedtItem.cidade" label="Cidade" readonly></v-text-field>
               </v-col>
               <v-col cols="12" sm="2" md="2" lg="1" xl="1">
-                <v-select
-                  v-model="visualizedtItem.uf"
-                  :items="uf"
-                  label="UF"
-                  readonly
-                ></v-select>
+                <v-select v-model="visualizedtItem.uf" :items="uf" label="UF" readonly></v-select>
               </v-col>
               <v-col cols="12" sm="6" md="5" lg="3">
-                <v-text-field
-                  v-model="visualizedtItem.ramo"
-                  label="Ramo de Atividade"
-                  readonly
-                ></v-text-field>
+                <v-text-field v-model="visualizedtItem.ramo" label="Ramo de Atividade" readonly></v-text-field>
               </v-col>
             </v-row>
           </v-container>
 
           <v-toolbar flat color="dark-grey">
-            <v-toolbar-title
-              >Lista de Produtos e Serviços da Empresa</v-toolbar-title
-            >
+            <v-toolbar-title>Lista de Produtos e Serviços da Empresa</v-toolbar-title>
           </v-toolbar>
 
           <v-data-table
@@ -256,24 +170,20 @@
             <template v-slot:item.nome="{ item }">
               <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
                 {{
-                  item.nome
+                item.nome
                 }}
               </tr>
             </template>
             <template v-slot:item.tipo="{ item }">
               <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
                 {{
-                  item.tipo
+                item.tipo
                 }}
               </tr>
             </template>
             <template v-slot:item.valor="{ item }">
               <tr v-bind:class="{ produtoServicoInativo: !item.ativo }">
-                <money
-                  v-model="item.valor"
-                  v-bind="money"
-                  readonly="true"
-                ></money>
+                <money v-model="item.valor" v-bind="money" readonly="true"></money>
               </tr>
             </template>
             <template v-slot:item.actions="{ item }">
@@ -281,8 +191,7 @@
                 size="20"
                 @click="detalharProdutoServico(item)"
                 v-bind:title="msnDetalharProdutoServico"
-                >mdi-magnify</v-icon
-              >
+              >mdi-magnify</v-icon>
 
               <v-dialog
                 size="20"
@@ -311,18 +220,10 @@
                         ></v-select>
                       </v-col>
                       <v-col cols="12" sm="6" md="5" lg="3">
-                        <money
-                          v-model="produtoServicoDetalhado.valor"
-                          v-bind="money"
-                          readonly
-                        ></money>
+                        <money v-model="produtoServicoDetalhado.valor" v-bind="money" readonly></money>
                       </v-col>
                       <v-col cols="12" sm="6" md="5" lg="3">
-                        <v-img
-                          :src="produtoServicoDetalhado.img"
-                          height="50px"
-                          width="50px"
-                        ></v-img>
+                        <v-img :src="produtoServicoDetalhado.img" height="50px" width="50px"></v-img>
                       </v-col>
                       <v-col cols="12" sm="12" md="12" lg="6" xl="6">
                         <v-textarea
@@ -344,8 +245,7 @@
                 color="green"
                 @click="ativarDesativarProdutoServico(item)"
                 v-bind:title="msnDesativarProdutoServico"
-                >mdi-check-bold</v-icon
-              >
+              >mdi-check-bold</v-icon>
               <v-icon
                 size="20"
                 class="ml-2"
@@ -353,23 +253,20 @@
                 color="red"
                 @click="ativarDesativarProdutoServico(item)"
                 v-bind:title="msnAtivarProdutoServico"
-                >mdi-cancel</v-icon
-              >
+              >mdi-cancel</v-icon>
               <v-icon
                 class="ml-2"
                 size="20"
                 v-if="item.ativo"
                 @click="editarProdutoServico(item)"
                 v-bind:title="msnEditarProdutoServico"
-                >mdi-pencil</v-icon
-              >
+              >mdi-pencil</v-icon>
               <v-icon
                 class="ml-2"
                 v-bind:title="msnNaoEditaProdutoServicoInativo"
                 size="20"
                 v-if="!item.ativo"
-                >mdi-pencil-remove</v-icon
-              >
+              >mdi-pencil-remove</v-icon>
             </template>
           </v-data-table>
           <v-layout justify-center>
@@ -380,8 +277,7 @@
                 dark
                 class="mb-2"
                 @click="fecharDetalharEmpresa()"
-                >FECHAR DETALHAMENTO DE EMPRESAS</v-btn
-              >
+              >FECHAR DETALHAMENTO DE EMPRESAS</v-btn>
             </v-card-actions>
           </v-layout>
         </v-card>
@@ -391,12 +287,8 @@
         <v-toolbar-title>Lista de Empresas</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn color="primary" fab dark small @click="mostrarCadastro">
-          <v-icon v-if="!novoCadastro" dark v-bind:title="messageNewAdd"
-            >mdi-plus</v-icon
-          >
-          <v-icon v-if="novoCadastro" dark v-bind:title="msgClose"
-            >mdi-minus</v-icon
-          >
+          <v-icon v-if="!novoCadastro" dark v-bind:title="messageNewAdd">mdi-plus</v-icon>
+          <v-icon v-if="novoCadastro" dark v-bind:title="msgClose">mdi-minus</v-icon>
         </v-btn>
       </v-toolbar>
     </template>
@@ -404,28 +296,28 @@
     <template v-slot:item.empresa="{ item }">
       <tr v-bind:class="{ empresaInativa: !item.ativo }">
         {{
-          item.empresa
+        item.empresa
         }}
       </tr>
     </template>
     <template v-slot:item.cnpj="{ item }">
       <tr v-bind:class="{ empresaInativa: !item.ativo }">
         {{
-          item.cnpj
+        item.cnpj
         }}
       </tr>
     </template>
     <template v-slot:item.email="{ item }">
       <tr v-bind:class="{ empresaInativa: !item.ativo }">
         {{
-          item.email
+        item.email
         }}
       </tr>
     </template>
     <template v-slot:item.telefone="{ item }">
       <tr v-bind:class="{ empresaInativa: !item.ativo }">
         {{
-          item.telefone
+        item.telefone
         }}
       </tr>
     </template>
@@ -435,22 +327,19 @@
         size="20"
         @click="mostrarNovoProdServ(item)"
         v-bind:title="msnCadastraListaProdutosServicos"
-        >mdi-wrench-outline</v-icon
-      >
+      >mdi-wrench-outline</v-icon>
       <v-icon
         size="20"
         class="ml-1"
         @click="abrirDialogMensagens(item)"
         v-bind:title="msgMensagens"
-        >mdi-email-outline</v-icon
-      >
+      >mdi-email-outline</v-icon>
       <v-icon
         size="20"
         class="ml-1"
         @click="visualizaEmpresa(item)"
         v-bind:title="msgVisualizar"
-        >mdi-magnify</v-icon
-      >
+      >mdi-magnify</v-icon>
       <v-icon
         size="20"
         class="ml-1"
@@ -458,8 +347,7 @@
         color="red"
         @click="ativarDesativarEmpresa(item)"
         v-bind:title="messageEnable"
-        >mdi-cancel</v-icon
-      >
+      >mdi-cancel</v-icon>
       <v-icon
         size="20"
         class="ml-1"
@@ -467,16 +355,14 @@
         color="green"
         @click="ativarDesativarEmpresa(item)"
         v-bind:title="messageDisable"
-        >mdi-check-bold</v-icon
-      >
+      >mdi-check-bold</v-icon>
       <v-icon
         size="20"
         class="ml-1"
         v-if="item.ativo"
         @click="editItem(item)"
         v-bind:title="msnEditar"
-        >mdi-pencil</v-icon
-      >
+      >mdi-pencil</v-icon>
 
       <!-- * HTML MENSAGENS INICIO * -->
       <!-- Todas as mensagens de uma empresa inicio -->
@@ -505,7 +391,7 @@
             <template v-slot:item.cliente="{ item }">
               <tr>
                 {{
-                  item.cliente
+                item.cliente
                 }}
               </tr>
             </template>
@@ -513,7 +399,7 @@
             <template v-slot:item.cliente="{ item }">
               <tr>
                 {{
-                  item.cliente
+                item.cliente
                 }}
               </tr>
             </template>
@@ -524,24 +410,21 @@
                 @click="abrirDialogMensagem(item)"
                 class="ml-3"
                 v-bind:title="msnAcessarMensagens"
-                >mdi-message-text-outline</v-icon
-              >
+              >mdi-message-text-outline</v-icon>
               <v-icon
                 size="20"
                 class="ml-10"
                 v-if="item.visualizada"
                 color="green"
                 v-bind:title="msnMensagensVisualizadas"
-                >mdi-checkbox-marked-circle-outline</v-icon
-              >
+              >mdi-checkbox-marked-circle-outline</v-icon>
               <v-icon
                 size="20"
                 class="ml-10"
                 v-if="!item.visualizada"
                 color="yellow"
                 v-bind:title="msnMensagensNaoVisualizadas"
-                >mdi-alert-circle-outline</v-icon
-              >
+              >mdi-alert-circle-outline</v-icon>
             </template>
           </v-data-table>
         </v-card>
@@ -568,9 +451,7 @@
                       {{ clienteMensagemConsultada.cliente }}
                     </v-card-title>
                     <v-spacer></v-spacer>
-                    <v-btn @click="fecharDialogMensagem()" color="primary"
-                      >Fechar</v-btn
-                    >
+                    <v-btn @click="fecharDialogMensagem()" color="primary">Fechar</v-btn>
                   </v-toolbar>
 
                   <v-list-item
@@ -612,16 +493,14 @@
                       class
                       @click="salvaMensagem()"
                       :disabled="!validChat"
-                      >Enviar</v-btn
-                    >
+                    >Enviar</v-btn>
                     <v-btn
                       color="primary"
                       ref="refBotaoCancelarMensagem"
                       dark
                       class="ml-5"
                       @click="resetCampoMensagem()"
-                      >Cancelar</v-btn
-                    >
+                    >Cancelar</v-btn>
                   </v-layout>
                 </v-col>
               </v-row>
@@ -654,13 +533,7 @@
           <v-toolbar class="toolbarCadLisProdServ" flat color="dark-grey">
             <v-toolbar-title>Cadastro de Produtos e Serviços</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn
-              @click="fecharDialogProdutosServicos()"
-              color="primary"
-              dark
-              small
-              >VOLTAR</v-btn
-            >
+            <v-btn @click="fecharDialogProdutosServicos()" color="primary" dark small>VOLTAR</v-btn>
           </v-toolbar>
 
           <v-content class="ma-0 pa-0">
@@ -669,11 +542,7 @@
                 <v-card-title>
                   <span class="headline">{{ formTitleProdutosServicos }}</span>
                 </v-card-title>
-                <v-form
-                  @submit="e.keyCode === 13"
-                  v-model="validProdutosServicos"
-                  ref="form"
-                >
+                <v-form v-model="validProdutosServicos" ref="form">
                   <v-card-text>
                     <v-container>
                       <v-row>
@@ -696,17 +565,10 @@
                         </v-col>
                         <v-col cols="12" sm="6" md="6" lg="4" xl="3">
                           <label>Valor:</label>
-                          <money
-                            v-model="produtoServicoEditado.valor"
-                            v-bind="money"
-                          ></money>
+                          <money v-model="produtoServicoEditado.valor" v-bind="money"></money>
                         </v-col>
                         <v-col cols="12" sm="6" md="6" lg="4" xl="3">
-                          <v-file-input
-                            accept="image/*"
-                            label="Imagem (Opcional)"
-                            prepend-icon
-                          ></v-file-input>
+                          <v-file-input accept="image/*" label="Imagem (Opcional)" prepend-icon></v-file-input>
                         </v-col>
                       </v-row>
                       <v-row>
@@ -733,15 +595,13 @@
                         class="mb-2"
                         @click="salvarProdutoServicoEditado"
                         :disabled="!validProdutosServicos"
-                        >Salvar</v-btn
-                      >
+                      >Salvar</v-btn>
                       <v-btn
                         color="primary"
                         dark
                         class="mb-2"
                         @click="fecharDialogProdutosServicos"
-                        >Cancelar</v-btn
-                      >
+                      >Cancelar</v-btn>
                     </v-card-actions>
                   </v-layout>
                 </v-form>
@@ -1073,9 +933,7 @@ export default {
 
     visualizaEmpresa(item) {
       this.visualizedtItem = item;
-
       this.produtosServicos = this.visualizedtItem.produtosServicos;
-      console.log(JSON.stringify(this.produtosServicos));
       this.detalharEmpresa = true;
       this.teste = false;
     },
@@ -1115,11 +973,13 @@ export default {
     buscarTodosEmpresas() {
       EmpresasRequestUtil.buscarTodos().then(empresas => {
         this.empresas = empresas;
+      });
+    },
 
-        //TODO: Só fazer o for quando houver edição na lista de produtos e serviços do elemento selecionado
-
+    buscarTodosEmpresasProdutosServicos() {
+      EmpresasRequestUtil.buscarTodos().then(empresas => {
+        this.empresas = empresas;
         for (let i = 0; i < this.empresas.length; i++) {
-          console.log("empr: " + JSON.stringify(this.empresas[i]));
           if (this.empresas[i]._id == this.empresaAtual) {
             this.visualizedtItem = this.empresas[i];
             this.produtosServicos = this.visualizedtItem.produtosServicos;
@@ -1130,9 +990,9 @@ export default {
 
     // Methods de Produtos e Serviços INICIO
     mostrarNovoProdServ(empresa) {
-      alert(JSON.stringify(empresa));
-      this.idEmpresaParaSalverNovoProdutoServico = empresa._id;
-      alert(JSON.stringify(this.idEmpresaParaSalverNovoProdutoServico));
+      if (empresa != undefined) {
+        this.idEmpresaParaSalverNovoProdutoServico = empresa._id;
+      }
       this.mostraNovoProdServ = !this.mostraNovoProdServ;
       this.dialogProdutosServicos = true;
     },
@@ -1148,8 +1008,6 @@ export default {
     fechaNovoProdServ() {
       this.mostraNovoProdServ = false;
     },
-
-    buscarTodosProdutosServicos() {},
 
     abrirDialogProdutosServicos(empresa) {
       this.empresaProdutosServicos = empresa;
@@ -1174,6 +1032,7 @@ export default {
         let pacoteEmpresaEditaProdutoServico = {};
         pacoteEmpresaEditaProdutoServico._idEmpresa = this.visualizedtItem._id;
         pacoteEmpresaEditaProdutoServico.produtoServicoEditado = this.produtoServicoEditado;
+        this.empresaAtual = this.visualizedtItem._id;
         ProdutosEServicosRequestUtil.editar(
           pacoteEmpresaEditaProdutoServico
         ).then(res => {
@@ -1198,24 +1057,18 @@ export default {
           } else if (res == "Produto/Serviço editado com sucesso!") {
             alert(res);
             // this.snackbarClienteAtivarInativarSucesso = true;
+            this.fecharDialogProdutosServicos();
+            this.buscarTodosEmpresasProdutosServicos();
           } else {
             alert("Erro inesperado!");
           }
-          this.buscarTodosEmpresas();
-          this.produtoServicoEditado.valor = 0;
-          this.resetProdutosServicos();
-          this.produtoServicoEditadoIndex = -1;
         });
       } else {
         //SALVAR
+        this.produtoServicoEditado.ativo = true;
         let pacoteEmpresaNovoProdutoServico = {};
         pacoteEmpresaNovoProdutoServico._idEmpresa = this.idEmpresaParaSalverNovoProdutoServico;
-        alert(pacoteEmpresaNovoProdutoServico._idEmpresa);
         pacoteEmpresaNovoProdutoServico.novoProdutoServico = this.produtoServicoEditado;
-        alert(
-          JSON.stringify(pacoteEmpresaNovoProdutoServico.novoProdutoServico)
-        );
-        alert(JSON.stringify(pacoteEmpresaNovoProdutoServico));
         ProdutosEServicosRequestUtil.salvar(
           pacoteEmpresaNovoProdutoServico
         ).then(res => {
@@ -1235,25 +1088,16 @@ export default {
           } else if (res == "Novo Produto/Serviço salvo com sucesso") {
             alert(res);
             // this.snackbarClienteAtivarInativarSucesso = true;
+            this.fecharDialogProdutosServicos();
+            this.buscarTodosEmpresas();
           } else {
             alert("Erro inesperado!");
           }
-          this.buscarTodosEmpresas();
-          this.produtoServicoEditado.valor = 0;
-          this.resetProdutosServicos();
-          this.produtoServicoEditadoIndex = -1;
         });
-
-        this.produtoServicoEditado.ativo = true;
-        this.produtosServicos.push(
-          Object.assign({}, this.produtoServicoEditado)
-          //Aqui dispara a requisição enviando this.empresaProdutosServicos para a API
-        );
       }
     },
-    ativarDesativarProdutoServico(item) {
-      console.log("ITEM PARA ATIVAR/INATIVAR:" + JSON.stringify(item));
 
+    ativarDesativarProdutoServico(item) {
       let idsEmpresaEProdutoServico = {};
       idsEmpresaEProdutoServico._idEmpresa = this.visualizedtItem._id;
       idsEmpresaEProdutoServico._idProdutoServico = item._id;
@@ -1272,19 +1116,18 @@ export default {
           } else {
             alert("Cliente Ativado/Inativado com sucesso!");
             this.empresaAtual = idsEmpresaEProdutoServico._idEmpresa;
-            this.buscarTodosEmpresas();
+            this.buscarTodosEmpresasProdutosServicos();
             // this.snackbarClienteAtivarInativarSucesso = true;
           }
-          // mesmo após o buscarTodos o this.visualizedtItem não está mudando de forma dinâmica... e já alterei o this.visualizaEmpresa() antes era um Object.assign agora deixei apontando para o próprio item
         });
     },
+
     editarProdutoServico(item) {
       this.produtoServicoEditadoIndex = this.produtosServicos.indexOf(item);
       this.produtoServicoEditado = Object.assign({}, item);
       this.mostrarNovoProdServ();
-      console.log(JSON.stringify(this.produtoServicoEditado));
-      console.log(JSON.stringify(this.produtoServicoEditadoIndex));
     },
+
     resetProdutosServicos() {
       if (this.mostraNovoProdServ) {
         this.$refs.form.reset();
@@ -1295,7 +1138,7 @@ export default {
         );
       }
     },
-    // this.produtoServicoEditado.valor = 0;
+
     detalharProdutoServico(item) {
       this.produtoServicoDetalhado = Object.assign(
         {},
